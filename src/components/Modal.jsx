@@ -1,4 +1,4 @@
-// Reusable modal wrapper (for review, add/edit service etc.)
+// Reusable modal wrapper to edit UserProfile, edit AdminProfile, edit AdminFacilityDetails, leave a Review, AddFacility (superadmin)
 
 const Modal = () => {
   return <div>Modal</div>;

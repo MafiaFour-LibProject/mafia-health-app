@@ -7,7 +7,7 @@ import UserLayout from "./layouts/UserLayout";
 import AdminLayout from "./layouts/AdminLayout";
 import SuperAdminLayout from "./layouts/SuperAdminLayout";
 
-// Public (Unregisted Users) Pages
+// Public (Unregistered Users) Pages
 import Home from "./pages/common/Home";
 import FacilityDetails from "./pages/common/FacilityDetails";
 

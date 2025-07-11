@@ -1,4 +1,4 @@
-// View facility reviews
+// View facility reviews. Import ReviewList.jsx
 
 const AdminReviews = () => {
   return <div>AdminReviews</div>;
