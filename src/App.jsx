@@ -23,19 +23,19 @@ import SuperAdminDashboard from "./pages/superadmin/SuperAdminDashboard";
 import SuperAdminFacilities from "./pages/superadmin/SuperAdminFacilities";
 import SuperAdminUsers from "./pages/superadmin/SuperAdminUsers";
 import Analytics from "./pages/superadmin/Analytics";
-import AddFacility from "./pages/superadmin/AddFacility";
+// import AddFacility from "./pages/superadmin/AddFacility";
 
 // Admin Pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminAppointments from "./pages/admin/AdminAppointments";
 import AdminProfile from "./pages/admin/AdminProfile";
 import AdminReviews from "./pages/admin/AdminReviews";
-import EditAdminProfile from "./pages/admin/EditAdminProfile";
+// import EditAdminProfile from "./pages/admin/EditAdminProfile";
 
 // User Pages
 import UserDashboard from "./pages/user/UserDashboard";
 import UserAppointments from "./pages/user/UserAppointments";
-import EditUserProfile from "./pages/user/EditUserProfile";
+// import EditUserProfile from "./pages/user/EditUserProfile";
 
 // Review Components
 import ReviewList from "./pages/reviews/ReviewList";
@@ -75,7 +75,7 @@ function App() {
       children: [
         { index: true, element: <UserDashboard /> },
         { path: "appointments", element: <UserAppointments /> },
-        { path: "edit-profile", element: <EditUserProfile /> },
+        // { path: "edit-profile", element: <EditUserProfile /> },
         { path: "reviews", element: <ReviewList /> },
       ],
     },
@@ -89,7 +89,7 @@ function App() {
         { path: "appointments", element: <AdminAppointments /> },
         { path: "reviews", element: <AdminReviews /> },
         { path: "profile", element: <AdminProfile /> },
-        { path: "edit-profile", element: <EditAdminProfile /> },
+        // { path: "edit-profile", element: <EditAdminProfile /> },
       ],
     },
 
@@ -100,7 +100,7 @@ function App() {
       children: [
         { index: true, element: <SuperAdminDashboard /> },
         { path: "facilities", element: <SuperAdminFacilities /> },
-        { path: "add-facility", element: <AddFacility /> },
+        // { path: "add-facility", element: <AddFacility /> },
         { path: "users", element: <SuperAdminUsers /> },
         { path: "analytics", element: <Analytics /> },
       ],
