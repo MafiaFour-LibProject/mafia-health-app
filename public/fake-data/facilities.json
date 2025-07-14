@@ -1,0 +1,91 @@
+[
+  {
+    "_id": "fac1",
+    "name": "Mafia Hospital",
+    "type": "hospital",
+    "location": "Spintex",
+    "coords": { "lat": 5.6037, "lng": -0.187 },
+    "services": ["serv1", "serv2"],
+    "openingHours": "8:00",
+    "closingHours": "18:00",
+    "image": "https://images.unsplash.com/photo-1559833063-a37c6c205676?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8aG9zcGl0YWwlMjBidWlsZGluZyUyMGdoYW5hfGVufDB8fDB8fHww",
+    "status": "active",
+    "createdAt": "2024-01-01T00:00:00Z",
+    "updatedAt": "2024-01-02T00:00:00Z"
+  },
+
+  {
+    "_id": "fac2",
+    "name": "Bye-Bye Pharmacy",
+    "type": "pharmacy",
+    "location": "Tema",
+    "coords": { "lat": 5.6037, "lng": -0.187 },
+    "services": ["serv3"],
+    "openingHours": "9:00",
+    "closingHours": "19:00",
+    "image": "https://plus.unsplash.com/premium_photo-1712774402321-f377166b12d2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8aG9zcGl0YWwlMjBidWlsZGluZyUyMGdoYW5hfGVufDB8fDB8fHww",
+    "status": "active",
+    "createdAt": "2024-01-01T00:00:00Z",
+    "updatedAt": "2024-01-02T00:00:00Z"
+  },
+
+  {
+    "_id": "fac3",
+    "name": "Sunrise Pharmacy",
+    "type": "pharmacy",
+    "location": "Tema",
+    "coords": { "lat": 5.6037, "lng": -0.187 },
+    "services": ["serv3"],
+    "openingHours": "9:00",
+    "closingHours": "19:00",
+    "image": "https://images.unsplash.com/photo-1669215526535-08ee346103f0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8aG9zcGl0YWwlMjBidWlsZGluZyUyMGdoYW5hfGVufDB8fDB8fHww",
+    "status": "active",
+    "createdAt": "2024-01-01T00:00:00Z",
+    "updatedAt": "2024-01-02T00:00:00Z"
+  },
+
+  {
+    "_id": "fac4",
+    "name": "Sunrise Pharmacy",
+    "type": "pharmacy",
+    "location": "Tema",
+    "coords": { "lat": 5.6037, "lng": -0.187 },
+    "services": ["serv3"],
+    "openingHours": "9:00",
+    "closingHours": "19:00",
+    "image": "https://images.unsplash.com/photo-1559833063-a37c6c205676?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8aG9zcGl0YWwlMjBidWlsZGluZyUyMGdoYW5hfGVufDB8fDB8fHww",
+    "status": "active",
+    "createdAt": "2024-01-01T00:00:00Z",
+    "updatedAt": "2024-01-02T00:00:00Z"
+  },
+
+  {
+    "_id": "fac5",
+    "name": "Sunrise Pharmacy",
+    "type": "pharmacy",
+    "location": "Tema",
+    "coords": { "lat": 5.6037, "lng": -0.187 },
+    "services": ["serv3"],
+    "openingHours": "9:00",
+    "closingHours": "19:00",
+    "image": "https://plus.unsplash.com/premium_photo-1712774402321-f377166b12d2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8aG9zcGl0YWwlMjBidWlsZGluZyUyMGdoYW5hfGVufDB8fDB8fHww",
+    "status": "active",
+    "createdAt": "2024-01-01T00:00:00Z",
+    "updatedAt": "2024-01-02T00:00:00Z"
+  },
+
+  {
+    "_id": "fac6",
+    "name": "Sunrise Pharmacy",
+    "type": "pharmacy",
+    "location": "Tema",
+    "coords": { "lat": 5.6037, "lng": -0.187 },
+    "services": ["serv3"],
+    "openingHours": "9:00",
+    "closingHours": "19:00",
+    "image": "https://images.unsplash.com/photo-1669215526535-08ee346103f0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8aG9zcGl0YWwlMjBidWlsZGluZyUyMGdoYW5hfGVufDB8fDB8fHww",
+    "status": "active",
+    "createdAt": "2024-01-01T00:00:00Z",
+    "updatedAt": "2024-01-02T00:00:00Z"
+  }
+]

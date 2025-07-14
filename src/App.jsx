@@ -51,7 +51,7 @@ function App() {
       element: <PublicLayout />,
       children: [
         { index: true, element: <Home /> },
-        { path: "facility/:id", element: <FacilityDetails /> },
+        { path: "facilities/:id", element: <FacilityDetails /> },
         { path: "*", element: <EmptyState message="Page not found" /> },
       ],
     },

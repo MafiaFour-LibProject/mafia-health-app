@@ -1,0 +1,40 @@
+[
+  {
+    "_id": "user1",
+    "name": "Vicky Amponsah",
+    "email": "vicky@gmail.com",
+    "phoneNumber": "0244444444",
+    "password": "12345678",
+    "role": "user",
+    "facility": null,
+    "isEmailVerified": true,
+    "createdAt": "2024-06-05T00:00:00Z",
+    "updatedAt": "2024-06-05T00:00:00Z"
+  },
+
+  {
+    "_id": "user2",
+    "name": "Dr. Akoto-Sampong",
+    "email": "akotosampong@gmail.com",
+    "phoneNumber": "0255555555",
+    "role": "facilityAdmin",
+    "password": "12345678",
+    "facility": "facility1",
+    "isEmailVerified": true,
+    "createdAt": "2024-06-05T00:00:00Z",
+    "updatedAt": "2024-06-05T00:00:00Z"
+  },
+
+  {
+    "_id": "user3",
+    "name": "Afia Kwarteng",
+    "email": "afiakwarteng@gmail.com",
+    "phoneNumber": "0266666666",
+    "role": "superadmin",
+    "password": "12345678",
+    "facility": null,
+    "isEmailVerified": true,
+    "createdAt": "2024-06-05T00:00:00Z",
+    "updatedAt": "2024-06-05T00:00:00Z"
+  }
+]

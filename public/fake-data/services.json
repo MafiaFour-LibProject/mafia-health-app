@@ -1,0 +1,40 @@
+[
+  {
+    "_id": "serv1",
+    "name": "Snake Bite Anti-Venom",
+    "category": "vaccine",
+    "description": "Bitten by a snake? You need this to live.",
+    "stockStatus": "in-stock",
+    "price": 30,
+    "facility": "fac1",
+    "image": "https://cdn.pixabay.com/photo/2020/12/16/05/04/medical-5835701_640.jpg",
+    "createdAt": "2024-06-10T00:00:00Z",
+    "updatedAt": "2024-06-10T00:00:00Z"
+  },
+
+  {
+    "_id": "serv2",
+    "name": "Hep B Medication",
+    "category": "medication",
+    "description": "You got Hep B? You need this to live.",
+    "stockStatus": "low-stock",
+    "price": 50,
+    "facility": "fac1",
+    "image": "https://cdn.pixabay.com/photo/2020/12/16/05/04/medical-5835701_640.jpg",
+    "createdAt": "2024-06-10T00:00:00Z",
+    "updatedAt": "2024-06-10T00:00:00Z"
+  },
+
+  {
+    "_id": "serv3",
+    "name": "Yellow Fever Test",
+    "category": "vaccine",
+    "description": "Need to find out you're not perishing? You need this test.",
+    "stockStatus": "out-in-stock",
+    "price": 60,
+    "facility": "fac2",
+    "image": "https://cdn.pixabay.com/photo/2020/12/16/05/04/medical-5835701_640.jpg",
+    "createdAt": "2024-06-10T00:00:00Z",
+    "updatedAt": "2024-06-10T00:00:00Z"
+  }
+]
