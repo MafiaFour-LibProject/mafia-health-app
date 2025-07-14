@@ -1,0 +1,23 @@
+[
+  {
+    "_id": "blog1",
+    "title": "Debunking Myths About Bee Stings",
+    "content": "Getting stung doesn't mean your ancestors are visiting you. You're probably allergic. Take some action before you perish.",
+    "image": "https://cdn.pixabay.com/photo/2015/08/02/14/27/vitamin-b-871135_640.jpg",
+    "author": "user3",
+    "isPublished": true,
+    "createdAt": "2024-06-25T00:00:00Z",
+    "updatedAt": "2024-06-25T00:00:00Z"
+  },
+
+  {
+    "_id": "blog2",
+    "title": "Debunking Myths About Bee Stings",
+    "content": "Getting stung doesn't mean your ancestors are visiting you. You're probably allergic. Take some action before you perish.",
+    "image": "https://cdn.pixabay.com/photo/2015/08/02/14/27/vitamin-b-871135_640.jpg",
+    "author": "user3",
+    "isPublished": true,
+    "createdAt": "2024-06-25T00:00:00Z",
+    "updatedAt": "2024-06-25T00:00:00Z"
+  }
+]

@@ -7,7 +7,7 @@ const UserLayout = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />{" "}
       {/* We need to adjust it to be logged-in user specific - hide signup button and show logout */}
-      <main className="flex-grow">
+      <main className="flex-grow my-10">
         <Outlet />
       </main>
       <Footer />

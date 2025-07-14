@@ -1,0 +1,27 @@
+[
+  {
+    "_id": "app1",
+    "user": "user1",
+    "facility": "fac1",
+    "service": "serv2",
+    "reason": "Need Hep B medication",
+    "preferredDate": "2025-07-15",
+    "preferredTime": "10:00",
+    "status": "pending",
+    "createdAt": "2025-07-01T00:00:00Z",
+    "updatedAt": "2025-07-01T00:00:00Z"
+  },
+
+  {
+    "_id": "app2",
+    "user": "user1",
+    "facility": "fac2",
+    "service": "serv3",
+    "reason": "Need Yellow Fever test",
+    "preferredDate": "2025-07-15",
+    "preferredTime": "10:00",
+    "status": "confirmed",
+    "createdAt": "2025-07-01T00:00:00Z",
+    "updatedAt": "2025-07-01T00:00:00Z"
+  }
+]

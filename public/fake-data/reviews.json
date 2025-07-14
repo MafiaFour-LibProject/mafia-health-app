@@ -1,0 +1,21 @@
+[
+  {
+    "_id": "rev1",
+    "user": "user1",
+    "facility": "fac1",
+    "rating": 5,
+    "comment": "Excellent service. Snake bite didn't off me!",
+    "createdAt": "2025-07-02T00:00:00Z",
+    "updatedAt": "2025-07-02T00:00:00Z"
+  },
+
+  {
+    "_id": "rev2",
+    "user": "user1",
+    "facility": "fac2",
+    "rating": 1,
+    "comment": "Poor service! Yellow fever nearly offed me!",
+    "createdAt": "2025-07-02T00:00:00Z",
+    "updatedAt": "2025-07-02T00:00:00Z"
+  }
+]
