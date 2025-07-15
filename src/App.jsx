@@ -19,7 +19,7 @@ import ResetPassword from "./pages/auth/ResetPassword";
 import VerifyEmail from "./pages/auth/VerifyEmail";
 
 // Superadmin Pages
-import SuperAdminDashboard from "./pages/superadmin/SuperAdminDashboard";
+import SuperadminDashboard from "./pages/superadmin/SuperadminDashboard";
 import SuperAdminFacilities from "./pages/superadmin/SuperAdminFacilities";
 import SuperAdminUsers from "./pages/superadmin/SuperAdminUsers";
 import Analytics from "./pages/superadmin/Analytics";
@@ -98,7 +98,7 @@ function App() {
       path: "/superadmin",
       element: <SuperAdminLayout />,
       children: [
-        { index: true, element: <SuperAdminDashboard /> },
+        { index: true, element: <SuperadminDashboard /> },
         { path: "facilities", element: <SuperAdminFacilities /> },
         // { path: "add-facility", element: <AddFacility /> },
         { path: "users", element: <SuperAdminUsers /> },
