@@ -20,8 +20,8 @@ import VerifyEmail from "./pages/auth/VerifyEmail";
 
 // Superadmin Pages
 import SuperadminDashboard from "./pages/superadmin/SuperadminDashboard";
-import SuperAdminFacilities from "./pages/superadmin/SuperAdminFacilities";
-import SuperAdminUsers from "./pages/superadmin/SuperAdminUsers";
+import SuperadminFacilities from "./pages/superadmin/SuperadminFacilities";
+import SuperadminUsers from "./pages/superadmin/SuperadminUsers";
 import Analytics from "./pages/superadmin/Analytics";
 // import AddFacility from "./pages/superadmin/AddFacility";
 
@@ -99,9 +99,9 @@ function App() {
       element: <SuperAdminLayout />,
       children: [
         { index: true, element: <SuperadminDashboard /> },
-        { path: "facilities", element: <SuperAdminFacilities /> },
+        { path: "facilities", element: <SuperadminFacilities /> },
         // { path: "add-facility", element: <AddFacility /> },
-        { path: "users", element: <SuperAdminUsers /> },
+        { path: "users", element: <SuperadminUsers /> },
         { path: "analytics", element: <Analytics /> },
       ],
     },
