@@ -16,7 +16,6 @@ const Signup = () => {
   const onSubmit = async (data) => {
     const payload = {
       fullName: data.fullName,
-      // facility: data.facility,
       contact: data.contact,
       email: data.email,
       password: data.password,
@@ -27,6 +26,7 @@ const Signup = () => {
 
     try {
       const res = await ApiSignup(payload);
+      localStorage.setItem("unverifiedEmail", payload.email);
       toast.success("User registered successfully");
       navigate("/auth/verify-email");
     } catch (error) {

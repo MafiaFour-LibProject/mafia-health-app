@@ -18,7 +18,7 @@ import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/Signup";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
-import VerifyEmail from "./pages/auth/VerifyEmail";
+import VerifyEmailNotice from "./pages/auth/VerifyEmailNotice";
 
 // Superadmin Pages
 import SuperadminDashboard from "./pages/superadmin/SuperadminDashboard";
@@ -44,6 +44,7 @@ import ReviewList from "./pages/reviews/ReviewList";
 
 // Empty/Fallback
 import EmptyState from "./components/EmptyState";
+import VerifyEmailToken from "./pages/auth/VerifyEmailToken";
 
 function App() {
   const router = createBrowserRouter([
@@ -66,7 +67,8 @@ function App() {
         { path: "signup", element: <Signup /> },
         { path: "forgot-password", element: <ForgotPassword /> },
         { path: "reset-password", element: <ResetPassword /> },
-        { path: "verify-email", element: <VerifyEmail /> },
+        { path: "verify-email", element: <VerifyEmailNotice /> },
+        { path: "/auth/verify-email-token", element: <VerifyEmailToken /> },
       ],
     },
 

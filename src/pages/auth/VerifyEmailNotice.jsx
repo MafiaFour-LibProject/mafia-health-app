@@ -1,42 +1,19 @@
-import { useEffect, useState } from "react";
-import { useSearchParams, useNavigate, Link } from "react-router-dom";
-import {
-  verifyEmailToken,
-  resendVerificationEmail,
-} from "../../services/authService";
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import { resendVerificationEmail } from "../../services/authService";
 
-const VerifyEmail = () => {
-  const [searchParams] = useSearchParams();
-  const [status, setStatus] = useState("verifying"); // verifying, success, error
+const VerifyEmailNotice = () => {
   const [message, setMessage] = useState("");
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const verify = async () => {
-      const token = searchParams.get("token");
-      if (!token) {
-        setStatus("error");
-        setMessage("Invalid or missing token.");
-        return;
-      }
-
-      try {
-        await verifyEmailToken(token);
-        setStatus("success");
-        setMessage("Your email has been successfully verified!");
-        setTimeout(() => navigate("/auth/login"), 3000);
-      } catch (err) {
-        setStatus("error");
-        setMessage(err.message || "Verification failed.");
-      }
-    };
-
-    verify();
-  }, []);
 
   const handleResend = async () => {
+    const email = localStorage.getItem("unverifiedEmail");
+    if (!email) {
+      setMessage("Email not found. Please sign up again.");
+      return;
+    }
+
     try {
-      await resendVerificationEmail();
+      await resendVerificationEmail(email);
       setMessage("Verification email resent. Please check your inbox.");
     } catch (err) {
       setMessage(err.message || "Failed to resend verification email.");
@@ -53,13 +30,13 @@ const VerifyEmail = () => {
           Verify Your Email
         </h2>
 
-        <p className="text-lg text-gray-700 mb-8">
-          {status === "verifying" && "Verifying your email..."}
-          {status === "success" && message}
-          {status === "error" && message}
+        <p className="text-lg text-gray-700 mb-4">
+          A verification email has been sent. Please check your inbox.
         </p>
 
-        <div className="flex flex-col items-center justify-center gap-4">
+        {message && <p className="text-sm text-green-700">{message}</p>}
+
+        <div className="flex flex-col items-center justify-center gap-4 mt-4">
           <button
             type="button"
             onClick={handleResend}
@@ -85,4 +62,4 @@ const VerifyEmail = () => {
   );
 };
 
-export default VerifyEmail;
+export default VerifyEmailNotice;
