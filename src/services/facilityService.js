@@ -1,73 +1,73 @@
 import { apiClient } from "./config";
 
-let fakeFacilitiesCache = null; // change later
+// let fakeFacilitiesCache = null; // change later
 
-// GET all facilities
+// // GET all facilities
 
-export const getAllFacilities = async () => {
-  const res = await apiClient.get("/fake-data/facilities.json");
-  fakeFacilitiesCache = res.data;
-  return res.data;
-};
+// export const getAllFacilities = async () => {
+//   const res = await apiClient.get("/fake-data/facilities.json");
+//   fakeFacilitiesCache = res.data;
+//   return res.data;
+// };
 
-// GET single facility by ID
+// // GET single facility by ID
 
-export const getSingleFacility = async (id) => {
-  const res = await apiClient.get("/fake-data/facilities.json");
-  return res.data.find((f) => String(f._id) === id);
-};
+// export const getSingleFacility = async (id) => {
+//   const res = await apiClient.get("/fake-data/facilities.json");
+//   return res.data.find((f) => String(f._id) === id);
+// };
 
-// Create new facility
+// // Create new facility
 
-export const createFacility = async (payload) => {
-  const res = await apiClient.get("/fake-data/facilities.json");
-  const newFacility = {
-    ...payload,
-    _id: Date.now().toString(),
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  };
-  fakeFacilitiesCache = [newFacility, ...res.data];
-  return newFacility;
-};
+// export const createFacility = async (payload) => {
+//   const res = await apiClient.get("/fake-data/facilities.json");
+//   const newFacility = {
+//     ...payload,
+//     _id: Date.now().toString(),
+//     createdAt: new Date().toISOString(),
+//     updatedAt: new Date().toISOString(),
+//   };
+//   fakeFacilitiesCache = [newFacility, ...res.data];
+//   return newFacility;
+// };
 
-// Update Facility
+// // Update Facility
 
-export const updateFacility = async (id, payload) => {
-  const res = await apiClient.get("/fake-data/facilities.json");
-  const index = res.data.findIndex((f) => f._id === id);
-  if (index !== -1) {
-    const updatedFacility = {
-      ...res.data[index],
-      ...payload,
-      updatedAt: new Date().toISOString(),
-    };
-    res.data[index] = updatedFacility;
-    fakeFacilitiesCache = [...res.data];
-    return updatedFacility;
-  }
-  return null;
-};
+// export const updateFacility = async (id, payload) => {
+//   const res = await apiClient.get("/fake-data/facilities.json");
+//   const index = res.data.findIndex((f) => f._id === id);
+//   if (index !== -1) {
+//     const updatedFacility = {
+//       ...res.data[index],
+//       ...payload,
+//       updatedAt: new Date().toISOString(),
+//     };
+//     res.data[index] = updatedFacility;
+//     fakeFacilitiesCache = [...res.data];
+//     return updatedFacility;
+//   }
+//   return null;
+// };
 
-// Delete Facility
+// // Delete Facility
 
-export const deleteFacility = async (id) => {
-  const res = await apiClient.get("/fake-data/facilities.json");
-  const updatedList = res.data.filter((f) => f._id !== id);
-  fakeFacilitiesCache = updatedList;
-  return id;
-};
+// export const deleteFacility = async (id) => {
+//   const res = await apiClient.get("/fake-data/facilities.json");
+//   const updatedList = res.data.filter((f) => f._id !== id);
+//   fakeFacilitiesCache = updatedList;
+//   return id;
+// };
 
-/*  replace later with:
+// replace later with:
 
- export const getAllFacilities = () => apiClient.get("/facilities");
+export const getAllFacilities = () => apiClient.get("/api/facilities");
 
- export const getSingleFacility = (id) => apiClient.get(`/facilities/${id}`)
+export const getSingleFacility = (id) => apiClient.get(`/api/facilities/${id}`);
 
- export const createFacility = (payload) => apiClient.post("/facilities", payload);
+export const createFacility = (payload) =>
+  apiClient.post("/api/facilities", payload);
 
- export const updateFacility = (id, payload) => apiClient.put(`/facilities/${id}`, payload);
+export const updateFacility = (id, payload) =>
+  apiClient.put(`/api/facilities/${id}`, payload);
 
-  export const deleteFacility = (id) => apiClient.delete(`/facilities/${id}`);
-
- */
+export const deleteFacility = (id) => apiClient.delete(`/api/facilities/${id}`);
