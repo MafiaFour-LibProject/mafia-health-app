@@ -68,26 +68,6 @@ const Signup = () => {
             )}
           </div>
 
-          {/* Facility Input */}
-          {/* <div className="mb-4">
-            <label
-              htmlFor="institution"
-              className="block text-sm font-semibold text-gray-700 mb-1"
-            >
-              Name of Facility
-            </label>
-            <input
-              type="text"
-              id="institution"
-              {...register("institution", { required: "Facility is required" })}
-              placeholder="Enter your facility"
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-blue-400"
-            />
-            {errors?.institution && (
-              <span className="text-red-600">{errors.institution.message}</span>
-            )}
-          </div> */}
-
           {/* Email Input */}
           <div className="mb-4">
             <label
