@@ -31,10 +31,11 @@ export const verifyEmailToken = async (token) => {
 
 // resend verification email
 
-export const resendVerificationEmail = async () => {
+export const resendVerificationEmail = async (email) => {
   try {
     const response = await apiClient.post(
-      "https://startuphealth.onrender.com/api-docsapi/auth/resend-verification"
+      "https://startuphealth.onrender.com/api-docs/api/auth/resend-verification",
+      { email }
     );
     return response.data;
   } catch (error) {
