@@ -60,7 +60,12 @@ import { apiClient } from "./config";
 
 // replace later with:
 
-export const getAllFacilities = () => apiClient.get("/api/facilities");
+const baseURL = "https://startuphealth.onrender.com";
+
+export const getAllFacilities = async (params = {}) => {
+  const response = await apiClient.get(`${baseURL}/api/facilities`, { params }); // axios handles encoding
+  return response.data;
+};
 
 export const getSingleFacility = (id) => apiClient.get(`/api/facilities/${id}`);
 
