@@ -1,7 +1,5 @@
 import axios from "axios";
 
-// connect to real backend URL later. also refer to bye-bye store config.js for how to add a login token (from localStorage)
-
 const baseURL = import.meta.env.VITE_BASE_URL;
 
 export const apiClient = axios.create({
@@ -10,3 +8,16 @@ export const apiClient = axios.create({
     "Content-Type": "application/json",
   },
 });
+
+// intercept request to attach token
+
+apiClient.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);

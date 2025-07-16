@@ -1,0 +1,51 @@
+import { apiClient } from "./config";
+
+// login
+
+export const ApiLogin = async (payload) =>
+  apiClient.post(
+    "https://startuphealth.onrender.com/api-docs/api/auth/LogIn",
+    payload
+  );
+
+// signup
+export const ApiSignup = async (payload) =>
+  apiClient.post(
+    "https://startuphealth.onrender.com/api-docs/api/auth/signUp",
+    payload
+  );
+
+// verify email
+
+export const verifyEmailToken = async (token) => {
+  try {
+    const response = await apiClient.post(
+      "https://startuphealth.onrender.com/api-docs/api/auth/verify-email",
+      { token }
+    );
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { message: "Email verification failed" };
+  }
+};
+
+// resend verification email
+
+export const resendVerificationEmail = async () => {
+  try {
+    const response = await apiClient.post(
+      "https://startuphealth.onrender.com/api-docsapi/auth/resend-verification"
+    );
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { message: "Resend failed" };
+  }
+};
+
+// export const ApiForgotPassword = async (payload) =>
+//   apiClient.post("/auth/forgot-password", payload);
+
+// export const ApiResetPassword = async (payload) =>
+//   apiClient.post("/auth/reset-password", payload);
+
+// export const ApiVerifyEmail = async (payload) => apiClient.post("/auth/verify-email");
