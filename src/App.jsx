@@ -19,6 +19,7 @@ import Signup from "./pages/auth/Signup";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
 import VerifyEmailNotice from "./pages/auth/VerifyEmailNotice";
+import VerifyEmailToken from "./pages/auth/VerifyEmailToken";
 
 // Superadmin Pages
 import SuperadminDashboard from "./pages/superadmin/SuperadminDashboard";
@@ -44,7 +45,6 @@ import ReviewList from "./pages/reviews/ReviewList";
 
 // Empty/Fallback
 import EmptyState from "./components/EmptyState";
-import VerifyEmailToken from "./pages/auth/VerifyEmailToken";
 
 function App() {
   const router = createBrowserRouter([
