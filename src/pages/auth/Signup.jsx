@@ -26,6 +26,7 @@ const Signup = () => {
 
     try {
       const res = await ApiSignup(payload);
+      console.log("Signup response:", res);
       localStorage.setItem("unverifiedEmail", payload.email);
       toast.success("User registered successfully");
       navigate("/auth/verify-email");

@@ -11,6 +11,7 @@ const VerifyEmailToken = () => {
   useEffect(() => {
     const verify = async () => {
       const token = searchParams.get("token");
+      console.log("Token from URL:", token);
       if (!token) {
         setStatus("error");
         setMessage("Invalid or missing token.");
