@@ -14,6 +14,7 @@ const Home = () => {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedType, setSelectedType] = useState("");
+  const defaultImage = "/images/hero-image-3.jpg";
 
   const fetchFacilities = async () => {
     setLoading(true);
@@ -21,15 +22,21 @@ const Home = () => {
     try {
       const params = {};
       if (searchTerm) {
-        params.search = searchTerm;
+        params.q = searchTerm;
       }
       if (selectedType) {
         params.type = selectedType;
       }
 
-      const data = await getAllFacilities();
+      const data = await getAllFacilities(params);
       console.log("fetched data:", data);
-      setFacilities(data);
+
+      const facilitiesArray = data;
+
+      if (!Array.isArray(facilitiesArray)) {
+        throw new Error("Expected an array of facilities");
+      }
+      setFacilities(facilitiesArray);
     } catch (err) {
       console.log("Error fetching facilities:", err);
       setError("Failed to load facilities. Please try again later");
@@ -203,8 +210,8 @@ const Home = () => {
           <Link to={`/facilities/${f._id}`} key={f._id}>
             <div className="facility-card bg-white  border border-green-200 hover:border-green-300 hover:-translate-y-1 hover:shadow-xl transition transform duration-500 rounded-xl">
               <img
-                src={f.image}
-                alt="facility image"
+                src={f.images?.[0]?.url ?? defaultImage}
+                alt={f.name}
                 className="w-full h-50 object-cover rounded-t-xl"
               />
               <div className="px-5 py-5">
@@ -221,7 +228,10 @@ const Home = () => {
 
                 <div className="flex flex-row gap-x-1 mt-2 items-center justify-center md:justify-normal">
                   <MapPin className="size-5 text-green-600" />
-                  <p className="text-gray-500 font-semibold">{f.location}</p>
+                  <p className="text-gray-500 font-semibold">
+                    {f.location?.address || "Unknown address"},{" "}
+                    {f.location?.city || "Unknown city"}
+                  </p>
                 </div>
 
                 <div

@@ -1,5 +1,7 @@
 import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // Layouts
 import PublicLayout from "./layouts/PublicLayout";
@@ -16,12 +18,13 @@ import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/Signup";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
-import VerifyEmail from "./pages/auth/VerifyEmail";
+import VerifyEmailNotice from "./pages/auth/VerifyEmailNotice";
+import VerifyEmailToken from "./pages/auth/VerifyEmailToken";
 
 // Superadmin Pages
-import SuperAdminDashboard from "./pages/superadmin/SuperAdminDashboard";
-import SuperAdminFacilities from "./pages/superadmin/SuperAdminFacilities";
-import SuperAdminUsers from "./pages/superadmin/SuperAdminUsers";
+import SuperadminDashboard from "./pages/superadmin/SuperadminDashboard";
+import SuperadminFacilities from "./pages/superadmin/SuperadminFacilities";
+import SuperadminUsers from "./pages/superadmin/SuperadminUsers";
 import Analytics from "./pages/superadmin/Analytics";
 // import AddFacility from "./pages/superadmin/AddFacility";
 
@@ -42,18 +45,10 @@ import ReviewList from "./pages/reviews/ReviewList";
 
 // Empty/Fallback
 import EmptyState from "./components/EmptyState";
-
-//Admin Sidebar
-import Sidebar from "./components/Sidebar";
-
-//Admin SuperSidebar
-import SuperSidebar from "./components/SuperAdminSidebar";
-
-
+import AllFacilities from "./components/AllFacilities";
+import SuperAdminFacilityView from "./pages/superadmin/SuperAdminFacilityView";
 
 function App() {
-
-
   const router = createBrowserRouter([
     {
       path: "/",
@@ -73,8 +68,15 @@ function App() {
         { path: "signup", element: <Signup /> },
         { path: "forgot-password", element: <ForgotPassword /> },
         { path: "reset-password", element: <ResetPassword /> },
-        { path: "verify-email", element: <VerifyEmail /> },
+        { path: "verify-email", element: <VerifyEmailNotice /> },
       ],
+    },
+
+    { path: "/verify-email", element: <VerifyEmailToken /> },
+
+    {
+      path: "all-facilities",
+      element: <AllFacilities />,
     },
 
     // User Routes
@@ -107,26 +109,22 @@ function App() {
       path: "/superadmin",
       element: <SuperAdminLayout />,
       children: [
-        { index: true, element: <SuperAdminDashboard /> },
-        { path: "facilities", element: <SuperAdminFacilities /> },
-        // { path: "add-facility", element: <AddFacility /> },
-        { path: "users", element: <SuperAdminUsers /> },
+        { index: true, element: <SuperadminDashboard /> },
+        { path: "facilities/:id", element: <SuperAdminFacilityView /> },
+        { path: "facilities", element: <SuperadminFacilities /> },
+        { path: "users", element: <SuperadminUsers /> },
         { path: "analytics", element: <Analytics /> },
       ],
     },
-
-    {
-      path: "/sidebar",
-      element: <Sidebar className="w-64 bg-gray-700 fixed h-screen px-4 py-2 flex flex-col mb-10"/>,
-    },
-
-    {
-      path:"/superadminsidebar",
-      element:<SuperSidebar/>
-    }
+     
   ]);
 
-  return <RouterProvider router={router} />;
+  return (
+    <>
+      <RouterProvider router={router} />
+      <ToastContainer position="top-right" autoClose={3000} />
+    </>
+  );
 }
 
 export default App;

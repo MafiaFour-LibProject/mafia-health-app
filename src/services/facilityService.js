@@ -1,73 +1,32 @@
+// replace later with:
+
 import { apiClient } from "./config";
 
-let fakeFacilitiesCache = null; // change later
+export const getAllFacilities = async (params = {}) => {
+  const response = await apiClient.get("/api/facilities", { params });
 
-// GET all facilities
+  const maybeArray =
+    response.data?.facilities || response.data?.data || response.data;
 
-export const getAllFacilities = async () => {
-  const res = await apiClient.get("/fake-data/facilities.json");
-  fakeFacilitiesCache = res.data;
-  return res.data;
-};
-
-// GET single facility by ID
-
-export const getSingleFacility = async (id) => {
-  const res = await apiClient.get("/fake-data/facilities.json");
-  return res.data.find((f) => String(f._id) === id);
-};
-
-// Create new facility
-
-export const createFacility = async (payload) => {
-  const res = await apiClient.get("/fake-data/facilities.json");
-  const newFacility = {
-    ...payload,
-    _id: Date.now().toString(),
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  };
-  fakeFacilitiesCache = [newFacility, ...res.data];
-  return newFacility;
-};
-
-// Update Facility
-
-export const updateFacility = async (id, payload) => {
-  const res = await apiClient.get("/fake-data/facilities.json");
-  const index = res.data.findIndex((f) => f._id === id);
-  if (index !== -1) {
-    const updatedFacility = {
-      ...res.data[index],
-      ...payload,
-      updatedAt: new Date().toISOString(),
-    };
-    res.data[index] = updatedFacility;
-    fakeFacilitiesCache = [...res.data];
-    return updatedFacility;
+  if (!Array.isArray(maybeArray)) {
+    throw new Error("Expected an array of facilities");
   }
-  return null;
+
+  return maybeArray;
 };
 
-// Delete Facility
+export const getSingleFacility = async (id) =>
+  apiClient.get(`/api/facilities/${id}`);
 
-export const deleteFacility = async (id) => {
-  const res = await apiClient.get("/fake-data/facilities.json");
-  const updatedList = res.data.filter((f) => f._id !== id);
-  fakeFacilitiesCache = updatedList;
-  return id;
+export const createFacility = async (payload) =>
+  apiClient.post("/api/facilities", payload);
+
+export const createFacilityAdmin = async (payload) => {
+  return apiClient.post("/api/auth/create-facility-admin", payload);
 };
 
-/*  replace later with:
+export const updateFacility = async (id, payload) =>
+  apiClient.put(`/api/facilities/${id}`, payload);
 
- export const getAllFacilities = () => apiClient.get("/facilities");
-
- export const getSingleFacility = (id) => apiClient.get(`/facilities/${id}`)
-
- export const createFacility = (payload) => apiClient.post("/facilities", payload);
-
- export const updateFacility = (id, payload) => apiClient.put(`/facilities/${id}`, payload);
-
-  export const deleteFacility = (id) => apiClient.delete(`/facilities/${id}`);
-
- */
+export const deleteFacility = async (id) =>
+  apiClient.delete(`/api/facilities/${id}`);
