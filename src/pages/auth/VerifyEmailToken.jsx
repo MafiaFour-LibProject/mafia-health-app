@@ -4,6 +4,7 @@ import { verifyEmailToken } from "../../services/authService";
 
 const VerifyEmailToken = () => {
   const { token } = useParams();
+  console.log("Token from URL:", token);
   const [status, setStatus] = useState("verifying");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
