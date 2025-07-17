@@ -1,79 +1,43 @@
-import React from 'react';
+import React from "react";
+import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#212C3D] text-white py-8 px-4 sm:px-6 lg:px-8 font-inter">
-      <div className="max-w-7xl mx-auto grid grid-cols-8 gap-4 md:gap-6 lg:gap-8 items-start">
-
-        {/* Company Logo */}
-        <div className="md:col-span-2 flex justify-center md:justify-start mb-6 md:mb-0">
-          <h2 className="text-4xl font-bold text-[#4CAF50] tracking-wide">MaFia</h2>
+    <footer className="bg-gray-800 text-white py-6">
+      <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+        
+        {/* Brand */}
+        <div className="text-center md:text-left">
+          <h1 className="text-xl font-bold">MaFia</h1>
         </div>
 
-        {/* Company Info */}
-        <div className="flex flex-col items-center md:items-start text-center md:text-left">
-          <h3 className="text-lg font-semibold mb-3">Company Info</h3>
-          <ul className="space-y-1 text-gray-300 text-sm">
-            <li><a href="#" className="hover:text-white transition-colors duration-300">About Us</a></li>
-            <li><a href="#" className="hover:text-white transition-colors duration-300">Careers</a></li>
-            <li><a href="#" className="hover:text-white transition-colors duration-300">Press & Media</a></li>
-          </ul>
+        {/* Navigation Links */}
+        <div className="flex space-x-6">
+          <a href="#" className="hover:text-gray-400 transition">Home</a>
+          <a href="#" className="hover:text-gray-400 transition">About</a>
+          <a href="#" className="hover:text-gray-400 transition">Contact</a>
         </div>
 
-        {/* Services */}
-        <div className="flex flex-col items-center md:items-start text-center md:text-left">
-          <h3 className="text-lg font-semibold mb-3">Services</h3>
-          <ul className="space-y-1 text-gray-300 text-sm">
-            <li><a href="#" className="hover:text-white transition-colors duration-300">Find Healthcare Providers</a></li>
-            <li><a href="#" className="hover:text-white transition-colors duration-300">Book Consultations</a></li>
-            <li><a href="#" className="hover:text-white transition-colors duration-300">Insurance Coverage</a></li>
-          </ul>
+        {/* Social Icons */}
+        <div className="flex space-x-4">
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500">
+            <FaFacebook size={20} />
+          </a>
+          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-sky-400">
+            <FaTwitter size={20} />
+          </a>
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-pink-400">
+            <FaInstagram size={20} />
+          </a>
+          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-300">
+            <FaLinkedin size={20} />
+          </a>
         </div>
+      </div>
 
-        {/* Support */}
-        <div className="flex flex-col items-center md:items-start text-center md:text-left">
-          <h3 className="text-lg font-semibold mb-3">Support</h3>
-          <ul className="space-y-1 text-gray-300 text-sm">
-            <li><a href="#" className="hover:text-white transition-colors duration-300">Help Center</a></li>
-            <li><a href="#" className="hover:text-white transition-colors duration-300">FAQs</a></li>
-            <li><a href="#" className="hover:text-white transition-colors duration-300">Contact Us</a></li>
-            <li><a href="#" className="hover:text-white transition-colors duration-300">Privacy Policy</a></li>
-            <li><a href="#" className="hover:text-white transition-colors duration-300">Terms Of Service</a></li>
-          </ul>
-        </div>
-
-        {/* Social Media */}
-        <div className="flex flex-col items-center md:items-start text-center md:text-left">
-          <h3 className="text-lg font-semibold mb-3">Social Media</h3>
-          <ul className="space-y-1 text-gray-300 text-sm">
-            <li><a href="#" className="hover:text-white transition-colors duration-300">Facebook</a></li>
-            <li><a href="#" className="hover:text-white transition-colors duration-300">X</a></li>
-            <li><a href="#" className="hover:text-white transition-colors duration-300">Instagram</a></li>
-          </ul>
-        </div>
-
-        {/* Newsletter */}
-        <div className="md:col-span-6 lg:col-span-2 flex flex-col items-center md:items-start text-center md:text-left mt-8 md:mt-0">
-          <h3 className="text-lg font-semibold mb-3">Newsletter</h3>
-          <p className="text-gray-300 mb-3 max-w-xs text-sm">
-            Stay informed! Sign up for our newsletter and get the latest healthcare tips, updates, and exclusive LifeLyn features.
-          </p>
-          <form className="w-full max-w-sm">
-            <div className="flex flex-col sm:flex-row gap-2">
-              <input
-                type="email"
-                placeholder="Your email"
-                className="flex-grow p-2 rounded-md bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-              />
-              <button
-                type="submit"
-                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-lg transition-colors duration-300 text-sm "
-              >
-                Subscribe
-              </button>
-            </div>
-          </form>
-        </div>
+      {/* Copyright */}
+      <div className="text-center text-sm mt-4 text-gray-400">
+        &copy; {new Date().getFullYear()} MaFia. All rights reserved.
       </div>
     </footer>
   );

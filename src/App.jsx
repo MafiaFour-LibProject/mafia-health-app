@@ -43,9 +43,18 @@ import ReviewList from "./pages/reviews/ReviewList";
 // Empty/Fallback
 import EmptyState from "./components/EmptyState";
 
+//Admin Sidebar
+import Sidebar from "./components/Sidebar";
+
+//Admin SuperSidebar
+import SuperSidebar from "./components/SuperAdminSidebar";
+
+
+
 function App() {
+
+
   const router = createBrowserRouter([
-    // Public Routes (Unregistered)
     {
       path: "/",
       element: <PublicLayout />,
@@ -105,6 +114,16 @@ function App() {
         { path: "analytics", element: <Analytics /> },
       ],
     },
+
+    {
+      path: "/sidebar",
+      element: <Sidebar className="w-64 bg-gray-700 fixed h-screen px-4 py-2 flex flex-col mb-10"/>,
+    },
+
+    {
+      path:"/superadminsidebar",
+      element:<SuperSidebar/>
+    }
   ]);
 
   return <RouterProvider router={router} />;
