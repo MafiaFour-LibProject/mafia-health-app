@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { X } from "lucide-react";
-import { createFacility, updateFacility } from "../../services/facilityService";
+import { createFacility } from "../../services/facilityService";
 import { toast } from "react-toastify";
 
-const FacilityFormModal = ({ isOpen, onClose, onSaved, facility }) => {
+const FacilityFormModal = ({ isOpen, onClose, onSaved }) => {
   const {
     register,
     handleSubmit,
@@ -14,43 +14,43 @@ const FacilityFormModal = ({ isOpen, onClose, onSaved, facility }) => {
 
   useEffect(() => {
     if (isOpen) {
-      if (facility) {
-        reset({
-          name: facility.name || "",
-          location: facility.location || "",
-          capacity: facility.capacity || "",
-        });
-      } else {
-        reset({
-          name: "",
-          location: "",
-          capacity: "",
-        });
-      }
+      reset({
+        name: "",
+        type: "",
+        address: "",
+        city: "",
+        email: "",
+        phone: "",
+      });
+      document.body.style.overflow = "hidden";
     }
-  }, [isOpen, facility, reset]);
-
-  useEffect(() => {
-    if (isOpen) document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = "unset";
     };
-  }, [isOpen]);
+  }, [isOpen, reset]);
 
   const onSubmit = async (data) => {
+    const payload = {
+      name: data.name,
+      type: data.type,
+      location: {
+        address: data.address,
+        city: data.city,
+      },
+      contact: {
+        email: data.email,
+        phone: data.phone,
+      },
+    };
+
     try {
-      if (facility) {
-        await updateFacility(facility.id, data);
-        toast.success("Facility updated successfully");
-      } else {
-        await createFacility(data);
-        toast.success("Facility created successfully");
-      }
+      await createFacility(payload);
+      toast.success("Facility created successfully");
       onClose();
       onSaved?.();
     } catch (error) {
-      console.error("Error saving facility:", error);
-      toast.error("Failed to save facility");
+      console.error("Error creating facility:", error);
+      toast.error("Failed to create facility");
     }
   };
 
@@ -68,9 +68,7 @@ const FacilityFormModal = ({ isOpen, onClose, onSaved, facility }) => {
     >
       <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md relative border">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold">
-            {facility ? "Edit Facility" : "Add Facility"}
-          </h2>
+          <h2 className="text-lg font-semibold">Add New Facility</h2>
           <button
             onClick={onClose}
             className="text-gray-500 hover:text-red-500"
@@ -88,16 +86,40 @@ const FacilityFormModal = ({ isOpen, onClose, onSaved, facility }) => {
           />
           <input
             type="text"
-            placeholder="Location"
-            {...register("location", { required: true })}
+            placeholder="Type (e.g., hospital, clinic)"
+            {...register("type", { required: true })}
             className="w-full px-3 py-2 border rounded-md"
           />
-          <input
-            type="number"
-            placeholder="Capacity"
-            {...register("capacity", { required: true, min: 1 })}
-            className="w-full px-3 py-2 border rounded-md"
-          />
+
+          <div className="grid grid-cols-2 gap-2">
+            <input
+              type="text"
+              placeholder="Address"
+              {...register("address", { required: true })}
+              className="w-full px-3 py-2 border rounded-md"
+            />
+            <input
+              type="text"
+              placeholder="City"
+              {...register("city", { required: true })}
+              className="w-full px-3 py-2 border rounded-md"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-2">
+            <input
+              type="email"
+              placeholder="Email"
+              {...register("email", { required: true })}
+              className="w-full px-3 py-2 border rounded-md"
+            />
+            <input
+              type="text"
+              placeholder="Phone"
+              {...register("phone", { required: true })}
+              className="w-full px-3 py-2 border rounded-md"
+            />
+          </div>
 
           <button
             type="submit"
@@ -106,11 +128,7 @@ const FacilityFormModal = ({ isOpen, onClose, onSaved, facility }) => {
               isSubmitting ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >
-            {isSubmitting
-              ? "Saving..."
-              : facility
-              ? "Update Facility"
-              : "Add Facility"}
+            {isSubmitting ? "Saving..." : "Add Facility"}
           </button>
         </form>
       </div>

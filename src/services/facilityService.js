@@ -18,10 +18,15 @@ export const getAllFacilities = async (params = {}) => {
 export const getSingleFacility = async (id) =>
   apiClient.get(`/api/facilities/${id}`);
 
-export const createFacility = (payload) =>
+export const createFacility = async (payload) =>
   apiClient.post("/api/facilities", payload);
 
-export const updateFacility = (id, payload) =>
+export const createFacilityAdmin = async (payload) => {
+  return apiClient.post("/api/auth/create-facility-admin", payload);
+};
+
+export const updateFacility = async (id, payload) =>
   apiClient.put(`/api/facilities/${id}`, payload);
 
-export const deleteFacility = (id) => apiClient.delete(`/api/facilities/${id}`);
+export const deleteFacility = async (id) =>
+  apiClient.delete(`/api/facilities/${id}`);
