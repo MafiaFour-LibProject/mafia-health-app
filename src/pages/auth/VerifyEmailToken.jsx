@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { verifyEmailToken } from "../../services/authService";
 
 const VerifyEmailToken = () => {
-  const { token } = useParams();
-  console.log("Token from URL:", token);
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get("token");
   const [status, setStatus] = useState("verifying");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
