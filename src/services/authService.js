@@ -15,9 +15,9 @@ export const ApiSignup = async (payload) =>
 
 export const verifyEmailToken = async (token) => {
   try {
-    const response = await apiClient.post(`${baseURL}/api/auth/verify-email`, {
-      token,
-    });
+    const response = await apiClient.get(
+      `${baseURL}/api/auth/verify-email/${token}`
+    );
     return response.data;
   } catch (error) {
     throw error.response?.data || { message: "Email verification failed" };
