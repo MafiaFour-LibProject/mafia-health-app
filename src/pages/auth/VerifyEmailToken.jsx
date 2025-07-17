@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { verifyEmailToken } from "../../services/authService";
 
 const VerifyEmailToken = () => {
-  const { token } = useParams(); // ✅ path param, not query param
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get("token"); // ✅ Get token from query param
   const [status, setStatus] = useState("verifying");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ const VerifyEmailToken = () => {
   useEffect(() => {
     const verify = async () => {
       try {
+        if (!token) throw new Error("No token provided");
         await verifyEmailToken(token);
         setStatus("success");
         setMessage("Your email has been successfully verified!");
@@ -21,7 +23,7 @@ const VerifyEmailToken = () => {
       }
     };
 
-    if (token) verify();
+    verify();
   }, [token, navigate]);
 
   return (
