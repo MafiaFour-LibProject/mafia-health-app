@@ -68,9 +68,10 @@ function App() {
         { path: "forgot-password", element: <ForgotPassword /> },
         { path: "reset-password", element: <ResetPassword /> },
         { path: "verify-email", element: <VerifyEmailNotice /> },
-        { path: "/auth/verify-email-token", element: <VerifyEmailToken /> },
       ],
     },
+
+    { path: "/verify-email/:token", element: <VerifyEmailToken /> },
 
     // User Routes
     {
