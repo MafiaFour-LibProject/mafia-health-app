@@ -1,23 +1,19 @@
 import { apiClient } from "./config";
 
-const baseURL = "https://startuphealth.onrender.com";
-
 // login
 
 export const ApiLogin = async (payload) =>
-  apiClient.post(`${baseURL}/api/auth/LogIn`, payload);
+  apiClient.post("/api/auth/LogIn", payload);
 
 // signup
 export const ApiSignup = async (payload) =>
-  apiClient.post(`${baseURL}/api/auth/signUp`, payload);
+  apiClient.post("/api/auth/signUp", payload);
 
 // verify email
 
 export const verifyEmailToken = async (token) => {
   try {
-    const response = await apiClient.get(
-      `${baseURL}/api/auth/verify-email/${token}`
-    );
+    const response = await apiClient.get(`/api/auth/verify-email/${token}`);
     return response.data;
   } catch (error) {
     throw error.response?.data || { message: "Email verification failed" };
@@ -28,12 +24,9 @@ export const verifyEmailToken = async (token) => {
 
 export const resendVerificationEmail = async (email) => {
   try {
-    const response = await apiClient.post(
-      `${baseURL}/api/auth/resend-verification`,
-      {
-        email,
-      }
-    );
+    const response = await apiClient.post("/api/auth/resend-verification", {
+      email,
+    });
     return response.data;
   } catch (error) {
     throw error.response?.data || { message: "Resend failed" };

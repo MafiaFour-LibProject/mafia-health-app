@@ -1,5 +1,3 @@
-import { apiClient } from "./config";
-
 // let fakeFacilitiesCache = null; // change later
 
 // // GET all facilities
@@ -60,10 +58,10 @@ import { apiClient } from "./config";
 
 // replace later with:
 
-const baseURL = "https://startuphealth.onrender.com";
+import { apiClient } from "./config";
 
 export const getAllFacilities = async (params = {}) => {
-  const response = await apiClient.get(`${baseURL}/api/facilities`, { params }); // axios handles encoding
+  const response = await apiClient.get("/api/facilities", { params }); // axios handles encoding
   return response.data;
 };
 
