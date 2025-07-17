@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getAllFacilities } from "../../services/facilityService";
 import Loader from "../../components/Loader";
 import { MapPin, Eye, Trash2, Users } from "lucide-react";
@@ -18,8 +18,11 @@ const SuperAdminDashboard = () => {
     setLoading(true);
     setError(null);
     try {
-      const data = await getAllFacilities();
-      setFacilities(data);
+      const response = await getAllFacilities();
+      if (!Array.isArray(response.data)) {
+        throw new Error("Unexpected facilities format");
+      }
+      setFacilities(response.data);
     } catch (err) {
       console.error("Error fetching facilities:", err);
       setError("Failed to load facilities. Please try again later.");
@@ -29,7 +32,7 @@ const SuperAdminDashboard = () => {
   };
 
   const handleView = (id) => {
-    navigate(`/facilities/${id}`);
+    navigate(`/superadmin/facilities/${id}`);
   };
 
   const handleOpenModal = (facility) => {
@@ -47,7 +50,7 @@ const SuperAdminDashboard = () => {
   };
 
   const handleViewUsers = () => {
-    navigate("/superadmin/users");
+    navigate(`/superadmin/facilities/${id}`);
   };
 
   useEffect(() => {
@@ -98,7 +101,8 @@ const SuperAdminDashboard = () => {
                   <td className="px-6 py-4 font-medium">{facility.name}</td>
                   <td className="px-6 py-4 flex items-center gap-1">
                     <MapPin className="text-green-600 size-4" />
-                    {facility.location}
+                    {facility.location?.address || "Unknown address"},{" "}
+                    {facility.location?.city || "Unknown city"}
                   </td>
                   <td className="px-6 py-4 capitalize">{facility.type}</td>
                   <td className="px-6 py-4 text-center space-x-2">
@@ -109,6 +113,7 @@ const SuperAdminDashboard = () => {
                       <Eye className="size-4" />
                       View
                     </button>
+
                     <button
                       onClick={() => handleOpenModal(facility)}
                       className="inline-flex items-center gap-1 text-sm bg-red-600 text-white px-3 py-1.5 rounded hover:bg-red-700 transition"

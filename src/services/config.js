@@ -12,15 +12,13 @@ export const apiClient = axios.create({
 
 // intercept request to attach token
 
-apiClient.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("accessToken");
-    console.log("Access Token:", token);
+apiClient.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  console.log("token being sent:", token);
 
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+});

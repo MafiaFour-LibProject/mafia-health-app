@@ -1,44 +1,38 @@
-//Lists all facilities, with search + filter and a button to sign up
-
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Loader from "./Loader";
 import { getAllFacilities } from "../services/facilityService";
-import { MapPin } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import Loader from "./Loader";
+import { Calendar, MapPin, RefreshCcw, Search } from "lucide-react";
 
-const type = ["hospital", "pharmacy"];
+const typeOptions = ["hospital", "pharmacy"];
+const defaultImage = "/images/hero-image-3.jpg";
 
 const AllFacilities = () => {
   const [facilities, setFacilities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  const handleView = (id) => {
-    navigate(`/facility/${id}`);
-  };
-
-  const handleRemove = (id) => {
-    const confirmed = confirm("Are you sure you want to remove this facility?");
-    if (confirmed) {
-      setFacilities((prev) => prev.filter((f) => f.id !== id));
-    }
-  };
-
-  const handleViewUsers = () => {
-    navigate("/superadmin/users");
-  };
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedType, setSelectedType] = useState("");
 
   const fetchFacilities = async () => {
     setLoading(true);
     setError(null);
     try {
-      const data = await getAllFacilities();
-      console.log("fetched data:", data);
-      setFacilities(data);
+      const params = {};
+      if (searchTerm) params.q = searchTerm;
+      if (selectedType) params.type = selectedType;
+
+      const response = await getAllFacilities(params);
+      const facilitiesArray = response.data;
+
+      if (!Array.isArray(facilitiesArray)) {
+        throw new Error("Expected an array of facilities");
+      }
+
+      setFacilities(facilitiesArray);
     } catch (err) {
-      console.log("Error fetching facilities:", err);
-      setError("Failed to load facilities. Please try again later");
+      console.error("Error fetching facilities:", err);
+      setError("Failed to load facilities. Please try again later.");
     } finally {
       setLoading(false);
     }
@@ -48,68 +42,124 @@ const AllFacilities = () => {
     fetchFacilities();
   }, []);
 
+  const handleSearch = () => fetchFacilities();
+
+  const handleResetFilters = () => {
+    setSearchTerm("");
+    setSelectedType("");
+    fetchFacilities();
+  };
+
   if (loading) return <Loader />;
-  if (error) return <p>Error: {error}</p>;
+  if (error) return <p className="text-red-500 text-center">{error}</p>;
 
   return (
-    <div className="p-6 bg-white min-h-screen">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-green-700">
-          SuperAdmin Dashboard
-        </h1>
-        <button
-          onClick={handleViewUsers}
-          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-        >
-          View Users
-        </button>
+    <div className="p-6">
+      {/* Search & Filter Form */}
+      <div className="bg-white p-5 shadow-lg mt-16 border border-green-200 max-w-3xl mx-auto rounded-lg">
+        <form className="flex flex-col gap-4 md:flex-row md:gap-6">
+          <input
+            type="text"
+            id="searchTerm"
+            placeholder="Search medications, vaccines, conditions..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="md:flex-1 w-full px-4 py-2 text-sm border border-gray-300 rounded-md bg-white text-gray-900 shadow-sm focus:ring-green-600 focus:border-green-600 placeholder:text-sm"
+          />
+
+          <select
+            id="typeFilter"
+            value={selectedType}
+            onChange={(e) => setSelectedType(e.target.value)}
+            className="md:flex-1 w-full px-2 py-2.5 text-sm border border-gray-300 rounded-md bg-white text-gray-700 shadow-sm focus:ring-green-600 focus:border-green-600"
+          >
+            <option value="">Select facility type</option>
+            {typeOptions.map((t) => (
+              <option key={t} value={t}>
+                {t}
+              </option>
+            ))}
+          </select>
+
+          <div className="flex gap-2 md:gap-3">
+            <button
+              type="button"
+              onClick={handleResetFilters}
+              className="bg-white border border-green-600 text-green-600 hover:bg-green-600 hover:text-white font-semibold py-2 px-3 rounded-md shadow-sm transition"
+            >
+              <RefreshCcw className="size-4" />
+            </button>
+            <button
+              type="button"
+              onClick={handleSearch}
+              className="bg-green-600 text-white font-semibold py-2 px-4 rounded-md shadow-sm hover:bg-green-700 transition"
+            >
+              Search
+            </button>
+          </div>
+        </form>
       </div>
 
-      <div className="overflow-x-auto shadow border rounded-lg">
-        <table className="min-w-full bg-white">
-          <thead className="bg-green-100 text-green-700">
-            <tr>
-              <th className="text-left py-3 px-4">Name</th>
-              <th className="text-left py-3 px-4">Location</th>
-              <th className="text-left py-3 px-4">Type</th>
-              <th className="text-left py-3 px-4">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {facilities.length === 0 ? (
-              <tr>
-                <td colSpan="4" className="text-center py-6 text-gray-500">
-                  No facilities onboarded yet.
-                </td>
-              </tr>
-            ) : (
-              facilities.map((facility) => (
-                <tr
-                  key={facility.id}
-                  className="border-t hover:bg-green-50 transition"
-                >
-                  <td className="py-3 px-4">{facility.name}</td>
-                  <td className="py-3 px-4">{facility.location}</td>
-                  <td className="py-3 px-4 capitalize">{facility.type}</td>
-                  <td className="py-3 px-4 space-x-2">
-                    <button
-                      onClick={() => handleView(facility.id)}
-                      className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
-                    >
-                      View
-                    </button>
-                    <button
-                      onClick={() => handleRemove(facility.id)}
-                      className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-                    >
-                      Remove
-                    </button>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+      {/* How It Works */}
+      <div className="text-center py-16 bg-white mt-10 shadow-2xl">
+        <h3 className="text-3xl md:text-4xl font-extrabold text-green-800 mb-8">
+          How MAFIA Works
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto px-4">
+          {[
+            { icon: <Search className="size-5" />, label: "Search" },
+            { icon: <MapPin className="size-5" />, label: "Find" },
+            { icon: <Calendar className="size-5" />, label: "Book" },
+          ].map(({ icon, label }) => (
+            <div
+              key={label}
+              className="flex flex-col items-center gap-2 shadow-2xl p-6"
+            >
+              <div className="rounded-full flex gap-x-2 bg-green-100 px-3 py-2 font-semibold items-center">
+                {icon}
+                <p>{label}</p>
+              </div>
+              <p className="text-sm text-gray-600">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat
+                quod vitae incidunt illum voluptates exercitationem.
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Facilities Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8 px-6 py-12 bg-white">
+        {facilities.map((f) => (
+          <Link to={`/facilities/${f._id}`} key={f._id}>
+            <div className="bg-white border border-green-200 hover:border-green-300 rounded-xl overflow-hidden transition-transform transform hover:-translate-y-1 hover:shadow-xl">
+              <img
+                src={f.images?.[0]?.url ?? defaultImage}
+                alt={f.name}
+                className="w-full h-48 object-cover"
+              />
+              <div className="p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="font-bold text-gray-700">{f.name}</h3>
+                  <span className="bg-orange-100 text-orange-500 text-xs font-semibold px-3 py-1 rounded-full border border-orange-300">
+                    {f.type}
+                  </span>
+                </div>
+                <div className="flex items-center text-sm text-gray-600 gap-1">
+                  <MapPin className="size-4 text-green-600" />
+                  <p>
+                    {f.location?.address || "Unknown address"},{" "}
+                    {f.location?.city || "Unknown city"}
+                  </p>
+                </div>
+                <div className="flex items-center justify-center mt-4 py-2 border border-gray-200 hover:bg-gray-50 transition">
+                  <MapPin className="size-4 text-gray-600" />
+                  <p className="ml-2 text-sm text-gray-700">View on map</p>
+                </div>
+              </div>
+            </div>
+          </Link>
+        ))}
       </div>
     </div>
   );

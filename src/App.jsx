@@ -45,6 +45,8 @@ import ReviewList from "./pages/reviews/ReviewList";
 
 // Empty/Fallback
 import EmptyState from "./components/EmptyState";
+import AllFacilities from "./components/AllFacilities";
+import SuperAdminFacilityView from "./pages/superadmin/SuperAdminFacilityView";
 
 function App() {
   const router = createBrowserRouter([
@@ -72,6 +74,11 @@ function App() {
     },
 
     { path: "/verify-email", element: <VerifyEmailToken /> },
+
+    {
+      path: "all-facilities",
+      element: <AllFacilities />,
+    },
 
     // User Routes
     {
@@ -104,12 +111,14 @@ function App() {
       element: <SuperAdminLayout />,
       children: [
         { index: true, element: <SuperadminDashboard /> },
+        { path: "facilities/:id", element: <SuperAdminFacilityView /> },
         { path: "facilities", element: <SuperadminFacilities /> },
-        // { path: "add-facility", element: <AddFacility /> },
         { path: "users", element: <SuperadminUsers /> },
         { path: "analytics", element: <Analytics /> },
       ],
     },
+
+    // { path: "add-facility", element: <AddFacility /> },
   ]);
 
   return (
