@@ -1,129 +1,125 @@
-import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { getSingleFacility } from "../../services/facilityService";
-import Loader from "../../components/Loader";
-import { MapPin, ArrowLeft, Trash2, Star } from "lucide-react";
-import { toast } from "react-toastify";
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 
 const SuperAdminFacilityView = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-
   const [facility, setFacility] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchFacility = async () => {
       try {
-        const res = await getSingleFacility(id);
-        setFacility(res.data);
+        const { data } = await getSingleFacility(id);
+        setFacility(data);
       } catch (err) {
         console.error("Error fetching facility:", err);
-        setError("Failed to load facility details.");
       } finally {
         setLoading(false);
       }
     };
-
     fetchFacility();
   }, [id]);
 
-  const handleBack = () => {
-    navigate("/superadmin");
-  };
+  if (loading) return <div className="p-6">Loading...</div>;
+  if (!facility)
+    return <div className="p-6 text-red-600">Facility not found</div>;
 
-  const handleRemove = () => {
-    toast.success("Facility removed");
-    navigate("/superadmin");
-  };
-
-  const dummyReviews = [
-    {
-      name: "Jane Doe",
-      avatar: "https://i.pravatar.cc/100?img=1",
-      stars: 5,
-      comment: "Very professional facility!",
-    },
-    {
-      name: "Mike Johnson",
-      avatar: "https://i.pravatar.cc/100?img=2",
-      stars: 4,
-      comment: "Clean environment and friendly staff.",
-    },
-  ];
-
-  if (loading) return <Loader />;
-  if (error) return <p className="text-red-600 text-center">{error}</p>;
-  if (!facility) return <p className="text-center">Facility not found.</p>;
+  const {
+    name,
+    description,
+    location,
+    contact,
+    hours,
+    type,
+    rating,
+    isActive,
+    images,
+    services,
+  } = facility;
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8">
+    <div className="p-6 max-w-5xl mx-auto">
       <button
-        onClick={handleBack}
-        className="flex items-center text-sm text-green-700 hover:underline mb-6"
+        onClick={() => navigate(-1)}
+        className="flex items-center gap-2 mb-4 text-blue-600 hover:underline"
       >
-        <ArrowLeft className="size-4 mr-1" />
-        Back to Dashboard
+        <ArrowLeftIcon className="w-5 h-5" /> Back to Dashboard
       </button>
 
-      <div className="bg-white border border-gray-200 rounded-xl shadow p-6 mb-8">
-        <h1 className="text-2xl font-bold text-green-700 mb-2">
-          {facility.name}
-        </h1>
-        <div className="text-gray-700 mb-2 flex items-center gap-2">
-          <MapPin className="text-green-600 size-4" />
-          {facility?.location?.address || "Unknown address"},{" "}
-          {facility?.location?.city || "Unknown city"}
+      <h1 className="text-3xl font-bold mb-2">{name}</h1>
+      <p className="text-gray-700 mb-4">{description}</p>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <h2 className="text-lg font-semibold">Type</h2>
+          <p>{type}</p>
+
+          <h2 className="text-lg font-semibold mt-4">Location</h2>
+          <p>
+            {location?.address}, {location?.city}
+          </p>
+          <p className="text-sm text-gray-500">
+            Lat: {location?.coordinates?.latitude}, Lng:{" "}
+            {location?.coordinates?.longitude}
+          </p>
+
+          <h2 className="text-lg font-semibold mt-4">Contact</h2>
+          <p>Email: {contact?.email}</p>
+          <p>Phone: {contact?.phone}</p>
         </div>
-        <p className="capitalize text-sm text-gray-600 mb-1">
-          Type: {facility.type || "N/A"}
-        </p>
-        <p className="text-sm text-gray-500">
-          Facility ID: <span className="font-mono">{facility._id}</span>
-        </p>
+
+        <div>
+          <h2 className="text-lg font-semibold">Operating Hours</h2>
+          <ul className="list-disc ml-5">
+            {Object.entries(hours || {}).map(([day, time]) => (
+              <li key={day}>
+                <strong>{day.charAt(0).toUpperCase() + day.slice(1)}:</strong>{" "}
+                {time.open} - {time.close}
+              </li>
+            ))}
+          </ul>
+
+          <h2 className="text-lg font-semibold mt-4">Rating</h2>
+          <p>
+            {rating?.average} ({rating?.count} reviews)
+          </p>
+
+          <h2 className="text-lg font-semibold mt-4">Status</h2>
+          <p className={isActive ? "text-green-600" : "text-red-600"}>
+            {isActive ? "Active" : "Inactive"}
+          </p>
+        </div>
       </div>
 
-      <div className="bg-white border border-gray-200 rounded-xl shadow p-6 mb-8">
-        <h2 className="text-lg font-semibold text-green-600 mb-4">Reviews</h2>
-        {dummyReviews.length === 0 ? (
-          <p className="text-sm text-gray-500">No reviews yet.</p>
-        ) : (
-          <div className="space-y-5">
-            {dummyReviews.map((review, idx) => (
-              <div key={idx} className="flex gap-3">
-                <img
-                  src={review.avatar}
-                  alt={review.name}
-                  className="w-10 h-10 rounded-full object-cover border border-gray-300"
-                />
-                <div>
-                  <p className="font-medium text-gray-800">{review.name}</p>
-                  <div className="flex text-yellow-500">
-                    {[...Array(review.stars)].map((_, i) => (
-                      <Star
-                        key={i}
-                        size={16}
-                        fill="currentColor"
-                        stroke="none"
-                      />
-                    ))}
-                  </div>
-                  <p className="text-sm text-gray-600 mt-1">{review.comment}</p>
-                </div>
-              </div>
+      {images?.length > 0 && (
+        <div className="mt-6">
+          <h2 className="text-lg font-semibold">Images</h2>
+          <div className="flex gap-4 mt-2 flex-wrap">
+            {images.map((img, index) => (
+              <img
+                key={index}
+                src={img.url}
+                alt={img.alt || "Facility image"}
+                className="w-40 h-32 object-cover rounded shadow"
+              />
             ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
-      <button
-        onClick={handleRemove}
-        className="flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"
-      >
-        <Trash2 className="size-4" />
-        Remove Facility
-      </button>
+      {services?.length > 0 && (
+        <div className="mt-6">
+          <h2 className="text-lg font-semibold">Services</h2>
+          <ul className="list-disc ml-5">
+            {services.map((s, index) => (
+              <li key={index}>{s}</li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

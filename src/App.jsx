@@ -118,7 +118,10 @@ function App() {
       ],
     },
 
-    // { path: "add-facility", element: <AddFacility /> },
+    {
+      path: "/s-admin-facility-view",
+      element: <SuperAdminFacilityView />,
+    },
   ]);
 
   return (

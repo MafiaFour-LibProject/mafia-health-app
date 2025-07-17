@@ -31,7 +31,7 @@ const Home = () => {
       const data = await getAllFacilities(params);
       console.log("fetched data:", data);
 
-      const facilitiesArray = data.data;
+      const facilitiesArray = data;
 
       if (!Array.isArray(facilitiesArray)) {
         throw new Error("Expected an array of facilities");

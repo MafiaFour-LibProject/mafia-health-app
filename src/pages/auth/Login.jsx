@@ -15,34 +15,46 @@ const Login = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    const payload = {
-      email: data.email,
-      password: data.password,
-    };
-
     setIsSubmitting(true);
 
     try {
-      const res = await ApiLogin(payload);
-      console.log(res);
-      const token = res?.data?.token;
-      localStorage.setItem("accessToken", token);
-      localStorage.setItem("name", res.data.user.name);
-      localStorage.setItem("email", res.data.user.email);
+      const payload = {
+        email: data.email,
+        password: data.password,
+      };
 
-      const userRole = res.data.user.role;
+      const res = await ApiLogin(payload);
+      console.log("Login response:", res);
+
+      const token = res?.data?.token;
+      const user = res?.data?.user;
+
+      if (!token || !user) {
+        toast.error("Login succeeded but no token or user returned.");
+        return;
+      }
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("name", user.name);
+      localStorage.setItem("email", user.email);
+
       toast.success("Login successful!");
 
-      if (userRole === "user") {
+      if (user.role === "user") {
         navigate("/user");
-      } else if (userRole === "facility_admin") {
+      } else if (user.role === "facility_admin") {
         navigate("/admin");
-      } else if (userRole === "superadmin") {
+      } else if (user.role === "superadmin") {
         navigate("/superadmin");
+      } else {
+        toast.warn("Unknown role. Redirecting to home.");
+        navigate("/");
       }
     } catch (error) {
-      console.log(error);
-      toast.error(error?.message || "Oops! An error occurred.");
+      console.error("Login error:", error);
+      toast.error(
+        error?.response?.data?.message || error?.message || "Login failed."
+      );
     } finally {
       setIsSubmitting(false);
     }

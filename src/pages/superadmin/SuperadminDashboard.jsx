@@ -1,145 +1,161 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { getAllFacilities } from "../../services/facilityService";
-import Loader from "../../components/Loader";
-import { MapPin, Eye, Trash2, Users } from "lucide-react";
-import ConfirmationModal from "../../components/ConfirmationModal";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import {
+  getAllFacilities,
+  deleteFacility,
+} from "../../services/facilityService";
+import FacilityFormModal from "./FacilityFormModal";
+import ConfirmationModal from "../../components/ConfirmationModal";
+import { useNavigate } from "react-router-dom";
 
 const SuperAdminDashboard = () => {
   const [facilities, setFacilities] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedFacility, setSelectedFacility] = useState(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [facilityToDelete, setFacilityToDelete] = useState(null);
   const navigate = useNavigate();
 
   const fetchFacilities = async () => {
-    setLoading(true);
-    setError(null);
     try {
-      const response = await getAllFacilities();
-      if (!Array.isArray(response.data)) {
-        throw new Error("Unexpected facilities format");
-      }
-      setFacilities(response.data);
+      setLoading(true);
+      const data = await getAllFacilities();
+      if (!Array.isArray(data)) throw new Error("Invalid facilities data");
+      setFacilities(data);
     } catch (err) {
       console.error("Error fetching facilities:", err);
-      setError("Failed to load facilities. Please try again later.");
+      toast.error("Failed to fetch facilities");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleView = (id) => {
-    navigate(`/superadmin/facilities/${id}`);
+  const confirmDelete = (facility) => {
+    setFacilityToDelete(facility);
+    setConfirmOpen(true);
   };
 
-  const handleOpenModal = (facility) => {
+  const handleDelete = async () => {
+    if (!facilityToDelete) return;
+    try {
+      await deleteFacility(facilityToDelete._id);
+      toast.success("Facility deleted");
+      fetchFacilities();
+    } catch (err) {
+      console.error("Error deleting facility:", err);
+      toast.error("Failed to delete facility");
+    } finally {
+      setConfirmOpen(false);
+    }
+  };
+
+  const handleEdit = (facility) => {
     setSelectedFacility(facility);
     setModalOpen(true);
   };
 
-  const confirmDelete = () => {
-    // this only clears it form the frontend. to delete from the database, we'd need to call a delete api
-    if (!selectedFacility) return;
-    toast.success("Facility removed successfully");
-    setFacilities((prev) => prev.filter((f) => f._id !== selectedFacility._id));
+  const handleAdd = () => {
     setSelectedFacility(null);
-    setModalOpen(false);
+    setModalOpen(true);
   };
 
-  const handleViewUsers = () => {
-    navigate(`/superadmin/facilities/${id}`);
+  const handleView = (facilityId) => {
+    navigate(`/superadmin/facilities/${facilityId}`);
   };
 
   useEffect(() => {
     fetchFacilities();
   }, []);
 
-  if (loading) return <Loader />;
-  if (error) return <p className="text-red-600 text-center">{error}</p>;
-
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-green-700">
-          SuperAdmin Dashboard
-        </h1>
+        <h1 className="text-2xl font-bold">Super Admin Dashboard</h1>
         <button
-          onClick={handleViewUsers}
-          className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
+          onClick={handleAdd}
+          className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
         >
-          <Users className="size-4" />
-          View Users
+          Add Facility
         </button>
       </div>
 
-      <div className="overflow-x-auto shadow border border-gray-200 rounded-lg bg-white">
-        <table className="min-w-full text-sm text-left">
-          <thead className="bg-green-100 text-green-700 text-xs uppercase font-semibold">
-            <tr>
-              <th className="px-6 py-4">Name</th>
-              <th className="px-6 py-4">Location</th>
-              <th className="px-6 py-4">Type</th>
-              <th className="px-6 py-4 text-center">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="text-gray-700">
-            {facilities.length === 0 ? (
+      {loading ? (
+        <p>Loading facilities...</p>
+      ) : facilities.length === 0 ? (
+        <p>No facilities found.</p>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white border border-gray-200 shadow-sm rounded-lg">
+            <thead className="bg-gray-100 text-left">
               <tr>
-                <td colSpan="4" className="text-center py-6 text-gray-500">
-                  No facilities onboarded yet.
-                </td>
+                <th className="py-3 px-4 border-b">Name</th>
+                <th className="py-3 px-4 border-b">Description</th>
+                <th className="py-3 px-4 border-b">Type</th>
+                <th className="py-3 px-4 border-b">City</th>
+                <th className="py-3 px-4 border-b">Address</th>
+                <th className="py-3 px-4 border-b">Actions</th>
               </tr>
-            ) : (
-              facilities.map((facility, idx) => (
-                <tr
-                  key={facility._id}
-                  className={idx % 2 === 0 ? "bg-white" : "bg-gray-50"}
-                >
-                  <td className="px-6 py-4 font-medium">{facility.name}</td>
-                  <td className="px-6 py-4 flex items-center gap-1">
-                    <MapPin className="text-green-600 size-4" />
-                    {facility.location?.address || "Unknown address"},{" "}
-                    {facility.location?.city || "Unknown city"}
+            </thead>
+            <tbody>
+              {facilities.map((facility) => (
+                <tr key={facility._id} className="hover:bg-gray-50">
+                  <td className="py-3 px-4 border-b">{facility.name}</td>
+                  <td className="py-3 px-4 border-b">{facility.description}</td>
+                  <td className="py-3 px-4 border-b capitalize">
+                    {facility.type}
                   </td>
-                  <td className="px-6 py-4 capitalize">{facility.type}</td>
-                  <td className="px-6 py-4 text-center space-x-2">
-                    <button
-                      onClick={() => handleView(facility._id)}
-                      className="inline-flex items-center gap-1 text-sm bg-gray-600 text-white px-3 py-1.5 rounded hover:bg-gray-700 transition"
-                    >
-                      <Eye className="size-4" />
-                      View
-                    </button>
-
-                    <button
-                      onClick={() => handleOpenModal(facility)}
-                      className="inline-flex items-center gap-1 text-sm bg-red-600 text-white px-3 py-1.5 rounded hover:bg-red-700 transition"
-                    >
-                      <Trash2 className="size-4" />
-                      Remove
-                    </button>
+                  <td className="py-3 px-4 border-b">
+                    {facility.location?.city}
+                  </td>
+                  <td className="py-3 px-4 border-b">
+                    {facility.location?.address}
+                  </td>
+                  <td className="py-3 px-4 border-b">
+                    <div className="flex gap-3">
+                      <button
+                        onClick={() => handleView(facility._id)}
+                        className="text-indigo-600 hover:underline"
+                      >
+                        View
+                      </button>
+                      <button
+                        onClick={() => handleEdit(facility)}
+                        className="text-blue-600 hover:underline"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => confirmDelete(facility)}
+                        className="text-red-600 hover:underline"
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      <FacilityFormModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        facility={selectedFacility}
+        onSaved={() => {
+          setModalOpen(false);
+          fetchFacilities();
+        }}
+      />
 
       <ConfirmationModal
-        isOpen={modalOpen}
-        onCancel={() => {
-          setModalOpen(false);
-          setSelectedFacility(null);
-        }}
-        onConfirm={confirmDelete}
-        title="Remove Facility?"
-        message={`Are you sure you want to remove "${
-          selectedFacility?.name || "this facility"
-        }"? This action cannot be undone.`}
+        isOpen={confirmOpen}
+        onCancel={() => setConfirmOpen(false)}
+        onConfirm={handleDelete}
+        title="Delete Facility"
+        message={`Are you sure you want to delete '${facilityToDelete?.name}'?`}
       />
     </div>
   );
