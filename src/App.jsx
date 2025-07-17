@@ -71,7 +71,7 @@ function App() {
       ],
     },
 
-    { path: "/verify-email", element: <VerifyEmailToken /> },
+    { path: "/verify-email/:token", element: <VerifyEmailToken /> },
 
     // User Routes
     {
