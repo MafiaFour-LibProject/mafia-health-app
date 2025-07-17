@@ -1,47 +1,35 @@
+import { FaBars, FaSearch, FaUserCircle } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 function Navbar() {
   return (
-    <nav className="bg-[#212C3D]/95    p-4 shadow-md">
-      <div className="container mx-auto flex justify-between items-center">
-        {/* Left Section: Logo */}
-         {/* Company Logo */}
-        <div className="md:col-span-2 flex justify-center md:justify-start mb-6 md:mb-0">
-          <h2 className="text-4xl font-bold text-[#4CAF50] tracking-wide">MaFia</h2>
+    <>
+      <div className="bg-gray-600 px-4 py-3 flex justify-between  ">
+        {/*left side*/}
+
+        <div className="flex items-center text-xl">
+          <FaBars className="text-white me-4 cursor-pointer" />
+          <span className="text-white font-semibold">MaFia</span>
         </div>
 
-        {/* Right Section: Home and Signup Links */}
-        <div className="flex space-x-6 ">
-          <Link
-            to="/"
-            className=" text-white hover:text-[#4CAF50] font-semibold text-lg transition-colors duration-300"
-          >
-            Home
-          </Link>
+        {/*Right side*/}
 
-           <Link
-            to="/"
-            className=" text-white hover:text-[#4CAF50] font-semibold text-lg transition-colors duration-300"
-          >
-            Services
-          </Link>
-
-          <Link
-            to="/signup"
-            className=" text-white  hover:text-[#4CAF50] font-semibold text-lg transition-colors duration-300"
-          >
-            Signup
-          </Link>
-
-<Link
-            to="/signup"
-            className=" text-white hover:text-[#4CAF50] font-semibold text-lg transition-colors duration-300 border-2 border-blue-500  px-2 rounded-2xl"
-          >
-            Book Appointment
-          </Link>
+        <div className="relative">
+          <button className="text-white group hover:bg-gray-700 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
+            <FaUserCircle  className="w-6 mt-1 cursor-pointer"/>
+            <div className="z-10 hidden absolute bg-white rounded-lg shadow w-32 group-focus:block top-full right-0">
+              <ul>
+                <li className="py-2 text-sm flex flex-col text-gray-950 hover:bg-gray-200">
+                  <a href="" className="hover:bg-blue-500">Profile</a>
+                  <a href="" className="hover:bg-blue-500">Settings</a>
+                  <a href="" className="hover:bg-blue-500">Logout</a>
+                </li>
+              </ul>
+            </div>
+          </button>
         </div>
       </div>
-    </nav>
+    </>
   );
 }
 

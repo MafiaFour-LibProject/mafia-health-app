@@ -50,7 +50,6 @@ import SuperAdminFacilityView from "./pages/superadmin/SuperAdminFacilityView";
 
 function App() {
   const router = createBrowserRouter([
-    // Public Routes (Unregistered)
     {
       path: "/",
       element: <PublicLayout />,
@@ -117,11 +116,7 @@ function App() {
         { path: "analytics", element: <Analytics /> },
       ],
     },
-
-    {
-      path: "/s-admin-facility-view",
-      element: <SuperAdminFacilityView />,
-    },
+     
   ]);
 
   return (
