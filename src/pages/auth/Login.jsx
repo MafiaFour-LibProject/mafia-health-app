@@ -28,6 +28,7 @@ const Login = () => {
 
       const token = res?.data?.token;
       const user = res?.data?.user;
+      console.log("Logged in user:", user);
 
       if (!token || !user) {
         toast.error("Login succeeded but no token or user returned.");
@@ -35,21 +36,29 @@ const Login = () => {
       }
 
       localStorage.setItem("token", token);
-      console.log("Token saved:", localStorage.getItem("token"));
       localStorage.setItem("name", user.name);
       localStorage.setItem("email", user.email);
 
+      if (user.role === "facility_admin" && user.facilityId) {
+        localStorage.setItem("facilityId", user.facilityId);
+        console.log("Facility ID saved:", localStorage.getItem("facilityId"));
+      }
+
       toast.success("Login successful!");
 
-      if (user.role === "user") {
-        navigate("/user");
-      } else if (user.role === "facility_admin") {
-        navigate("/admin");
-      } else if (user.role === "superadmin") {
-        navigate("/superadmin");
-      } else {
-        toast.warn("Unknown role. Redirecting to home.");
-        navigate("/");
+      switch (user.role) {
+        case "user":
+          navigate("/user");
+          break;
+        case "facility_admin":
+          navigate("/admin");
+          break;
+        case "superadmin":
+          navigate("/superadmin");
+          break;
+        default:
+          toast.warn("Unknown role. Redirecting to home.");
+          navigate("/");
       }
     } catch (error) {
       console.error("Login error:", error);
@@ -131,7 +140,7 @@ const Login = () => {
             className={`w-full py-2 mt-5 font-bold rounded-md transition transform ${
               isSubmitting || isError
                 ? "bg-gray-300 cursor-not-allowed"
-                : "bg-green-600 text-white hover:bg-green-500 hover:scale-105 "
+                : "bg-green-600 text-white hover:bg-green-500 hover:scale-105"
             }`}
           >
             {isSubmitting ? "Submitting..." : "Log In"}
