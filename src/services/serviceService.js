@@ -1,102 +1,61 @@
 import { apiClient } from "./config";
+import axios from "axios";
 
-// // GET all services
-
-// export const getAllServices = async () => {
-//   const res = await apiClient.get("/fake-data/services.json");
-//   return res.data;
-// };
-
-// // GET single service by ID
-
-// export const getSingleService = async (id) => {
-//   const res = await apiClient.get("fake-data/services.json");
-//   return res.data.find((service) => service._id === id);
-// };
-
-// // GET all services for a facility
-
-// export const getServicesByFacility = async (facilityId) => {
-//   const res = await apiClient.get("fake-data/services.json");
-//   return res.data.filter((s) => s.facility === facilityId);
-// };
-
-/* Replace later with: 
-GET /services
-GET /services/:id
-GET /facilities/:id/services
-*/
-
-import { apiClient } from "./config";
-
-let fakeServicesCache = null; // change later
-
-// GET all services
-
-export const getAllServicess = async () => {
-  const res = await apiClient.get("/fake-data/services.json");
-  fakeServicesCache = res.data;
-  return res.data;
+export const createService = async (facilityId, serviceData) => {
+  console.log("Facility ID being used:", facilityId);
+  return apiClient.post(`/api/services/${facilityId}/services`, serviceData);
 };
 
-// GET single service by ID
+// Get a single service by ID
+export const getSingleService = async (serviceId) =>
+  apiClient.get(`/api/services/${serviceId}`);
 
-export const getSingleService = async (id) => {
-  const res = await apiClient.get("/fake-data/services.json");
-  return res.data.find((f) => String(f._id) === id);
-};
-
-// Create new service
-
-export const createService = async (payload) => {
-  const res = await apiClient.get("/fake-data/services.json");
-  const newService = {
-    ...payload,
-    _id: Date.now().toString(),
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  };
-  fakeServicesCache = [newService, ...res.data];
-  return newService;
-};
+//  Get services for a facility
+export const getFacilityServices = async (facilityId) =>
+  apiClient.get(`/api/services/${facilityId}/services`);
 
 // Update service
-
-export const updateService = async (id, payload) => {
-  const res = await apiClient.get("/fake-data/services.json");
-  const index = res.data.findIndex((f) => f._id === id);
-  if (index !== -1) {
-    const updatedService = {
-      ...res.data[index],
-      ...payload,
-      updatedAt: new Date().toISOString(),
-    };
-    res.data[index] = updatedService;
-    fakeServicesCache = [...res.data];
-    return updatedService;
-  }
-  return null;
-};
+export const updateService = async (serviceId, updatedData) =>
+  apiClient.put(`/api/services/${serviceId}`, updatedData);
 
 // Delete service
+export const deleteService = async (serviceId) =>
+  apiClient.delete(`/api/services/${serviceId}`);
 
-export const deleteService = async (id) => {
-  const res = await apiClient.get("/fake-data/services.json");
-  const updatedList = res.data.filter((f) => f._id !== id);
-  fakeServicesCache = updatedList;
-  return id;
+// Patch service stock
+export const patchServiceStock = async (serviceId, stockData) =>
+  apiClient.patch(`/api/services/${serviceId}/stock`, stockData);
+
+// Search services
+export const searchServices = async (query) =>
+  apiClient.get(`/api/services/search`, { params: { q: query } });
+
+// Upload photos to a facility (max 10)
+// facilityService.js
+
+export const uploadFacilityPhotos = async (facilityId, files) => {
+  const token = localStorage.getItem("token");
+  const formData = new FormData();
+
+  files.forEach((file) => {
+    formData.append("files", file);
+  });
+
+  for (let [key, value] of formData.entries()) {
+    console.log("FormData Entry:", key, value);
+  }
+
+  return axios.post(
+    `https://startuphealth.onrender.com/api/facilities/${facilityId}/photos`,
+    formData,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 };
 
-/*  replace later with:
-
- export const getAllServices = () => apiClient.get("/services");
-
- export const getSingleService = (id) => apiClient.get(`/services/${id}`)
-
- export const createService = (payload) => apiClient.post("/services", payload);
-
- export const updateService = (id, payload) => apiClient.put(`/services/${id}`, payload);
-
-  export const deleteService = (id) => apiClient.delete(`/services/${id}`);
-
- */
+// Get low-stock services for a facility
+export const getLowStockServices = async (facilityId) =>
+  apiClient.get(`/api/facilities/${facilityId}/services/low-stock`);
