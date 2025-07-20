@@ -1,4 +1,4 @@
-// import { apiClient } from "./config";
+import { apiClient } from "./config";
 
 // // Get all users
 
@@ -18,3 +18,6 @@
 // GET /users
 // GET /users/:id
 // */
+
+export const getAdminDashboard = async () =>
+  await apiClient.get("/api/facilities/admin/dashboard");

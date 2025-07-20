@@ -50,12 +50,14 @@ import SuperAdminFacilityView from "./pages/superadmin/SuperAdminFacilityView";
 
 function App() {
   const router = createBrowserRouter([
+    // Public Routes
     {
       path: "/",
       element: <PublicLayout />,
       children: [
         { index: true, element: <Home /> },
-        { path: "facilities/:id", element: <FacilityDetails /> },
+        { path: "facilities/:facilityId", element: <FacilityDetails /> },
+        { path: "all-facilities", element: <AllFacilities /> },
         { path: "*", element: <EmptyState message="Page not found" /> },
       ],
     },
@@ -71,13 +73,7 @@ function App() {
         { path: "verify-email", element: <VerifyEmailNotice /> },
       ],
     },
-
     { path: "/verify-email", element: <VerifyEmailToken /> },
-
-    {
-      path: "all-facilities",
-      element: <AllFacilities />,
-    },
 
     // User Routes
     {
@@ -86,12 +82,12 @@ function App() {
       children: [
         { index: true, element: <UserDashboard /> },
         { path: "appointments", element: <UserAppointments /> },
-        // { path: "edit-profile", element: <EditUserProfile /> },
         { path: "reviews", element: <ReviewList /> },
+        // { path: "facility/:facilityId", element: <FacilityDetails /> },
       ],
     },
 
-    // Admin Routes (Facility Admin)
+    // Admin Routes
     {
       path: "/admin",
       element: <AdminLayout />,
@@ -100,7 +96,6 @@ function App() {
         { path: "appointments", element: <AdminAppointments /> },
         { path: "reviews", element: <AdminReviews /> },
         { path: "profile", element: <AdminProfile /> },
-        // { path: "edit-profile", element: <EditAdminProfile /> },
       ],
     },
 
@@ -116,7 +111,6 @@ function App() {
         { path: "analytics", element: <Analytics /> },
       ],
     },
-     
   ]);
 
   return (

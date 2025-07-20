@@ -1,20 +1,21 @@
 import { apiClient } from "./config";
 
-// Get all reviews
+export const createReview = async (reviewData) => {
+  return await apiClient.post("/api/reviews", reviewData);
+};
 
-export const getAllReviews = async () => {
-  const res = await apiClient.get("/fake-data/reviews.json");
+// Get reviews of a facility
+
+export const getFacilityReviews = (facilityId) =>
+  apiClient.get(`/api/reviews/facility/${facilityId}`);
+
+// Delete review
+
+export const deleteReview = async (reviewId, token) => {
+  const res = await apiClient.delete(`/api/reviews/${reviewId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return res.data;
 };
-
-// Get reviews for a facility
-
-export const getReviewsByFacility = async (facilityId) => {
-  const res = await apiClient.get("/fake-data/reviews.json");
-  return res.data.filter((r) => r.facility === facilityId);
-};
-
-/* Replace later with:
-GET /reviews
-GET /facilities/:id/reviews
-*/

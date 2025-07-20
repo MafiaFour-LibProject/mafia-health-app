@@ -1,5 +1,5 @@
-import { apiClient } from "./config";
 import axios from "axios";
+import { apiClient } from "./config";
 
 export const createService = async (facilityId, serviceData) => {
   console.log("Facility ID being used:", facilityId);
@@ -19,6 +19,7 @@ export const updateService = async (serviceId, updatedData) =>
   apiClient.put(`/api/services/${serviceId}`, updatedData);
 
 // Delete service
+
 export const deleteService = async (serviceId) =>
   apiClient.delete(`/api/services/${serviceId}`);
 
@@ -35,12 +36,17 @@ export const searchServices = async (query) =>
 
 export const uploadFacilityPhotos = async (facilityId, files) => {
   const token = localStorage.getItem("token");
-  const formData = new FormData();
 
+  if (!token) {
+    throw new Error("Authorization token is missing.");
+  }
+
+  const formData = new FormData();
   files.forEach((file) => {
     formData.append("files", file);
   });
 
+  // For debugging
   for (let [key, value] of formData.entries()) {
     console.log("FormData Entry:", key, value);
   }

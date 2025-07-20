@@ -1,12 +1,18 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { ApiLogin } from "../../services/authService";
+import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
+
+import { ApiLogin } from "../../services/authService";
+import { useAuth } from "../../contexts/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { login } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const redirectTo = new URLSearchParams(location.search).get("redirect");
 
   const {
     register,
@@ -24,41 +30,45 @@ const Login = () => {
       };
 
       const res = await ApiLogin(payload);
-      console.log("Login response:", res);
-
       const token = res?.data?.token;
       const user = res?.data?.user;
-      console.log("Logged in user:", user);
 
       if (!token || !user) {
         toast.error("Login succeeded but no token or user returned.");
         return;
       }
 
-      localStorage.setItem("token", token);
-      localStorage.setItem("name", user.name);
-      localStorage.setItem("email", user.email);
+      const userData = {
+        _id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        token,
+        facilityId: user.facilityId || null,
+      };
 
-      if (user.role === "facility_admin" && user.facilityId) {
-        localStorage.setItem("facilityId", user.facilityId);
-        console.log("Facility ID saved:", localStorage.getItem("facilityId"));
-      }
+      localStorage.setItem("user", JSON.stringify(userData));
+      login(userData);
 
       toast.success("Login successful!");
 
-      switch (user.role) {
-        case "user":
-          navigate("/user");
-          break;
-        case "facility_admin":
-          navigate("/admin");
-          break;
-        case "superadmin":
-          navigate("/superadmin");
-          break;
-        default:
-          toast.warn("Unknown role. Redirecting to home.");
-          navigate("/");
+      if (redirectTo) {
+        navigate(redirectTo);
+      } else {
+        switch (user.role) {
+          case "user":
+            navigate("/user");
+            break;
+          case "facility_admin":
+            navigate("/admin");
+            break;
+          case "superadmin":
+            navigate("/superadmin");
+            break;
+          default:
+            toast.warn("Unknown role. Redirecting to home.");
+            navigate("/");
+        }
       }
     } catch (error) {
       console.error("Login error:", error);
@@ -69,8 +79,6 @@ const Login = () => {
       setIsSubmitting(false);
     }
   };
-
-  const isError = Object.keys(errors).length > 0;
 
   return (
     <div
@@ -136,9 +144,9 @@ const Login = () => {
 
           <button
             type="submit"
-            disabled={isSubmitting || isError}
+            disabled={isSubmitting}
             className={`w-full py-2 mt-5 font-bold rounded-md transition transform ${
-              isSubmitting || isError
+              isSubmitting
                 ? "bg-gray-300 cursor-not-allowed"
                 : "bg-green-600 text-white hover:bg-green-500 hover:scale-105"
             }`}
@@ -147,12 +155,10 @@ const Login = () => {
           </button>
 
           <div className="flex items-center justify-center mb-6 pt-5">
-            <p className="block text-sm font-semibold text-gray-700 mb-1 mr-1">
-              New User?
-            </p>
+            <p className="text-sm text-gray-700 mr-1">New User?</p>
             <a
               onClick={() => navigate("/auth/signup")}
-              className="text-sm text-blue-700 hover:underline font-semibold"
+              className="text-sm text-blue-700 hover:underline font-semibold cursor-pointer"
             >
               Register
             </a>

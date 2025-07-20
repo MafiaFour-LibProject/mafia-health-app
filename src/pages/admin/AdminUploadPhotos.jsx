@@ -27,11 +27,17 @@ const AdminUploadPhotos = ({ facilityId, onClose }) => {
   const handleUpload = async () => {
     try {
       setLoading(true);
-      await uploadFacilityPhotos(facilityId, selectedFiles);
-      toast.success("Photos uploaded successfully!");
-      onClose();
+      const response = await uploadFacilityPhotos(facilityId, selectedFiles);
+      console.log("Upload response:", response.data);
+
+      if (response.data.success) {
+        toast.success("Photos uploaded successfully!");
+        onClose();
+      } else {
+        toast.error("Upload failed. Please try again.");
+      }
     } catch (err) {
-      console.error(err);
+      console.error("Upload error:", err);
       toast.error("Failed to upload photos.");
     } finally {
       setLoading(false);

@@ -113,6 +113,24 @@ const AdminAddServiceForm = ({
           onChange={handleChange}
           className="input"
         />
+        <select
+          name="currency"
+          value={formData.price.currency || "GHS"}
+          onChange={(e) =>
+            setFormData((prev) => ({
+              ...prev,
+              price: {
+                ...prev.price,
+                currency: e.target.value,
+              },
+            }))
+          }
+          className="input"
+        >
+          <option value="GHS">GHS</option>
+          <option value="USD">USD</option>
+          <option value="EUR">EUR</option>
+        </select>
         <input
           type="number"
           name="amount"

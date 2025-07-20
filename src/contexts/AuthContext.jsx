@@ -4,16 +4,27 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [authReady, setAuthReady] = useState(false);
 
-  // check localStorage or make an API call here
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      const parsedUser = JSON.parse(storedUser);
+
+      if (!parsedUser._id && parsedUser.id) {
+        parsedUser._id = parsedUser.id;
+      }
+
+      setUser(parsedUser);
     }
+    setAuthReady(true);
   }, []);
 
   const login = (userData) => {
+    if (!userData._id && userData.id) {
+      userData._id = userData.id;
+    }
+
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
   };
@@ -24,7 +35,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, authReady }}>
       {children}
     </AuthContext.Provider>
   );
