@@ -18,7 +18,7 @@ const AdminAddServiceForm = ({
     stock: "", // changed from object to string
     price: { amount: "", currency: "GHS" },
     requiresAppointment: false,
-    // description: "",
+    description: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -36,7 +36,7 @@ const AdminAddServiceForm = ({
           currency: priceData.currency ?? "GHS",
         },
         requiresAppointment: !!initialData.requiresAppointment,
-        // description: initialData.description || "",
+        description: initialData.description || "",
       });
     }
   }, [initialData, mode]);
@@ -73,7 +73,7 @@ const AdminAddServiceForm = ({
         currency: formData.price.currency,
       },
       requiresAppointment: !!formData.requiresAppointment,
-      // description: formData.description,
+      description: formData.description,
     };
 
     try {
@@ -170,7 +170,6 @@ const AdminAddServiceForm = ({
         </label>
       </div>
 
-      {/* 
       <textarea
         name="description"
         placeholder="Description"
@@ -179,7 +178,6 @@ const AdminAddServiceForm = ({
         onChange={handleChange}
         className="w-full border rounded p-2 resize-none"
       />
-      */}
 
       <div className="flex justify-end gap-2 pt-4">
         <button

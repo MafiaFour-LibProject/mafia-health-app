@@ -22,7 +22,7 @@ import VerifyEmailNotice from "./pages/auth/VerifyEmailNotice";
 import VerifyEmailToken from "./pages/auth/VerifyEmailToken";
 
 // Superadmin Pages
-import SuperadminDashboard from "./pages/superadmin/SuperadminDashboard";
+import SuperAdminDashboard from "./pages/superadmin/SuperAdminDashboard";
 import SuperadminFacilities from "./pages/superadmin/SuperadminFacilities";
 import SuperadminUsers from "./pages/superadmin/SuperadminUsers";
 import Analytics from "./pages/superadmin/Analytics";
@@ -47,6 +47,7 @@ import ReviewList from "./pages/reviews/ReviewList";
 import EmptyState from "./components/EmptyState";
 import AllFacilities from "./components/AllFacilities";
 import SuperAdminFacilityView from "./pages/superadmin/SuperAdminFacilityView";
+import AdminSettingsPage from "./pages/admin/AdminSettingsPage";
 
 function App() {
   const router = createBrowserRouter([
@@ -97,6 +98,7 @@ function App() {
         { path: "appointments", element: <AdminAppointments /> },
         { path: "reviews", element: <AdminReviews /> },
         { path: "profile", element: <AdminProfile /> },
+        { path: "settings", element: <AdminSettingsPage /> },
       ],
     },
 
@@ -105,7 +107,7 @@ function App() {
       path: "/superadmin",
       element: <SuperAdminLayout />,
       children: [
-        { index: true, element: <SuperadminDashboard /> },
+        { index: true, element: <SuperAdminDashboard /> },
         { path: "facilities/:id", element: <SuperAdminFacilityView /> },
         { path: "facilities", element: <SuperadminFacilities /> },
         { path: "users", element: <SuperadminUsers /> },

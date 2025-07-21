@@ -12,6 +12,7 @@ export const apiClient = axios.create({
 
 apiClient.interceptors.request.use((config) => {
   const stored = localStorage.getItem("user");
+  console.log("User from storage (interceptor):", stored);
   const token = stored ? JSON.parse(stored).token : null;
 
   if (token) {

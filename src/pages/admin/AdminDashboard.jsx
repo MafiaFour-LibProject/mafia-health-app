@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { getAdminDashboard } from "../../services/userService";
 import { deleteService } from "../../services/serviceService";
 import Loader from "../../components/Loader";
@@ -22,6 +23,8 @@ const statIcons = [
 ];
 
 const AdminDashboard = () => {
+  const navigate = useNavigate();
+
   const [stats, setStats] = useState(null);
   const [facilities, setFacilities] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -76,8 +79,15 @@ const AdminDashboard = () => {
       <h1 className="text-3xl md:text-4xl font-extrabold text-green-800 mb-8 text-center">
         Admin Dashboard
       </h1>
-
-      {/* Stats Cards */}
+      <div className="flex justify-end max-w-6xl mx-auto mb-6">
+        <button
+          className="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700"
+          onClick={() => navigate("/admin/settings")}
+        >
+          Settings
+        </button>
+      </div>
+      ;{/* Stats Cards */}
       {stats && (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto mb-12">
           {[
@@ -115,7 +125,6 @@ const AdminDashboard = () => {
           ))}
         </div>
       )}
-
       <div className="max-w-6xl mx-auto">
         <h2 className="text-2xl font-bold text-blue-900 mb-6">Facilities</h2>
         <div className="space-y-8">
@@ -161,7 +170,6 @@ const AdminDashboard = () => {
                     {facility.rating?.count ?? 0})
                   </div>
                 </div>
-                {/* Services */}
                 <div className="flex-1">
                   <div className="flex items-center justify-between mb-2">
                     <h4 className="font-semibold text-green-700">Services</h4>
@@ -238,7 +246,6 @@ const AdminDashboard = () => {
           )}
         </div>
       </div>
-
       {/* Edit Service Modal */}
       {editingService && (
         <AdminModal onClose={() => setEditingService(null)}>
@@ -254,7 +261,6 @@ const AdminDashboard = () => {
           />
         </AdminModal>
       )}
-
       {/* Delete Confirmation Modal */}
       {deleteModal.open && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
