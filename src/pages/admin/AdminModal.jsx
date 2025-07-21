@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-const AdminModal = ({ isOpen, onClose, children }) => {
+const AdminModal = ({ onClose, children }) => {
   useEffect(() => {
     const handleEsc = (e) => {
       if (e.key === "Escape") onClose();
@@ -8,8 +8,6 @@ const AdminModal = ({ isOpen, onClose, children }) => {
     document.addEventListener("keydown", handleEsc);
     return () => document.removeEventListener("keydown", handleEsc);
   }, [onClose]);
-
-  if (!isOpen) return null;
 
   return (
     <div

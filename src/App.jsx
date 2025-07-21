@@ -83,7 +83,8 @@ function App() {
         { index: true, element: <UserDashboard /> },
         { path: "appointments", element: <UserAppointments /> },
         { path: "reviews", element: <ReviewList /> },
-        // { path: "facility/:facilityId", element: <FacilityDetails /> },
+        { path: "user-page", element: <Home /> },
+        { path: "facilities/:facilityId", element: <FacilityDetails /> },
       ],
     },
 

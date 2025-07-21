@@ -6,6 +6,16 @@ const FacilityCard = ({ facility }) => {
   const defaultImage = "/images/hero-image-3.jpg";
 
   const handleClick = () => {
+    const stored = localStorage.getItem("user");
+
+    if (stored) {
+      const userData = JSON.parse(stored);
+      if (userData?.role === "user") {
+        navigate(`/user/facilities/${facility._id}`);
+        return;
+      }
+    }
+
     navigate(`/facilities/${facility._id}`);
   };
 

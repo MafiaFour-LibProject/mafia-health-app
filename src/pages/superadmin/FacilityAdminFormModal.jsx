@@ -31,7 +31,7 @@ const FacilityAdminFormModal = ({ isOpen, onClose, onSaved }) => {
       reset({
         fullName: "",
         email: "",
-        password: "",
+        // password: "",
         contact: "",
         facility: "",
       });
@@ -48,6 +48,11 @@ const FacilityAdminFormModal = ({ isOpen, onClose, onSaved }) => {
   const onSubmit = async (data) => {
     try {
       await createFacilityAdmin(data);
+      console.error(
+        "Error creating facility admin:",
+        err.response?.data || err.message
+      );
+
       toast.success("Facility admin created successfully");
       onClose();
       onSaved?.();
@@ -93,12 +98,12 @@ const FacilityAdminFormModal = ({ isOpen, onClose, onSaved }) => {
             {...register("email", { required: true })}
             className="w-full px-3 py-2 border rounded-md"
           />
-          <input
+          {/* <input
             type="password"
             placeholder="Password"
             {...register("password", { required: true })}
             className="w-full px-3 py-2 border rounded-md"
-          />
+          /> */}
           <input
             type="text"
             placeholder="Contact"

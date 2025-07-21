@@ -3,6 +3,7 @@
 // import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import FacilityGrid from "../../components/FacilityGrid";
+import { Link } from "react-router-dom";
 
 const UserDashboard = () => {
   // const navigate = useNavigate();
@@ -30,6 +31,9 @@ const UserDashboard = () => {
           </button> */}
         </div>
         <div className="p-4">
+          {/* <Link to={`/facilities/${facility._id}`}>
+            <button>Browse Facilities</button>
+          </Link> */}
           <button
             onClick={() => setShowGrid((prev) => !prev)}
             className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"

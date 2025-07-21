@@ -107,7 +107,15 @@ const SuperAdminFacilityView = () => {
               <h2 className="font-semibold text-gray-800">Services</h2>
               <ul className="list-disc ml-5 mt-2">
                 {services.map((s, index) => (
-                  <li key={index}>{s}</li>
+                  <li key={index}>
+                    {typeof s.name === "string"
+                      ? s.name
+                      : JSON.stringify(s.name)}{" "}
+                    -
+                    {typeof s.price === "object"
+                      ? `${s.price.amount ?? ""} ${s.price.currency ?? ""}`
+                      : s.price}
+                  </li>
                 ))}
               </ul>
             </div>

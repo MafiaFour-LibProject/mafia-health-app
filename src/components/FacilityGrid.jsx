@@ -66,7 +66,6 @@ const FacilityGrid = () => {
 
   return (
     <div className="py-12 px-4 md:px-10 bg-gradient-to-br from-white via-green-50 to-blue-50 min-h-[60vh]">
-      {/* Filter Bar */}
       <div className="bg-white/90 backdrop-blur rounded-xl shadow-lg w-full max-w-5xl mx-auto mb-10 p-6 border border-green-100">
         <form className="flex flex-col md:flex-row gap-4 md:gap-6 w-full">
           <div className="flex-1">

@@ -57,7 +57,7 @@ const Login = () => {
       } else {
         switch (user.role) {
           case "user":
-            navigate("/user");
+            navigate("/user/user-page");
             break;
           case "facility_admin":
             navigate("/admin");

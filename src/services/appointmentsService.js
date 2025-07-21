@@ -1,28 +1,69 @@
 import { apiClient } from "./config";
 
-// Get all appointments
+// get a user's appointments
+export const getAppointmentsByUserId = async (userId) => {
+  const response = await apiClient.get(`/appointments/user/${userId}`);
+  return response.data;
+};
 
-export const getAllAppointments = async () => {
-  const res = await apiClient.get("/fake-data/appointments.json");
+// get appointments by facility
+export const getFacilityAppointments = async () => {
+  const response = await apiClient.get("/appointments/facility");
+  return response.data;
+};
+
+// facility updates an appointment: pending, confirmed, completed, canceled
+export const updateAppointmentStatus = async (appointmentId, status) => {
+  const response = await apiClient.put(
+    `/appointments/${appointmentId}/status`,
+    { status }
+  );
+  return response.data;
+};
+
+// user updates an appointment
+export const updateAppointment = async (appointmentId, updatedData) => {
+  const response = await apiClient.put(
+    `/appointments/${appointmentId}`,
+    updatedData
+  );
+  return response.data;
+};
+
+// user deletes an appointment
+export const deleteAppointment = async (appointmentId) => {
+  const response = await apiClient.delete(`/appointments/${appointmentId}`);
+  return response.data;
+};
+
+// get facility time slots for a specific date
+export const getFacilityTimeSlots = async (id, date) => {
+  const res = await apiClient.get(`api/facilities/${id}/time-slots`, {
+    params: { date },
+  });
   return res.data;
 };
 
-// Get all appointments by facility
-
-export const getAppointmentByFacility = async (facilityId) => {
-  const res = await apiClient.get("/fake-data/appointments.json");
-  return res.data.filter((appt) => appt.facility === facilityId);
+// book a new appointment
+export const requestAppointment = async (data) => {
+  const res = await apiClient.post("/api/appointments/", data);
+  return res.data;
 };
 
-// Get all appointments by user
-
-export const getAppointmentsByUser = async (userId) => {
-  const res = await apiClient.get("/fake-data/appointments.json");
-  return res.data.filter((appt) => appt.user === userId);
+// check calendar availability for a facility & service
+export const getFacilityCalendar = async (
+  facilityId,
+  serviceId,
+  startDate,
+  endDate
+) => {
+  const res = await apiClient.get("/api/appointments/facility/calendar", {
+    params: {
+      facilityId,
+      serviceId,
+      startDate,
+      endDate,
+    },
+  });
+  return res.data;
 };
-
-/* Replace later with: 
-GET /appointments
-GET /appointments/facility/:id
-GET /appointments/user/:id
-*/

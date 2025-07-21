@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { getAdminDashboard } from "../../services/userService";
-import { updateService, deleteService } from "../../services/serviceService";
+import { deleteService } from "../../services/serviceService";
 import Loader from "../../components/Loader";
+import AdminModal from "./AdminModal";
+import AdminAddServiceForm from "./AdminAddServiceForm";
 import {
   Building,
   CheckCircle,
@@ -13,109 +15,45 @@ import {
 import { toast } from "react-toastify";
 
 const statIcons = [
-  <Building className="text-blue-600" size={28} />,
-  <CheckCircle className="text-green-600" size={28} />,
-  <Star className="text-yellow-500" size={28} />,
-  <MessageCircle className="text-purple-600" size={28} />,
+  <Building className="text-blue-600" size={28} key="building" />,
+  <CheckCircle className="text-green-600" size={28} key="check" />,
+  <Star className="text-yellow-500" size={28} key="star" />,
+  <MessageCircle className="text-purple-600" size={28} key="msg" />,
 ];
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState(null);
   const [facilities, setFacilities] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showAddService, setShowAddService] = useState(null);
 
   // Service editing
   const [editingService, setEditingService] = useState(null);
-  const [editForm, setEditForm] = useState({
-    name: "",
-    description: "",
-    price: "",
-  });
   const [saving, setSaving] = useState(false);
 
-  const [editingFacility, setEditingFacility] = useState(null);
-  const [facilityForm, setFacilityForm] = useState({
-    name: "",
-    type: "",
-    address: "",
-    city: "",
-    phone: "",
-    email: "",
-  });
-
+  // Service delete logic
   const [deleteModal, setDeleteModal] = useState({
     open: false,
     serviceId: null,
   });
 
-  const fetchDashboard = () => {
+  // Fetch dashboard data
+  const fetchDashboard = async () => {
     setLoading(true);
-    getAdminDashboard()
-      .then((res) => {
-        setStats(res.data.data.statistics);
-        setFacilities(res.data.data.facilities);
-      })
-      .catch(() => toast.error("Failed to load dashboard"))
-      .finally(() => setLoading(false));
+    try {
+      const res = await getAdminDashboard();
+      setStats(res.data.data.statistics);
+      setFacilities(res.data.data.facilities);
+    } catch (err) {
+      toast.error("Failed to load dashboard");
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     fetchDashboard();
   }, []);
-
-  // Service edit handlers
-  const handleEditService = (service) => {
-    setEditingService(service);
-    setEditForm({
-      name: service.name || "",
-      type: service.type || "",
-      category: service.category || "",
-      quantity: service.stock?.quantity || "",
-      amount: service.price?.amount || "",
-      currency: service.price?.currency || "GHS",
-      requiresAppointment: !!service.requiresAppointment,
-      description: service.description || "",
-    });
-  };
-
-  const handleEditFormChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    if (name === "requiresAppointment") {
-      setEditForm((prev) => ({ ...prev, [name]: checked }));
-    } else {
-      setEditForm((prev) => ({ ...prev, [name]: value }));
-    }
-  };
-
-  const handleUpdateService = async () => {
-    setSaving(true);
-    try {
-      await updateService(editingService._id, {
-        name: editForm.name,
-        type: editForm.type,
-        category: editForm.category,
-        stock: { quantity: Number(editForm.quantity) || 0 },
-        price: {
-          amount: Number(editForm.amount) || 0,
-          currency: editForm.currency,
-        },
-        requiresAppointment: !!editForm.requiresAppointment,
-        description: editForm.description,
-      });
-      toast.success("Service updated!");
-      setEditingService(null);
-      fetchDashboard();
-    } catch {
-      toast.error("Failed to update service");
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  // Delete confirmation modal
-  const handleDeleteService = (serviceId) => {
-    setDeleteModal({ open: true, serviceId });
-  };
 
   const confirmDeleteService = async () => {
     setSaving(true);
@@ -123,39 +61,9 @@ const AdminDashboard = () => {
       await deleteService(deleteModal.serviceId);
       toast.success("Service deleted!");
       setDeleteModal({ open: false, serviceId: null });
-      fetchDashboard();
+      await fetchDashboard();
     } catch {
       toast.error("Failed to delete service");
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  // Facility edit handlers
-  const handleEditFacility = (facility) => {
-    setEditingFacility(facility);
-    setFacilityForm({
-      name: facility.name,
-      type: facility.type,
-      address: facility.location?.address || "",
-      city: facility.location?.city || "",
-      phone: facility.contact?.phone || "",
-      email: facility.contact?.email || "",
-    });
-  };
-
-  const handleFacilityFormChange = (e) => {
-    setFacilityForm({ ...facilityForm, [e.target.name]: e.target.value });
-  };
-
-  const handleUpdateFacility = async () => {
-    setSaving(true);
-    try {
-      toast.success("Facility updated!");
-      setEditingFacility(null);
-      fetchDashboard();
-    } catch {
-      toast.error("Failed to update facility");
     } finally {
       setSaving(false);
     }
@@ -169,44 +77,45 @@ const AdminDashboard = () => {
         Admin Dashboard
       </h1>
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto mb-12">
-        {[
-          {
-            label: "Total Facilities",
-            value: stats.totalFacilities,
-            icon: statIcons[0],
-          },
-          {
-            label: "Active Facilities",
-            value: stats.activeFacilities,
-            icon: statIcons[1],
-          },
-          {
-            label: "Average Rating",
-            value: stats.averageRating,
-            icon: statIcons[2],
-          },
-          {
-            label: "Total Reviews",
-            value: stats.totalReviews,
-            icon: statIcons[3],
-          },
-        ].map((stat) => (
-          <div
-            key={stat.label}
-            className="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center"
-          >
-            <div className="mb-2">{stat.icon}</div>
-            <div className="text-2xl font-bold text-green-700">
-              {stat.value}
+      {/* Stats Cards */}
+      {stats && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto mb-12">
+          {[
+            {
+              label: "Total Facilities",
+              value: stats.totalFacilities,
+              icon: statIcons[0],
+            },
+            {
+              label: "Active Facilities",
+              value: stats.activeFacilities,
+              icon: statIcons[1],
+            },
+            {
+              label: "Average Rating",
+              value: stats.averageRating,
+              icon: statIcons[2],
+            },
+            {
+              label: "Total Reviews",
+              value: stats.totalReviews,
+              icon: statIcons[3],
+            },
+          ].map((stat) => (
+            <div
+              key={stat.label}
+              className="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center"
+            >
+              <div className="mb-2">{stat.icon}</div>
+              <div className="text-2xl font-bold text-green-700">
+                {stat.value}
+              </div>
+              <div className="text-gray-500 text-sm">{stat.label}</div>
             </div>
-            <div className="text-gray-500 text-sm">{stat.label}</div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
-      {/* Facilities List */}
       <div className="max-w-6xl mx-auto">
         <h2 className="text-2xl font-bold text-blue-900 mb-6">Facilities</h2>
         <div className="space-y-8">
@@ -220,18 +129,12 @@ const AdminDashboard = () => {
                 key={facility._id}
                 className="bg-white rounded-2xl shadow p-6 space-y-6"
               >
+                {/* Facility Info */}
                 <div>
                   <div className="flex items-center gap-2 mb-2">
                     <h3 className="text-xl font-bold text-green-800">
                       {facility.name}
                     </h3>
-                    <button
-                      className="ml-2 text-blue-600 hover:bg-blue-50 p-1 rounded"
-                      onClick={() => handleEditFacility(facility)}
-                      title="Edit Facility"
-                    >
-                      <Pencil size={18} />
-                    </button>
                   </div>
                   <div className="flex flex-wrap gap-2 mb-2">
                     <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold uppercase">
@@ -260,9 +163,28 @@ const AdminDashboard = () => {
                 </div>
                 {/* Services */}
                 <div className="flex-1">
-                  <h4 className="font-semibold text-green-700 mb-2">
-                    Services
-                  </h4>
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="font-semibold text-green-700">Services</h4>
+                    <button
+                      className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-xs"
+                      onClick={() => setShowAddService(facility._id)}
+                    >
+                      + Add Service
+                    </button>
+                  </div>
+                  {showAddService === facility._id && (
+                    <AdminModal onClose={() => setShowAddService(null)}>
+                      <AdminAddServiceForm
+                        facilityId={facility._id}
+                        onClose={() => setShowAddService(null)}
+                        onServiceAdded={async () => {
+                          setShowAddService(null);
+                          await fetchDashboard();
+                        }}
+                        mode="add"
+                      />
+                    </AdminModal>
+                  )}
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                     {facility.services && facility.services.length > 0 ? (
                       facility.services.map((service) => (
@@ -277,18 +199,29 @@ const AdminDashboard = () => {
                             {service.description}
                           </span>
                           <span className="text-green-700 font-semibold mb-2">
-                            GHS {service.price?.amount}
+                            {service.price?.currency || "GHS"}{" "}
+                            {service.price?.amount}
                           </span>
                           <div className="flex gap-2 mt-auto">
                             <button
                               className="flex items-center gap-1 text-blue-600 hover:underline text-xs"
-                              onClick={() => handleEditService(service)}
+                              onClick={() =>
+                                setEditingService({
+                                  ...service,
+                                  facilityId: facility._id,
+                                })
+                              }
                             >
                               <Pencil size={14} /> Edit
                             </button>
                             <button
                               className="flex items-center gap-1 text-red-600 hover:underline text-xs"
-                              onClick={() => handleDeleteService(service._id)}
+                              onClick={() =>
+                                setDeleteModal({
+                                  open: true,
+                                  serviceId: service._id,
+                                })
+                              }
                             >
                               <Trash2 size={14} /> Delete
                             </button>
@@ -308,127 +241,18 @@ const AdminDashboard = () => {
 
       {/* Edit Service Modal */}
       {editingService && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg">
-            <h3 className="text-lg font-bold mb-4 text-green-700">
-              Edit Service
-            </h3>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleUpdateService();
-              }}
-              className="space-y-4 text-sm text-gray-700"
-            >
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block mb-1 font-medium">Service Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={editForm.name}
-                    onChange={handleEditFormChange}
-                    className="w-full border rounded px-3 py-2"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block mb-1 font-medium">Type</label>
-                  <input
-                    type="text"
-                    name="type"
-                    value={editForm.type || ""}
-                    onChange={handleEditFormChange}
-                    className="w-full border rounded px-3 py-2"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block mb-1 font-medium">Category</label>
-                  <input
-                    type="text"
-                    name="category"
-                    value={editForm.category || ""}
-                    onChange={handleEditFormChange}
-                    className="w-full border rounded px-3 py-2"
-                  />
-                </div>
-                <div>
-                  <label className="block mb-1 font-medium">
-                    Stock Quantity
-                  </label>
-                  <input
-                    type="number"
-                    name="quantity"
-                    value={editForm.quantity || ""}
-                    onChange={handleEditFormChange}
-                    className="w-full border rounded px-3 py-2"
-                  />
-                </div>
-                <div>
-                  <label className="block mb-1 font-medium">Currency</label>
-                  <select
-                    name="currency"
-                    value={editForm.currency || "GHS"}
-                    onChange={handleEditFormChange}
-                    className="w-full border rounded px-3 py-2"
-                  >
-                    <option value="GHS">GHS</option>
-                    <option value="USD">USD</option>
-                    <option value="EUR">EUR</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block mb-1 font-medium">Price</label>
-                  <input
-                    type="number"
-                    name="amount"
-                    value={editForm.amount || ""}
-                    onChange={handleEditFormChange}
-                    className="w-full border rounded px-3 py-2"
-                  />
-                </div>
-                <div className="flex items-center mt-2 md:col-span-2">
-                  <input
-                    type="checkbox"
-                    name="requiresAppointment"
-                    checked={!!editForm.requiresAppointment}
-                    onChange={handleEditFormChange}
-                    className="mr-2"
-                  />
-                  <label className="font-medium">Requires Appointment</label>
-                </div>
-              </div>
-              <div>
-                <label className="block mb-1 font-medium">Description</label>
-                <textarea
-                  name="description"
-                  rows={3}
-                  value={editForm.description}
-                  onChange={handleEditFormChange}
-                  className="w-full border rounded p-2 resize-none"
-                />
-              </div>
-              <div className="flex justify-end gap-2 pt-4">
-                <button
-                  type="button"
-                  onClick={() => setEditingService(null)}
-                  className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
-                  disabled={saving}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-5 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-                  disabled={saving}
-                >
-                  {saving ? "Saving..." : "Save"}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+        <AdminModal onClose={() => setEditingService(null)}>
+          <AdminAddServiceForm
+            facilityId={editingService.facilityId}
+            mode="edit"
+            initialData={editingService}
+            onClose={() => setEditingService(null)}
+            onServiceAdded={async () => {
+              setEditingService(null);
+              await fetchDashboard();
+            }}
+          />
+        </AdminModal>
       )}
 
       {/* Delete Confirmation Modal */}
@@ -453,81 +277,6 @@ const AdminDashboard = () => {
                 disabled={saving}
               >
                 {saving ? "Deleting..." : "Delete"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Edit Facility Modal */}
-      {editingFacility && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg">
-            <h3 className="text-lg font-bold mb-4">Edit Facility</h3>
-            <div className="space-y-3">
-              <input
-                type="text"
-                name="name"
-                value={facilityForm.name}
-                onChange={handleFacilityFormChange}
-                className="w-full border rounded px-3 py-2"
-                placeholder="Facility Name"
-              />
-              <input
-                type="text"
-                name="type"
-                value={facilityForm.type}
-                onChange={handleFacilityFormChange}
-                className="w-full border rounded px-3 py-2"
-                placeholder="Type"
-              />
-              <input
-                type="text"
-                name="address"
-                value={facilityForm.address}
-                onChange={handleFacilityFormChange}
-                className="w-full border rounded px-3 py-2"
-                placeholder="Address"
-              />
-              <input
-                type="text"
-                name="city"
-                value={facilityForm.city}
-                onChange={handleFacilityFormChange}
-                className="w-full border rounded px-3 py-2"
-                placeholder="City"
-              />
-              <input
-                type="text"
-                name="phone"
-                value={facilityForm.phone}
-                onChange={handleFacilityFormChange}
-                className="w-full border rounded px-3 py-2"
-                placeholder="Phone"
-              />
-              <input
-                type="email"
-                name="email"
-                value={facilityForm.email}
-                onChange={handleFacilityFormChange}
-                className="w-full border rounded px-3 py-2"
-                placeholder="Email"
-              />
-            </div>
-            <div className="flex justify-end gap-2 mt-6">
-              <button
-                className="px-4 py-2 rounded bg-gray-200"
-                onClick={() => setEditingFacility(null)}
-                disabled={saving}
-              >
-                Cancel
-              </button>
-              <button
-                className="px-4 py-2 rounded bg-green-600 text-white"
-                onClick={handleUpdateFacility}
-                disabled={saving}
-              >
-                {saving ? "Saving..." : "Save"}
               </button>
             </div>
           </div>

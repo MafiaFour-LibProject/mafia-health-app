@@ -1,12 +1,28 @@
 import { useEffect, useState } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Star, Trash2, Filter, ArrowLeft } from "lucide-react";
+import {
+  Star,
+  Trash2,
+  Filter,
+  ArrowLeft,
+  Clock,
+  Mail,
+  Phone,
+  Globe,
+  CalendarDays,
+  Hospital,
+  MessageSquareText,
+} from "lucide-react";
 import Loader from "../../components/Loader";
 import ReviewModal from "../../components/ReviewModal";
 import { useAuth } from "../../contexts/AuthContext";
 import { getSingleFacility } from "../../services/facilityService";
 import { getFacilityServices } from "../../services/serviceService";
+import {
+  requestAppointment,
+  getFacilityCalendar,
+} from "../../services/appointmentsService";
 import {
   getFacilityReviews,
   createReview,
@@ -25,6 +41,11 @@ const FacilityDetails = () => {
   const [loading, setLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState("newest");
   const [showReviewModal, setShowReviewModal] = useState(false);
+  const [selectedService, setSelectedService] = useState("");
+  const [appointmentDate, setAppointmentDate] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+  const [reason, setReason] = useState("");
 
   const fetchFacilityDetails = async () => {
     try {
@@ -38,9 +59,13 @@ const FacilityDetails = () => {
   const fetchServices = async () => {
     try {
       const res = await getFacilityServices(facilityId);
-      setServices(res.data);
+      const serviceData = Array.isArray(res.data)
+        ? res.data
+        : res.data?.services || [];
+      setServices(serviceData);
     } catch {
       toast.error("Error loading services");
+      setServices([]);
     }
   };
 
@@ -72,10 +97,71 @@ const FacilityDetails = () => {
 
   useEffect(() => {
     if (!authReady || !user || reviews.length === 0) return;
-
     const found = reviews.find((r) => r.user?._id === user._id);
     setUserReview(found || null);
   }, [authReady, user, reviews]);
+
+  const handleBookAppointment = async () => {
+    const stored = localStorage.getItem("user");
+
+    if (!stored) {
+      toast.error("You must be logged in to book an appointment.");
+      return;
+    }
+
+    const userData = JSON.parse(stored);
+    if (userData?.role !== "user") {
+      toast.error("Only users can book appointments.");
+      return;
+    }
+
+    if (
+      !selectedService ||
+      !appointmentDate ||
+      !startTime ||
+      !endTime ||
+      !reason
+    ) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
+    try {
+      // Check calendar availability
+      const calendar = await getFacilityCalendar(
+        facilityId,
+        selectedService,
+        appointmentDate,
+        appointmentDate
+      );
+
+      const isAvailable =
+        calendar?.data?.availableDates?.includes(appointmentDate);
+      if (!isAvailable) {
+        toast.error("No availability on the selected date.");
+        return;
+      }
+
+      await requestAppointment({
+        facility: facilityId,
+        service: selectedService,
+        appointmentDate,
+        timeSlot: { start: startTime, end: endTime },
+        reason,
+      });
+
+      toast.success("Appointment booked successfully!");
+
+      // Clear form
+      setSelectedService("");
+      setAppointmentDate("");
+      setStartTime("");
+      setEndTime("");
+      setReason("");
+    } catch (err) {
+      toast.error(err?.response?.data?.error || "Booking failed");
+    }
+  };
 
   const sortReviews = (data, order) => {
     const sorted = [...data];
@@ -121,9 +207,9 @@ const FacilityDetails = () => {
     Array.from({ length: 5 }, (_, i) => (
       <Star
         key={i}
-        size={16}
+        size={18}
         className={
-          i < rating ? "text-yellow-500 fill-yellow-400" : "text-gray-300"
+          i < rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
         }
       />
     ));
@@ -138,183 +224,316 @@ const FacilityDetails = () => {
   if (!authReady || loading) return <Loader />;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 pb-16">
-      <div className="relative w-full h-72 md:h-96 flex items-end">
+    <div className="min-h-screen bg-gray-50 font-sans">
+      {/* Hero Section */}
+      <div className="relative w-full h-80 md:h-96 flex items-end overflow-hidden">
         <img
           src={facility.images?.[0]?.url ?? "/images/hero-image-3.jpg"}
           alt={facility.name}
-          className="absolute inset-0 w-full h-full object-cover object-center rounded-b-3xl shadow-lg"
+          className="absolute inset-0 w-full h-full object-cover object-center transform transition-transform duration-500 hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-b-3xl" />
-        <div className="relative z-10 p-8 md:p-12 text-white">
+        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent" />
+        <div className="relative z-10 p-6 md:p-12 text-white w-full">
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center gap-2 mb-4 text-white/80 hover:text-white"
+            className="flex items-center gap-2 mb-4 text-white/90 hover:text-white transition-colors duration-200 text-sm font-medium"
           >
-            <ArrowLeft size={20} /> Back
+            <ArrowLeft size={20} /> Back to Facilities
           </button>
-          <h1 className="text-4xl md:text-5xl font-extrabold drop-shadow mb-2">
+          <h1 className="text-4xl md:text-6xl font-extrabold drop-shadow-lg mb-3 leading-tight">
             {facility.name}
           </h1>
-          <div className="flex flex-wrap gap-3 items-center mb-2">
-            <span className="bg-green-600/80 text-white text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wide">
+          <div className="flex flex-wrap items-center gap-4 mb-3">
+            <span className="bg-blue-600 text-white text-xs font-semibold px-4 py-1.5 rounded-full uppercase tracking-wide shadow-md">
               {facility.type}
             </span>
             <span
-              className={`text-xs font-semibold px-3 py-1 rounded-full ${
+              className={`text-xs font-semibold px-4 py-1.5 rounded-full shadow-md ${
                 facility.isActive
-                  ? "bg-green-100 text-green-700"
-                  : "bg-red-100 text-red-700"
+                  ? "bg-green-500 text-white"
+                  : "bg-red-500 text-white"
               }`}
             >
               {facility.isActive ? "Active" : "Inactive"}
             </span>
             {averageRating && (
-              <span className="flex items-center gap-1 bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full text-xs font-semibold">
-                {averageRating} <Star size={14} className="fill-yellow-400" />
+              <span className="flex items-center gap-1 bg-yellow-400 text-gray-900 px-3 py-1.5 rounded-full text-sm font-semibold shadow-md">
+                {averageRating}{" "}
+                <Star size={16} className="fill-yellow-700 text-yellow-700" />
               </span>
             )}
           </div>
-          <p className="text-white/90 text-lg">
-            {facility.location?.address}, {facility.location?.city}
+          <p className="text-gray-200 text-lg md:text-xl font-medium">
+            {facility.location?.address}, {facility.location?.city},{" "}
+            {facility.location?.region}
           </p>
+          {facility.location?.coordinates && (
+            <p className="text-gray-300 text-sm mt-1">
+              GPS: {facility.location.coordinates.lat},{" "}
+              {facility.location.coordinates.lng}
+            </p>
+          )}
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 mt-10 grid grid-cols-1 md:grid-cols-3 gap-10">
-        <div className="md:col-span-2 space-y-8">
-          <div className="bg-white rounded-2xl shadow p-6">
-            <h2 className="text-2xl font-bold text-blue-900 mb-2">About</h2>
-            <p className="text-gray-700 text-lg">{facility.description}</p>
-          </div>
-
-          <div className="bg-white rounded-2xl shadow p-6">
-            <h2 className="text-xl font-bold text-green-700 mb-4">
-              Services Offered
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 grid grid-cols-1 md:grid-cols-3 gap-10">
+        {/* Main Content Area */}
+        <div className="md:col-span-2 space-y-10">
+          {/* Services Offered Section (Moved to Top) */}
+          <section className="bg-white rounded-2xl shadow-xl p-8 transform hover:scale-[1.005] transition-transform duration-200 ease-in-out">
+            <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center gap-3 border-b-2 border-blue-100 pb-2">
+              <Hospital size={28} className="text-blue-500" /> Our Services
             </h2>
-            {services.length === 0 ? (
-              <p className="text-gray-400">No services available</p>
+            {!Array.isArray(services) || services.length === 0 ? (
+              <p className="text-gray-500 text-lg italic">
+                No services are currently listed for this facility.
+              </p>
             ) : (
-              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {services.map((s) => (
                   <li
                     key={s._id}
-                    className="border p-4 rounded-xl shadow-sm bg-green-50"
+                    className="border border-gray-200 p-6 rounded-xl shadow-md bg-gradient-to-br from-blue-50 to-white hover:shadow-lg transform hover:-translate-y-1 transition-all duration-200 ease-in-out"
                   >
-                    <h3 className="font-semibold text-gray-800">{s.name}</h3>
-                    <p className="text-sm text-gray-600">{s.description}</p>
-                    <p className="text-sm text-green-700 font-bold mt-1">
+                    <h3 className="font-semibold text-xl text-gray-800 mb-2">
+                      {s.name}
+                    </h3>
+                    <p className="text-base text-gray-600 mb-3 leading-relaxed">
+                      {s.description}
+                    </p>
+                    <p className="text-lg text-blue-700 font-bold mt-2">
                       GHS {s.price?.amount}
                     </p>
                   </li>
                 ))}
               </ul>
             )}
-          </div>
+          </section>
 
-          {authReady && !userReview && (
+          {/* About Section */}
+          <section className="bg-white rounded-2xl shadow-xl p-8 transform hover:scale-[1.005] transition-transform duration-200 ease-in-out">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4 border-b-2 border-blue-100 pb-2">
+              About Us
+            </h2>
+            <p className="text-gray-700 leading-relaxed text-lg">
+              {facility.description}
+            </p>
+          </section>
+
+          {/* Book Appointment Section */}
+          <section className="bg-white rounded-2xl shadow-xl p-8 transform hover:scale-[1.005] transition-transform duration-200 ease-in-out">
+            <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center gap-3 border-b-2 border-blue-100 pb-2">
+              <CalendarDays size={28} className="text-blue-500" /> Book Your
+              Appointment Today
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <label
+                  htmlFor="service"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Service
+                </label>
+                <select
+                  id="service"
+                  value={selectedService}
+                  onChange={(e) => setSelectedService(e.target.value)}
+                  className="w-full border-gray-300 rounded-xl px-4 py-2.5 focus:ring-blue-500 focus:border-blue-500 transition duration-200 text-gray-800 shadow-sm"
+                >
+                  <option value="">Select a service</option>
+                  {services.map((s) => (
+                    <option key={s._id} value={s._id}>
+                      {s.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="date"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Date
+                </label>
+                <input
+                  id="date"
+                  type="date"
+                  value={appointmentDate}
+                  onChange={(e) => setAppointmentDate(e.target.value)}
+                  className="w-full border-gray-300 rounded-xl px-4 py-2.5 focus:ring-blue-500 focus:border-blue-500 transition duration-200 text-gray-800 shadow-sm"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="startTime"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Start Time
+                </label>
+                <input
+                  id="startTime"
+                  type="time"
+                  value={startTime}
+                  onChange={(e) => setStartTime(e.target.value)}
+                  className="w-full border-gray-300 rounded-xl px-4 py-2.5 focus:ring-blue-500 focus:border-blue-500 transition duration-200 text-gray-800 shadow-sm"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="endTime"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  End Time
+                </label>
+                <input
+                  id="endTime"
+                  type="time"
+                  value={endTime}
+                  onChange={(e) => setEndTime(e.target.value)}
+                  className="w-full border-gray-300 rounded-xl px-4 py-2.5 focus:ring-blue-500 focus:border-blue-500 transition duration-200 text-gray-800 shadow-sm"
+                />
+              </div>
+            </div>
+
+            <div className="mb-8">
+              <label
+                htmlFor="reason"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Reason for Appointment
+              </label>
+              <textarea
+                id="reason"
+                value={reason}
+                onChange={(e) => setReason(e.target.value)}
+                rows="4"
+                className="w-full border-gray-300 rounded-xl px-4 py-2.5 focus:ring-blue-500 focus:border-blue-500 transition duration-200 text-gray-800 shadow-sm resize-y"
+                placeholder="Describe your reason for the appointment..."
+              />
+            </div>
+
             <div className="flex justify-end">
               <button
-                onClick={() => setShowReviewModal(true)}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg shadow transition"
+                onClick={handleBookAppointment}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-full shadow-lg transform hover:-translate-y-1 transition-all duration-300 ease-in-out"
               >
-                Leave a Review
+                Book Appointment
               </button>
             </div>
-          )}
+          </section>
         </div>
 
-        <div className="space-y-8">
-          <div className="bg-white rounded-2xl shadow p-6">
-            <h2 className="text-lg font-bold text-blue-900 mb-3">
-              Operating Hours
+        {/* Sidebar Content Area */}
+        <div className="space-y-10">
+          {/* Operating Hours Section */}
+          <section className="bg-white rounded-2xl shadow-xl p-8 transform hover:scale-[1.005] transition-transform duration-200 ease-in-out">
+            <h2 className="text-2xl font-bold text-gray-900 mb-5 flex items-center gap-2 border-b-2 border-blue-100 pb-2">
+              <Clock size={24} className="text-blue-500" /> Operating Hours
             </h2>
-            <ul className="space-y-1 text-sm">
+            <ul className="space-y-3 text-base text-gray-700">
               {facility.hours &&
                 Object.entries(facility.hours).map(([day, time]) => (
-                  <li key={day} className="flex justify-between">
-                    <span className="capitalize">{day}</span>
-                    <span className="font-mono">
+                  <li
+                    key={day}
+                    className="flex justify-between items-center pb-2 border-b border-gray-100 last:border-b-0"
+                  >
+                    <span className="capitalize font-medium">{day}</span>
+                    <span className="font-mono text-gray-800 bg-blue-50 px-3 py-1 rounded-lg text-sm">
                       {time.open} - {time.close}
                     </span>
                   </li>
                 ))}
             </ul>
-          </div>
+          </section>
 
-          <div className="bg-white rounded-2xl shadow p-6">
-            <h2 className="text-lg font-bold text-blue-900 mb-3">Contact</h2>
-            <div className="space-y-1">
-              <p>
+          {/* Contact Section */}
+          <section className="bg-white rounded-2xl shadow-xl p-8 transform hover:scale-[1.005] transition-transform duration-200 ease-in-out">
+            <h2 className="text-2xl font-bold text-gray-900 mb-5 flex items-center gap-2 border-b-2 border-blue-100 pb-2">
+              <Phone size={24} className="text-blue-500" /> Contact Details
+            </h2>
+            <div className="space-y-3 text-base text-gray-700">
+              <p className="flex items-center gap-3">
+                <Mail size={20} className="text-blue-500" />
                 <span className="font-semibold">Email:</span>{" "}
                 <a
                   href={`mailto:${facility.contact?.email}`}
-                  className="text-blue-700 hover:underline"
+                  className="text-blue-700 hover:underline transition-colors duration-200"
                 >
                   {facility.contact?.email}
                 </a>
               </p>
-              <p>
+              <p className="flex items-center gap-3">
+                <Phone size={20} className="text-blue-500" />
                 <span className="font-semibold">Phone:</span>{" "}
                 <a
                   href={`tel:${facility.contact?.phone}`}
-                  className="text-blue-700 hover:underline"
+                  className="text-blue-700 hover:underline transition-colors duration-200"
                 >
                   {facility.contact?.phone}
                 </a>
               </p>
               {facility.contact?.website && (
-                <p>
+                <p className="flex items-center gap-3">
+                  <Globe size={20} className="text-blue-500" />
                   <span className="font-semibold">Website:</span>{" "}
                   <a
                     href={facility.contact.website}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-700 hover:underline"
+                    className="text-blue-700 hover:underline transition-colors duration-200"
                   >
                     {facility.contact.website}
                   </a>
                 </p>
               )}
             </div>
-          </div>
+          </section>
 
-          <div className="bg-white rounded-2xl shadow p-6">
-            <div className="flex items-center justify-between mb-2">
-              <h2 className="text-lg font-bold text-green-700">
+          {/* Reviews Section */}
+          <section className="bg-white rounded-2xl shadow-xl p-8 transform hover:scale-[1.005] transition-transform duration-200 ease-in-out">
+            <div className="flex items-center justify-between mb-5 border-b-2 border-blue-100 pb-2">
+              <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                <MessageSquareText size={24} className="text-blue-500" />{" "}
                 Reviews ({reviews.length})
               </h2>
-              <div className="flex items-center gap-2">
-                <Filter size={16} />
+              <div className="flex items-center gap-3">
+                <Filter size={20} className="text-gray-600" />
                 <select
                   value={sortOrder}
                   onChange={(e) => setSortOrder(e.target.value)}
-                  className="text-sm border px-2 py-1 rounded"
+                  className="text-sm border border-gray-300 px-3 py-1.5 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200 text-gray-800 shadow-sm"
                 >
                   <option value="newest">Newest</option>
                   <option value="oldest">Oldest</option>
-                  <option value="highest">Highest</option>
-                  <option value="lowest">Lowest</option>
+                  <option value="highest">Highest Rating</option>
+                  <option value="lowest">Lowest Rating</option>
                 </select>
               </div>
             </div>
             {averageRating && (
-              <p className="text-yellow-500 font-bold mb-2">
-                Average Rating: {averageRating} ★
+              <p className="text-yellow-500 font-bold text-lg mb-4 flex items-center gap-1">
+                Average Rating: {averageRating}{" "}
+                <Star size={20} className="fill-yellow-500 text-yellow-500" />
               </p>
             )}
-            <div className="space-y-4">
+            <div className="space-y-6">
               {reviews.length === 0 ? (
-                <p className="text-gray-400">No reviews yet.</p>
+                <p className="text-gray-500 text-lg italic">
+                  No reviews yet. Be the first to share your experience!
+                </p>
               ) : (
                 reviews.map((review) => (
                   <div
                     key={review._id}
-                    className="bg-green-50 border border-green-100 p-4 rounded-xl shadow-sm"
+                    className="bg-gray-50 border border-gray-200 p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200"
                   >
-                    <div className="flex justify-between items-start">
+                    <div className="flex justify-between items-start mb-2">
                       <div>
-                        <p className="font-medium text-gray-800">
+                        <p className="font-semibold text-lg text-gray-800">
                           {review.user?.name}
                         </p>
                         <div className="flex mt-1">
@@ -324,20 +543,31 @@ const FacilityDetails = () => {
                       {user?._id === review.user?._id && (
                         <button
                           onClick={() => handleDeleteReview(review._id)}
-                          className="text-red-500 hover:text-red-700"
+                          className="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-50 transition-colors duration-200"
+                          title="Delete your review"
                         >
-                          <Trash2 size={16} />
+                          <Trash2 size={20} />
                         </button>
                       )}
                     </div>
-                    <p className="text-sm text-gray-600 mt-2">
+                    <p className="text-gray-600 leading-relaxed mt-2 text-base">
                       {review.comment}
                     </p>
                   </div>
                 ))
               )}
             </div>
-          </div>
+            {authReady && !userReview && (
+              <div className="flex justify-center mt-8">
+                <button
+                  onClick={() => setShowReviewModal(true)}
+                  className="bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-3 rounded-full shadow-lg transform hover:-translate-y-1 transition-all duration-300 ease-in-out"
+                >
+                  Leave a Review ✨
+                </button>
+              </div>
+            )}
+          </section>
         </div>
       </div>
       <ReviewModal
