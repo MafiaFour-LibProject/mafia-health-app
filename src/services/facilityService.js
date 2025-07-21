@@ -15,8 +15,10 @@ export const getAllFacilities = async (params = {}) => {
   return maybeArray;
 };
 
-export const getSingleFacility = async (id) =>
-  apiClient.get(`/api/facilities/${id}`);
+export const getSingleFacility = async (id) => {
+  const res = await apiClient.get(`/api/facilities/${id}`);
+  return res.data;
+};
 
 export const createFacility = async (payload) =>
   apiClient.post("/api/facilities", payload);

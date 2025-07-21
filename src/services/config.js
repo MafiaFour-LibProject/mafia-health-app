@@ -4,20 +4,21 @@ const baseURL = import.meta.env.VITE_BASE_URL;
 console.log("baseURL", baseURL);
 
 export const apiClient = axios.create({
-  baseURL: baseURL,
+  baseURL,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// intercept request to attach token
-
 apiClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  console.log("token being sent:", token);
+  const stored = localStorage.getItem("user");
+  const token = stored ? JSON.parse(stored).token : null;
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
+    console.log("Attached token:", token);
+  } else {
+    console.log("No token found in localStorage.");
   }
 
   return config;

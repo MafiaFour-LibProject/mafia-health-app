@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { createService } from "../../services/serviceService";
+import { useState, useEffect } from "react";
+import { createService, updateService } from "../../services/serviceService";
 import { toast } from "react-toastify";
 import Loader from "../../components/Loader";
 
@@ -7,36 +7,49 @@ const AdminAddServiceForm = ({
   facilityId: propFacilityId,
   onClose,
   onServiceAdded,
+  mode = "add",
+  initialData = {},
 }) => {
   const facilityId = propFacilityId || localStorage.getItem("facilityId");
 
   const [formData, setFormData] = useState({
     name: "",
     type: "",
-    description: "",
-    category: "",
-    stock: { quantity: "" },
-    price: { amount: "" },
+    stock: "", // changed from object to string
+    price: { amount: "", currency: "GHS" },
     requiresAppointment: false,
+    // description: "",
   });
 
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if (mode === "edit" && initialData) {
+      const priceData = initialData.price || { amount: "", currency: "GHS" };
+
+      setFormData({
+        name: initialData.name || "",
+        type: initialData.type || "",
+        stock: initialData.stock ?? "", // now just a string
+        price: {
+          amount: priceData.amount ?? "",
+          currency: priceData.currency ?? "GHS",
+        },
+        requiresAppointment: !!initialData.requiresAppointment,
+        // description: initialData.description || "",
+      });
+    }
+  }, [initialData, mode]);
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
-    if (name === "quantity") {
-      setFormData((prev) => ({
-        ...prev,
-        stock: {
-          quantity: parseInt(value, 10) || "",
-        },
-      }));
-    } else if (name === "amount") {
+    if (["amount", "currency"].includes(name)) {
       setFormData((prev) => ({
         ...prev,
         price: {
-          amount: parseFloat(value) || "",
+          ...prev.price,
+          [name]: value,
         },
       }));
     } else {
@@ -50,23 +63,34 @@ const AdminAddServiceForm = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
+    const payload = {
+      name: formData.name,
+      type: formData.type,
+      stock: formData.stock, // now string
+      price: {
+        amount: Number(formData.price.amount),
+        currency: formData.price.currency,
+      },
+      requiresAppointment: !!formData.requiresAppointment,
+      // description: formData.description,
+    };
+
     try {
-      const payload = {
-        ...formData,
-        facility: facilityId,
-      };
+      let res;
+      if (mode === "edit") {
+        res = await updateService(initialData._id, payload);
+        toast.success("Service updated successfully!");
+      } else {
+        res = await createService(facilityId, payload);
+        toast.success("Service added successfully!");
+      }
 
-      console.log("Payload being sent to backend:", payload);
-
-      const res = await createService(facilityId, payload);
-      const newService = res.data;
-
-      toast.success("Service added successfully!");
-      onServiceAdded(newService);
+      onServiceAdded(res.data);
       onClose();
     } catch (err) {
       console.error(err);
-      toast.error("Failed to add service.");
+      toast.error(`Failed to ${mode === "edit" ? "update" : "add"} service.`);
     } finally {
       setLoading(false);
     }
@@ -76,7 +100,9 @@ const AdminAddServiceForm = ({
     <Loader />
   ) : (
     <form onSubmit={handleSubmit} className="space-y-4 text-sm text-gray-700">
-      <h2 className="text-lg font-semibold text-green-700">Add New Service</h2>
+      <h2 className="text-lg font-semibold text-green-700">
+        {mode === "edit" ? "Edit Service" : "Add New Service"}
+      </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <input
@@ -88,39 +114,51 @@ const AdminAddServiceForm = ({
           className="input"
           required
         />
-        <input
-          type="text"
+
+        <select
           name="type"
-          placeholder="Type (e.g. test, medication)"
           value={formData.type}
           onChange={handleChange}
           className="input"
           required
-        />
+        >
+          <option value="">Select Type</option>
+          <option value="medication">Medication</option>
+          <option value="vaccine">Vaccine</option>
+          <option value="test">Test</option>
+        </select>
+
         <input
           type="text"
-          name="category"
-          placeholder="Category (e.g. vaccine)"
-          value={formData.category}
+          name="stock"
+          placeholder="Stock (e.g. '100 tablets')"
+          value={formData.stock}
           onChange={handleChange}
           className="input"
+          required
         />
-        <input
-          type="number"
-          name="quantity"
-          placeholder="Stock Quantity"
-          value={formData.stock.quantity}
-          onChange={handleChange}
-          className="input"
-        />
+
         <input
           type="number"
           name="amount"
-          placeholder="Price (GHS)"
+          placeholder="Price"
           value={formData.price.amount}
           onChange={handleChange}
           className="input"
+          required
         />
+
+        <select
+          name="currency"
+          value={formData.price.currency}
+          onChange={handleChange}
+          className="input"
+        >
+          <option value="GHS">GHS</option>
+          <option value="USD">USD</option>
+          <option value="EUR">EUR</option>
+        </select>
+
         <label className="flex items-center space-x-2 text-sm mt-1">
           <input
             type="checkbox"
@@ -132,6 +170,7 @@ const AdminAddServiceForm = ({
         </label>
       </div>
 
+      {/* 
       <textarea
         name="description"
         placeholder="Description"
@@ -140,6 +179,7 @@ const AdminAddServiceForm = ({
         onChange={handleChange}
         className="w-full border rounded p-2 resize-none"
       />
+      */}
 
       <div className="flex justify-end gap-2 pt-4">
         <button
@@ -153,7 +193,7 @@ const AdminAddServiceForm = ({
           type="submit"
           className="px-5 py-2 bg-green-600 text-white rounded hover:bg-green-700"
         >
-          Add Service
+          {mode === "edit" ? "Save Changes" : "Add Service"}
         </button>
       </div>
     </form>
