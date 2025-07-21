@@ -1,8 +1,61 @@
 import { Link } from "react-router-dom";
 import { Calendar, MapPin, Search } from "lucide-react";
 import FacilityGrid from "../../components/FacilityGrid";
+import { getNearbyFacilities } from "../../services/facilityService";
+import { useState } from "react";
+import { queryChatbot } from "../../services/facilityService";
 
 const Home = () => {
+  const [nearbyFacilities, setNearbyFacilities] = useState([]);
+  const [loadingNearby, setLoadingNearby] = useState(false);
+  const [locationError, setLocationError] = useState(null);
+  const [chatInput, setChatInput] = useState("");
+  const [chatResponse, setChatResponse] = useState("");
+  const [chatLoading, setChatLoading] = useState(false);
+  const [chatError, setChatError] = useState(null);
+
+  const handleLocateNearby = () => {
+    setLoadingNearby(true);
+    setLocationError(null);
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        console.log("User location:", latitude, longitude);
+        try {
+          const facilities = await getNearbyFacilities(latitude, longitude);
+          setNearbyFacilities(facilities);
+        } catch (error) {
+          console.error("Error fetching nearby facilities:", error);
+          setLocationError("Could not fetch facilities.");
+        } finally {
+          setLoadingNearby(false);
+        }
+      },
+      (error) => {
+        console.error("Geolocation error:", error);
+        setLocationError("Location access denied.");
+        setLoadingNearby(false);
+      }
+    );
+  };
+
+  const handleChatSubmit = async (e) => {
+    e.preventDefault();
+    setChatLoading(true);
+    setChatError(null);
+    setChatResponse("");
+
+    try {
+      const res = await queryChatbot(chatInput);
+      setChatResponse(res?.response || "No response from chatbot");
+    } catch (err) {
+      setChatError(err.message);
+    } finally {
+      setChatLoading(false);
+    }
+  };
+
   return (
     <div>
       <div
@@ -81,8 +134,26 @@ const Home = () => {
           </div>
         </div>
       </div>
+      <button
+        onClick={handleLocateNearby}
+        className="mt-4 bg-green-600 text-white font-semibold py-2 px-6 rounded-md shadow hover:bg-green-700 transition"
+      >
+        Locate a facility nearby
+      </button>
+      {loadingNearby && (
+        <p className="text-white mt-2">Finding facilities near you...</p>
+      )}
+      {locationError && <p className="text-red-400 mt-2">{locationError}</p>}
 
       <FacilityGrid showSearch />
+      {nearbyFacilities.length > 0 && (
+        <div className="px-4 md:px-10 mt-10">
+          <h2 className="text-2xl font-bold mb-4 text-green-800">
+            Facilities Near You
+          </h2>
+          <FacilityGrid facilities={nearbyFacilities} />
+        </div>
+      )}
     </div>
   );
 };

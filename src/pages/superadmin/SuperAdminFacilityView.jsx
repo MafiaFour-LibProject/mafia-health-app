@@ -46,7 +46,7 @@ const SuperAdminFacilityView = () => {
         onClick={() => navigate(-1)}
         className="flex items-center gap-2 mb-6 text-blue-600 hover:underline"
       >
-        <ArrowLeftIcon className="w-5 h-5" /> Back to Dashboard
+        <ArrowLeftIcon className="w-5 h-5 cursor-pointer" /> Back to Dashboard
       </button>
 
       <div className="grid md:grid-cols-2 gap-8">

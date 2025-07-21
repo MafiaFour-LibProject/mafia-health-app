@@ -35,6 +35,13 @@ export const resendVerificationEmail = async (email) => {
   }
 };
 
+// Update admin password
+export const updateAdminPassword = async ({ oldPassword, newPassword }) => {
+  return apiClient.put("/api/auth/update-password", {
+    oldPassword,
+    newPassword,
+  });
+};
 // export const ApiForgotPassword = async (payload) =>
 //   apiClient.post("/auth/forgot-password", payload);
 
