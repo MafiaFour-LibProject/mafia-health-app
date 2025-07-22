@@ -9,28 +9,29 @@ import {
 } from "react-icons/md";
 // import { useState } from "react";
 
-import { ChevronLeft, ChevronRight } from "lucide-react"; 
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
   return (
     <>
-    
-
-      <div className={` bg-gray-700 fixed h-screen px-4 py-2 flex flex-col mb-10 ${isSidebarOpen ? "w-64" : "w-20"}`}>
-          <div className="flex items-center justify-center ">
-        <button
-          onClick={toggleSidebar}
-          className="p-1 rounded-full bg-green-500 hover:bg-green-600 focus:outline-none"
-          aria-label={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
-        >
-          {isSidebarOpen ? (
-            <ChevronLeft className="h-5 w-5 text-white" />
-          ) : (
-            <ChevronRight className="h-5 w-5 text-white" />
-          )}
-        
-        </button>
-      </div>
+      <div
+        className={` bg-gray-700 fixed h-screen px-4 py-2 flex flex-col mb-10 ${
+          isSidebarOpen ? "w-64" : "w-20"
+        }`}
+      >
+        <div className="flex items-center justify-center ">
+          <button
+            onClick={toggleSidebar}
+            className="p-1 rounded-full bg-green-500 hover:bg-green-600 focus:outline-none"
+            aria-label={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+          >
+            {isSidebarOpen ? (
+              <ChevronLeft className="h-5 w-5 text-white" />
+            ) : (
+              <ChevronRight className="h-5 w-5 text-white" />
+            )}
+          </button>
+        </div>
         <div className="my-2 mt-4">
           <h1 className="text-2x text-white font-bold "> Admin Dashboard </h1>
         </div>
@@ -60,7 +61,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
           </li>
 
           <li className="mb-2 rounded hover:shadow hover:bg-blue-500 py-2">
-            <a href="#" className="px-3 flex items-center">
+            <a href="/admin/appointments" className="px-3 flex items-center">
               <MdEventNote className="inline-block w-6 h-6 mr-2"></MdEventNote>
               Appointment
             </a>

@@ -21,7 +21,7 @@ import { getSingleFacility } from "../../services/facilityService";
 import { getFacilityServices } from "../../services/serviceService";
 import {
   requestAppointment,
-  getFacilityCalendar,
+  // getFacilityCalendar,
 } from "../../services/appointmentsService";
 import {
   getFacilityReviews,
@@ -127,21 +127,7 @@ const FacilityDetails = () => {
     }
 
     try {
-      // Check calendar availability
-      const calendar = await getFacilityCalendar(
-        facilityId,
-        selectedService,
-        appointmentDate,
-        appointmentDate
-      );
-
-      const isAvailable =
-        calendar?.data?.availableDates?.includes(appointmentDate);
-      if (!isAvailable) {
-        toast.error("No availability on the selected date.");
-        return;
-      }
-
+      // Directly request the appointment without checking calendar
       await requestAppointment({
         facility: facilityId,
         service: selectedService,
@@ -277,9 +263,7 @@ const FacilityDetails = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 grid grid-cols-1 md:grid-cols-3 gap-10">
-        {/* Main Content Area */}
         <div className="md:col-span-2 space-y-10">
-          {/* Services Offered Section (Moved to Top) */}
           <section className="bg-white rounded-2xl shadow-xl p-8 transform hover:scale-[1.005] transition-transform duration-200 ease-in-out">
             <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center gap-3 border-b-2 border-blue-100 pb-2">
               <Hospital size={28} className="text-blue-500" /> Our Services
@@ -310,7 +294,6 @@ const FacilityDetails = () => {
             )}
           </section>
 
-          {/* About Section */}
           <section className="bg-white rounded-2xl shadow-xl p-8 transform hover:scale-[1.005] transition-transform duration-200 ease-in-out">
             <h2 className="text-3xl font-bold text-gray-900 mb-4 border-b-2 border-blue-100 pb-2">
               About Us

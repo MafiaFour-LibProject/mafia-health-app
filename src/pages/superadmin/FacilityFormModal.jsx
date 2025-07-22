@@ -9,7 +9,7 @@ const FacilityFormModal = ({ isOpen, onClose, onSaved }) => {
     register,
     handleSubmit,
     reset,
-    formState: { isSubmitting, errors },
+    formState: { isSubmitting },
   } = useForm();
 
   useEffect(() => {
@@ -48,9 +48,10 @@ const FacilityFormModal = ({ isOpen, onClose, onSaved }) => {
         address: data.address,
         city: data.city,
         geometry: {
-          lat: latitude,
-          lng: longitude,
+          coordinates: [longitude, latitude],
         },
+        latitude,
+        longitude,
       },
       contact: {
         email: data.email,
@@ -58,8 +59,7 @@ const FacilityFormModal = ({ isOpen, onClose, onSaved }) => {
         website: data.website,
       },
     };
-
-    console.log("Payload being sent:", JSON.stringify(payload, null, 2));
+    console.log("Payload being sent to backend:", payload);
 
     try {
       await createFacility(payload);

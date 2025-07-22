@@ -5,6 +5,7 @@ import { deleteService } from "../../services/serviceService";
 import Loader from "../../components/Loader";
 import AdminModal from "./AdminModal";
 import AdminAddServiceForm from "./AdminAddServiceForm";
+import AdminUploadPhotos from "./AdminUploadPhotos";
 import {
   Building,
   CheckCircle,
@@ -25,16 +26,22 @@ const statIcons = [
 const AdminDashboard = () => {
   const navigate = useNavigate();
 
+  // State to track which facility's photos are being uploaded
+  const [uploadingPhotosFor, setUploadingPhotosFor] = useState(null);
+
+  // Dashboard data state
   const [stats, setStats] = useState(null);
   const [facilities, setFacilities] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Modal control for adding a service
   const [showAddService, setShowAddService] = useState(null);
 
-  // Service editing
+  // Service editing state
   const [editingService, setEditingService] = useState(null);
   const [saving, setSaving] = useState(false);
 
-  // Service delete logic
+  // Modal control for delete confirmation
   const [deleteModal, setDeleteModal] = useState({
     open: false,
     serviceId: null,
@@ -87,7 +94,7 @@ const AdminDashboard = () => {
           Settings
         </button>
       </div>
-      ;{/* Stats Cards */}
+
       {stats && (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto mb-12">
           {[
@@ -125,6 +132,7 @@ const AdminDashboard = () => {
           ))}
         </div>
       )}
+
       <div className="max-w-6xl mx-auto">
         <h2 className="text-2xl font-bold text-blue-900 mb-6">Facilities</h2>
         <div className="space-y-8">
@@ -138,7 +146,6 @@ const AdminDashboard = () => {
                 key={facility._id}
                 className="bg-white rounded-2xl shadow p-6 space-y-6"
               >
-                {/* Facility Info */}
                 <div>
                   <div className="flex items-center gap-2 mb-2">
                     <h3 className="text-xl font-bold text-green-800">
@@ -170,16 +177,26 @@ const AdminDashboard = () => {
                     {facility.rating?.count ?? 0})
                   </div>
                 </div>
+
                 <div className="flex-1">
-                  <div className="flex items-center justify-between mb-2">
+                  <div className="flex justify-between items-center mb-2">
                     <h4 className="font-semibold text-green-700">Services</h4>
-                    <button
-                      className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-xs"
-                      onClick={() => setShowAddService(facility._id)}
-                    >
-                      + Add Service
-                    </button>
+                    <div className="flex gap-2">
+                      <button
+                        className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-xs"
+                        onClick={() => setShowAddService(facility._id)}
+                      >
+                        + Add Service
+                      </button>
+                      <button
+                        className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-xs"
+                        onClick={() => setUploadingPhotosFor(facility._id)}
+                      >
+                        Upload Photos
+                      </button>
+                    </div>
                   </div>
+
                   {showAddService === facility._id && (
                     <AdminModal onClose={() => setShowAddService(null)}>
                       <AdminAddServiceForm
@@ -193,6 +210,7 @@ const AdminDashboard = () => {
                       />
                     </AdminModal>
                   )}
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                     {facility.services && facility.services.length > 0 ? (
                       facility.services.map((service) => (
@@ -203,16 +221,17 @@ const AdminDashboard = () => {
                           <span className="font-bold text-base mb-1">
                             {service.name}
                           </span>
-                          <span className="text-xs text-gray-500 mb-1">
+                          <span className="text-xs text-gray-500 mb-1 truncate w-full">
                             {service.description}
                           </span>
                           <span className="text-green-700 font-semibold mb-2">
                             {service.price?.currency || "GHS"}{" "}
-                            {service.price?.amount}
+                            {service.price?.amount ?? "0.00"}
                           </span>
                           <div className="flex gap-2 mt-auto">
                             <button
                               className="flex items-center gap-1 text-blue-600 hover:underline text-xs"
+                              title="Edit service"
                               onClick={() =>
                                 setEditingService({
                                   ...service,
@@ -224,6 +243,7 @@ const AdminDashboard = () => {
                             </button>
                             <button
                               className="flex items-center gap-1 text-red-600 hover:underline text-xs"
+                              title="Delete service"
                               onClick={() =>
                                 setDeleteModal({
                                   open: true,
@@ -245,7 +265,18 @@ const AdminDashboard = () => {
             ))
           )}
         </div>
+
+        {/* Upload Photos Modal */}
+        {uploadingPhotosFor && (
+          <AdminModal onClose={() => setUploadingPhotosFor(null)}>
+            <AdminUploadPhotos
+              facilityId={uploadingPhotosFor}
+              onClose={() => setUploadingPhotosFor(null)}
+            />
+          </AdminModal>
+        )}
       </div>
+
       {/* Edit Service Modal */}
       {editingService && (
         <AdminModal onClose={() => setEditingService(null)}>
@@ -261,6 +292,7 @@ const AdminDashboard = () => {
           />
         </AdminModal>
       )}
+
       {/* Delete Confirmation Modal */}
       {deleteModal.open && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">

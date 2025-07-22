@@ -1,21 +1,23 @@
 import { apiClient } from "./config";
 
 // get a user's appointments
-export const getAppointmentsByUserId = async (userId) => {
+export const getUserAppointments = async (userId) => {
   const response = await apiClient.get(`/appointments/user/${userId}`);
-  return response.data;
+  return response.data.data;
 };
 
 // get appointments by facility
+
 export const getFacilityAppointments = async () => {
-  const response = await apiClient.get("/appointments/facility");
-  return response.data;
+  const res = await apiClient.get("/api/appointments/facility");
+  return res.data.data;
 };
 
 // facility updates an appointment: pending, confirmed, completed, canceled
 export const updateAppointmentStatus = async (appointmentId, status) => {
   const response = await apiClient.put(
-    `/appointments/${appointmentId}/status`,
+    `/api/
+    appointments/${appointmentId}/status`,
     { status }
   );
   return response.data;
@@ -46,24 +48,24 @@ export const getFacilityTimeSlots = async (id, date) => {
 
 // book a new appointment
 export const requestAppointment = async (data) => {
-  const res = await apiClient.post("/api/appointments/", data);
+  const res = await apiClient.post("/api/appointments", data);
   return res.data;
 };
 
 // check calendar availability for a facility & service
-export const getFacilityCalendar = async (
-  facilityId,
-  serviceId,
-  startDate,
-  endDate
-) => {
-  const res = await apiClient.get("/api/appointments/facility/calendar", {
-    params: {
-      facilityId,
-      serviceId,
-      startDate,
-      endDate,
-    },
-  });
-  return res.data;
-};
+// export const getFacilityCalendar = async (
+//   facilityId,
+//   serviceId,
+//   startDate,
+//   endDate
+// ) => {
+//   const res = await apiClient.get("/api/appointments/facility/calendar", {
+//     params: {
+//       facilityId,
+//       serviceId,
+//       startDate,
+//       endDate,
+//     },
+//   });
+//   return res.data;
+// };
