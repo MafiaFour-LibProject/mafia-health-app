@@ -22,7 +22,7 @@ import VerifyEmailNotice from "./pages/auth/VerifyEmailNotice";
 import VerifyEmailToken from "./pages/auth/VerifyEmailToken";
 
 // Superadmin Pages
-import SuperAdminDashboard from "./pages/superadmin/SuperAdminDashboard";
+import SuperAdminDashboard from "./pages/superadmin/SuperadminDashboard";
 import SuperadminFacilities from "./pages/superadmin/SuperadminFacilities";
 import SuperadminUsers from "./pages/superadmin/SuperadminUsers";
 import Analytics from "./pages/superadmin/Analytics";
