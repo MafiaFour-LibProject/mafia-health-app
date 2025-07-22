@@ -1,16 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import { MapPin } from "lucide-react";
+import { useAuth } from "../hooks/useAuth";
 
 const FacilityCard = ({ facility }) => {
   const navigate = useNavigate();
   const defaultImage = "/images/hero-image-3.jpg";
 
-  const handleClick = () => {
-    const stored = localStorage.getItem("user");
+  const { user } = useAuth();
 
-    if (stored) {
-      const userData = JSON.parse(stored);
-      if (userData?.role === "user") {
+  const handleClick = () => {
+    if (user) {
+      if (user.role === "user") {
         navigate(`/user/facilities/${facility._id}`);
         return;
       }
@@ -22,8 +22,7 @@ const FacilityCard = ({ facility }) => {
   return (
     <div
       onClick={handleClick}
-      className="cursor-pointer facility-card bg-white border border-green-200 hover:border-green-300 hover:-translate-y-1 hover:shadow-xl transition transform duration-300 rounded-xl"
-    >
+      className="cursor-pointer facility-card bg-white border border-green-200 hover:border-green-300 hover:-translate-y-1 hover:shadow-xl transition transform duration-300 rounded-xl">
       <img
         src={facility.images?.[0]?.url ?? defaultImage}
         alt={facility.name}
