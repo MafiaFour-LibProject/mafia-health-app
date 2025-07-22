@@ -22,7 +22,7 @@ import VerifyEmailNotice from "./pages/auth/VerifyEmailNotice";
 import VerifyEmailToken from "./pages/auth/VerifyEmailToken";
 
 // Superadmin Pages
-import SuperAdminDashboard from "./pages/superadmin/SuperAdminDashboard";
+import SuperAdminDashboard from "./pages/superadmin/SuperadminDashboard";
 import SuperadminFacilities from "./pages/superadmin/SuperadminFacilities";
 import SuperadminUsers from "./pages/superadmin/SuperadminUsers";
 import Analytics from "./pages/superadmin/Analytics";
@@ -48,6 +48,7 @@ import EmptyState from "./components/EmptyState";
 import AllFacilities from "./components/AllFacilities";
 import SuperAdminFacilityView from "./pages/superadmin/SuperAdminFacilityView";
 import AdminSettingsPage from "./pages/admin/AdminSettingsPage";
+import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
   const router = createBrowserRouter([
@@ -78,40 +79,55 @@ function App() {
 
     // User Routes
     {
-      path: "/user",
-      element: <UserLayout />,
+      element: <ProtectedRoute roles={["user"]} />,
       children: [
-        { index: true, element: <UserDashboard /> },
-        { path: "appointments", element: <UserAppointments /> },
-        { path: "reviews", element: <ReviewList /> },
-        // { path: "user-page", element: <Home /> },
-        { path: "facilities/:facilityId", element: <FacilityDetails /> },
+        {
+          path: "/user",
+          element: <UserLayout />,
+          children: [
+            { index: true, element: <UserDashboard /> },
+            { path: "appointments", element: <UserAppointments /> },
+            { path: "reviews", element: <ReviewList /> },
+            { path: "user-page", element: <Home /> },
+            { path: "facilities/:facilityId", element: <FacilityDetails /> },
+          ],
+        },
       ],
     },
 
     // Admin Routes
     {
-      path: "/admin",
-      element: <AdminLayout />,
+      element: <ProtectedRoute roles={["facility_admin"]} />,
       children: [
-        { index: true, element: <AdminDashboard /> },
-        { path: "appointments", element: <AdminAppointments /> },
-        { path: "reviews", element: <AdminReviews /> },
-        { path: "profile", element: <AdminProfile /> },
-        { path: "settings", element: <AdminSettingsPage /> },
+        {
+          path: "/admin",
+          element: <AdminLayout />,
+          children: [
+            { index: true, element: <AdminDashboard /> },
+            { path: "appointments", element: <AdminAppointments /> },
+            { path: "reviews", element: <AdminReviews /> },
+            { path: "profile", element: <AdminProfile /> },
+            { path: "settings", element: <AdminSettingsPage /> },
+          ],
+        },
       ],
     },
 
     // Superadmin Routes
     {
-      path: "/superadmin",
-      element: <SuperAdminLayout />,
+      element: <ProtectedRoute roles={["superadmin"]} />,
       children: [
-        { index: true, element: <SuperAdminDashboard /> },
-        { path: "facilities/:id", element: <SuperAdminFacilityView /> },
-        { path: "facilities", element: <SuperadminFacilities /> },
-        { path: "users", element: <SuperadminUsers /> },
-        { path: "analytics", element: <Analytics /> },
+        {
+          path: "/superadmin",
+          element: <SuperAdminLayout />,
+          children: [
+            { index: true, element: <SuperAdminDashboard /> },
+            { path: "facilities/:id", element: <SuperAdminFacilityView /> },
+            { path: "facilities", element: <SuperadminFacilities /> },
+            { path: "users", element: <SuperadminUsers /> },
+            { path: "analytics", element: <Analytics /> },
+          ],
+        },
       ],
     },
   ]);
