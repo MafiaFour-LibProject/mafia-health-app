@@ -2,7 +2,7 @@ import { apiClient } from "./config";
 
 // get a user's appointments
 export const getUserAppointments = async (userId) => {
-  const response = await apiClient.get(`/appointments/user/${userId}`);
+  const response = await apiClient.get(`/api/appointments/user/${userId}`);
   return response.data.data;
 };
 

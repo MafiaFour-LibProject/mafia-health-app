@@ -81,7 +81,7 @@ const AdminAppointments = () => {
               <div className="flex gap-x-3">
                 <button className="bg-green-500 text-white">Confirm</button>
                 <button className="bg-red-600 text-white">Decline</button>
-                <button className="bg-gray-400">Cancel</button>
+                <button className="bg-gray-">Cancel</button>
               </div>
             </li>
           ))}
