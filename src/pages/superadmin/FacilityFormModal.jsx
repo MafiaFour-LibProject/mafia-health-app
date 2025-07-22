@@ -9,7 +9,7 @@ const FacilityFormModal = ({ isOpen, onClose, onSaved }) => {
     register,
     handleSubmit,
     reset,
-    formState: { isSubmitting, errors },
+    formState: { isSubmitting },
   } = useForm();
 
   useEffect(() => {
@@ -59,8 +59,6 @@ const FacilityFormModal = ({ isOpen, onClose, onSaved }) => {
         website: data.website,
       },
     };
-
-    console.log("Payload being sent:", payload);
 
     try {
       await createFacility(payload);

@@ -4,6 +4,7 @@ import FacilityGrid from "../../components/FacilityGrid";
 import { getNearbyFacilities } from "../../services/facilityService";
 import { useEffect, useState } from "react";
 import { queryChatbot } from "../../services/facilityService";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 
 const Home = () => {

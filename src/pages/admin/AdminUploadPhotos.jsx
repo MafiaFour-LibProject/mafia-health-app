@@ -27,6 +27,7 @@ const AdminUploadPhotos = ({ facilityId, onClose }) => {
   const handleUpload = async () => {
     try {
       setLoading(true);
+      console.log("Selected files ", selectedFiles);
       const response = await uploadFacilityPhotos(facilityId, selectedFiles);
       console.log("Upload response:", response.data);
 
