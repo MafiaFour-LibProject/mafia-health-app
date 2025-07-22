@@ -1,12 +1,9 @@
-// Userdashboard. Cards showing profile and appointments, and a button to edit profile via a modal
-
-// import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import FacilityGrid from "../../components/FacilityGrid";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const UserDashboard = () => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const [showGrid, setShowGrid] = useState(false);
 
   return (
@@ -19,8 +16,7 @@ const UserDashboard = () => {
         <div className="flex flex-wrap gap-4 mb-10">
           <button
             onClick={() => navigate("/user/appointments")}
-            className="bg-green-600 text-white px-5 py-2 rounded-md hover:bg-green-700 transition text-sm md:text-base shadow"
-          >
+            className="bg-green-600 text-white px-5 py-2 rounded-md hover:bg-green-700 transition text-sm md:text-base shadow">
             View Your Appointments
           </button>
           {/* <button
@@ -36,8 +32,7 @@ const UserDashboard = () => {
           </Link> */}
           <button
             onClick={() => setShowGrid((prev) => !prev)}
-            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
-          >
+            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">
             {showGrid ? "Hide Facilities" : "Show Facilities"}
           </button>
 

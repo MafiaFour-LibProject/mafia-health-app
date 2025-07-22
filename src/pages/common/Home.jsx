@@ -2,8 +2,9 @@ import { Link } from "react-router-dom";
 import { Calendar, MapPin, Search } from "lucide-react";
 import FacilityGrid from "../../components/FacilityGrid";
 import { getNearbyFacilities } from "../../services/facilityService";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { queryChatbot } from "../../services/facilityService";
+import { useAuth } from "../../hooks/useAuth";
 
 const Home = () => {
   const [nearbyFacilities, setNearbyFacilities] = useState([]);
@@ -13,6 +14,12 @@ const Home = () => {
   const [chatResponse, setChatResponse] = useState("");
   const [chatLoading, setChatLoading] = useState(false);
   const [chatError, setChatError] = useState(null);
+
+  const { user, logout } = useAuth();
+
+  useEffect(() => {
+    console.log(user);
+  }, []);
 
   const handleLocateNearby = () => {
     setLoadingNearby(true);
@@ -56,30 +63,41 @@ const Home = () => {
     }
   };
 
+  const handleLogout = () => {
+    logout();
+  };
+
   return (
     <div>
       <div
         className="relative min-h-[70vh] md:min-h-[90vh] w-full bg-cover bg-center flex flex-col"
-        style={{ backgroundImage: "url('/images/home-hero-image-4.jpg')" }}
-      >
+        style={{ backgroundImage: "url('/images/home-hero-image-4.jpg')" }}>
         <div className="absolute inset-0 bg-black/70 z-0"></div>
 
         <div className="relative z-10 flex flex-col md:flex-row items-center justify-between px-4 py-3 md:px-10 md:py-6 w-full">
           <span className="text-white text-lg font-bold mb-2 md:mb-0">
             Logo
           </span>
-          <div className="flex gap-1">
-            <Link to="/auth/signup">
-              <button className="bg-white text-gree-600 font-semibold py-1 px-4 rounded-md shadow hover:bg-green-100 transition text-sm md:text-base">
-                Sign up
-              </button>
-            </Link>
-            <Link to="/auth/login">
-              <button className="bg-green-600 text-white font-semibold py-1 px-4 rounded-md shadow hover:bg-green-700 transition text-sm md:text-base">
-                Log in
-              </button>
-            </Link>
-          </div>
+          {user ? (
+            <button
+              onClick={() => handleLogout()}
+              className="bg-green-600 text-white font-semibold py-1 px-4 rounded-md shadow hover:bg-green-700 transition text-sm md:text-base">
+              Logout
+            </button>
+          ) : (
+            <div className="flex gap-1">
+              <Link to="/auth/signup">
+                <button className="bg-white text-gree-600 font-semibold py-1 px-4 rounded-md shadow hover:bg-green-100 transition text-sm md:text-base">
+                  Sign up
+                </button>
+              </Link>
+              <Link to="/auth/login">
+                <button className="bg-green-600 text-white font-semibold py-1 px-4 rounded-md shadow hover:bg-green-700 transition text-sm md:text-base">
+                  Log in
+                </button>
+              </Link>
+            </div>
+          )}
         </div>
 
         <div className="relative z-10 flex flex-col items-center md:items-start justify-center px-4 md:px-10 py-6 w-full flex-1 mt-3">
@@ -136,8 +154,7 @@ const Home = () => {
       </div>
       <button
         onClick={handleLocateNearby}
-        className="mt-4 bg-green-600 text-white font-semibold py-2 px-6 rounded-md shadow hover:bg-green-700 transition"
-      >
+        className="mt-4 bg-green-600 text-white font-semibold py-2 px-6 rounded-md shadow hover:bg-green-700 transition">
         Locate a facility nearby
       </button>
       {loadingNearby && (
