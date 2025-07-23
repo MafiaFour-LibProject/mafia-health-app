@@ -1,102 +1,87 @@
 import {
-  MdDashboard,
-  MdAddBox,
-  MdEventNote,
-  MdRateReview,
-  MdSettings,
-  MdLogout,
-  MdHome,
-} from "react-icons/md";
-
-import { ChevronLeft, ChevronRight } from "lucide-react";
+  LayoutDashboard,
+  PlusSquare,
+  CalendarDays,
+  Star,
+  Settings,
+  LogOut,
+  Home,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
+
+  const navItems = [
+    { label: "Home", icon: Home, path: "/" },
+    { label: "Dashboard", icon: LayoutDashboard, path: "/admin" },
+    { label: "Services", icon: PlusSquare, path: "/admin/services" },
+    { label: "Appointments", icon: CalendarDays, path: "/admin/appointments" },
+    { label: "Reviews", icon: Star, path: "/admin/reviews" },
+    { label: "Settings", icon: Settings, path: "/admin/settings" },
+  ];
+
   return (
-    <>
-      <div
-        className={`bg-gray-600 fixed h-screen px-4 py-2 flex flex-col mb-10 ${
-          isSidebarOpen ? "w-60" : "w-20"
-        } transition-all duration-300`}
-      >
-        <div
-          className={`flex items-center ${
-            isSidebarOpen ? "justify-end" : "justify-center"
-          }`}
-        >
-          <button
-            onClick={toggleSidebar}
-            className="p-1 rounded-full bg-gray-500 hover:bg-gray-600 focus:outline-none"
-            aria-label={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
-          >
-            {isSidebarOpen ? (
-              <ChevronLeft className="h-5 w-5 text-white" />
-            ) : (
-              <ChevronRight className="h-5 w-5 text-white" />
-            )}
-          </button>
-        </div>
-        {isSidebarOpen && (
-          <div className="my-2 mt-4">
-            <h1 className="text-2xl text-white font-bold">Admin Dashboard</h1>
+    <div
+      className={`bg-gray-800 text-white fixed h-screen px-3 py-4 flex flex-col transition-all duration-300 ${
+        isSidebarOpen ? "w-64" : "w-20"
+      }`}
+    >
+      <div className="flex items-center justify-between mb-6">
+        {isSidebarOpen ? (
+          <div className="flex items-center gap-2">
+            <img
+              src="/images/codeblue-logo.png"
+              alt="CodeBlue Logo"
+              className="w-8 h-8"
+            />
+            <h1 className="text-xl font-bold">CodeBlue</h1>
           </div>
+        ) : (
+          <span />
         )}
-
-        <hr className="my-2" />
-
-        <ul className="mt-3 text-white font-bold flex-grow overflow-auto">
-          <li className="mb-2 rounded hover:shadow hover:bg-gray-500 py-2">
-            <a href="#" className="px-3 flex items-center">
-              <MdHome className="inline-block w-6 h-6 mr-2"></MdHome>
-              {isSidebarOpen && <span>Home</span>}
-            </a>
-          </li>
-
-          <li className="mb-2 rounded hover:shadow hover:bg-gray-500 py-2">
-            <a href="#" className="px-3 flex items-center">
-              <MdDashboard className="inline-block w-6 h-6 mr-2"></MdDashboard>
-              {isSidebarOpen && <span>Dashboard</span>}
-            </a>
-          </li>
-
-          <li className="mb-2 rounded hover:shadow hover:bg-gray-500 py-2">
-            <a href="#" className="px-3 flex items-center">
-              <MdAddBox className="inline-block w-6 h-6 mr-2"></MdAddBox>
-              {isSidebarOpen && <span>Services</span>}
-            </a>
-          </li>
-
-          <li className="mb-2 rounded hover:shadow hover:bg-gray-500 py-2">
-            <a href="#" className="px-3 flex items-center">
-              <MdEventNote className="inline-block w-6 h-6 mr-2"></MdEventNote>
-              {isSidebarOpen && <span>Appointment</span>}
-            </a>
-          </li>
-
-          <li className="mb-2 rounded hover:shadow hover:bg-gray-500 py-2">
-            <a href="#" className="px-3 flex items-center">
-              <MdRateReview className="inline-block w-6 h-6 mr-2"></MdRateReview>
-              {isSidebarOpen && <span>Reviews</span>}
-            </a>
-          </li>
-
-          <li className="mb-2 rounded hover:shadow hover:bg-gray-500 py-2">
-            <a href="#" className="px-3 flex items-center">
-              <MdSettings className="inline-block w-6 h-6 mr-2"></MdSettings>
-              {isSidebarOpen && <span>Settings</span>}
-            </a>
-          </li>
-        </ul>
-
-        <ul className="mt-auto text-white font-bold">
-          <li className="mb-2 rounded hover:shadow hover:bg-gray-500 py-2">
-            <a href="#" className="px-3 flex items-center">
-              <MdLogout className="inline-block w-6 h-6 mr-2"></MdLogout>
-              {isSidebarOpen && <span>Logout</span>}
-            </a>
-          </li>
-        </ul>
+        <button
+          onClick={toggleSidebar}
+          className="p-1 rounded-full bg-green-500 hover:bg-green-600"
+        >
+          {isSidebarOpen ? (
+            <ChevronLeft className="h-5 w-5" />
+          ) : (
+            <ChevronRight className="h-5 w-5" />
+          )}
+        </button>
       </div>
-    </>
+
+      <nav className="flex flex-col gap-2 flex-grow">
+        {navItems.map(({ label, icon: Icon, path }) => (
+          <Link
+            key={label}
+            to={path}
+            className="flex items-center gap-3 px-3 py-2 rounded hover:bg-blue-600 transition-colors"
+          >
+            <Icon className="w-5 h-5" />
+            {isSidebarOpen && <span>{label}</span>}
+          </Link>
+        ))}
+      </nav>
+
+      <button
+        onClick={handleLogout}
+        className="flex items-center gap-3 mt-auto px-3 py-2 rounded hover:bg-red-600 transition-colors"
+      >
+        <LogOut className="w-5 h-5" />
+        {isSidebarOpen && <span>Logout</span>}
+      </button>
+    </div>
   );
 };
 

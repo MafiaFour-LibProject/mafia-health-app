@@ -1,20 +1,19 @@
-// import { apiClient } from "./config";
+import { apiClient } from "./config";
 
-// // Get all users
+export const getUserProfile = async () => {
+  const response = await apiClient.get("/users/profile");
+  return response.data;
+};
 
-// export const getAllUsers = async () => {
-//   const res = await apiClient.get("/fake-data/users.json");
-//   return res.data;
-// };
+export const updateUserProfile = async (profileData) => {
+  const response = await apiClient.put("/users/profile", profileData);
+  return response.data;
+};
 
-// // Get single user by ID
+export const deleteUserAccount = async () => {
+  const response = await apiClient.delete("/users/account");
+  return response.data;
+};
 
-// export const getSingleUser = async (id) => {
-//   const res = await apiClient.get("/fake-api/users.json");
-//   return res.data.find((user) => user._id === id);
-// };
-
-// /* Replace later with:
-// GET /users
-// GET /users/:id
-// */
+export const getAdminDashboard = async () =>
+  await apiClient.get("/api/facilities/admin/dashboard");

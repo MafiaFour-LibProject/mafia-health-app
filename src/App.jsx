@@ -22,7 +22,7 @@ import VerifyEmailNotice from "./pages/auth/VerifyEmailNotice";
 import VerifyEmailToken from "./pages/auth/VerifyEmailToken";
 
 // Superadmin Pages
-import SuperadminDashboard from "./pages/superadmin/SuperadminDashboard";
+import SuperAdminDashboard from "./pages/superadmin/SuperadminDashboard";
 import SuperadminFacilities from "./pages/superadmin/SuperadminFacilities";
 import SuperadminUsers from "./pages/superadmin/SuperadminUsers";
 import Analytics from "./pages/superadmin/Analytics";
@@ -47,19 +47,19 @@ import ReviewList from "./pages/reviews/ReviewList";
 import EmptyState from "./components/EmptyState";
 import AllFacilities from "./components/AllFacilities";
 import SuperAdminFacilityView from "./pages/superadmin/SuperAdminFacilityView";
-
-//AboutUs
-import AboutUs from "./pages/AboutUs";
-
+import AdminSettingsPage from "./pages/admin/AdminSettingsPage";
+import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
   const router = createBrowserRouter([
+    // Public Routes
     {
       path: "/",
       element: <PublicLayout />,
       children: [
         { index: true, element: <Home /> },
-        { path: "facilities/:id", element: <FacilityDetails /> },
+        { path: "facilities/:facilityId", element: <FacilityDetails /> },
+        { path: "all-facilities", element: <AllFacilities /> },
         { path: "*", element: <EmptyState message="Page not found" /> },
       ],
     },
@@ -75,58 +75,61 @@ function App() {
         { path: "verify-email", element: <VerifyEmailNotice /> },
       ],
     },
-
     { path: "/verify-email", element: <VerifyEmailToken /> },
-
-    {
-      path: "all-facilities",
-      element: <AllFacilities />,
-    },
 
     // User Routes
     {
-      path: "/user",
-      element: <UserLayout />,
+      element: <ProtectedRoute roles={["user"]} />,
       children: [
-        { index: true, element: <UserDashboard /> },
-        { path: "appointments", element: <UserAppointments /> },
-        // { path: "edit-profile", element: <EditUserProfile /> },
-        { path: "reviews", element: <ReviewList /> },
+        {
+          path: "/user",
+          element: <UserLayout />,
+          children: [
+            { index: true, element: <UserDashboard /> },
+            { path: "appointments", element: <UserAppointments /> },
+            { path: "reviews", element: <ReviewList /> },
+            { path: "user-page", element: <Home /> },
+            { path: "facilities/:facilityId", element: <FacilityDetails /> },
+          ],
+        },
       ],
     },
 
-    // Admin Routes (Facility Admin)
+    // Admin Routes
     {
-      path: "/admin",
-      element: <AdminLayout />,
+      element: <ProtectedRoute roles={["facility_admin"]} />,
       children: [
-        { index: true, element: <AdminDashboard /> },
-        { path: "appointments", element: <AdminAppointments /> },
-        { path: "reviews", element: <AdminReviews /> },
-        { path: "profile", element: <AdminProfile /> },
-        // { path: "edit-profile", element: <EditAdminProfile /> },
+        {
+          path: "/admin",
+          element: <AdminLayout />,
+          children: [
+            { index: true, element: <AdminDashboard /> },
+            { path: "appointments", element: <AdminAppointments /> },
+            { path: "reviews", element: <AdminReviews /> },
+            { path: "profile", element: <AdminProfile /> },
+            { path: "settings", element: <AdminSettingsPage /> },
+          ],
+        },
       ],
     },
 
     // Superadmin Routes
     {
-      path: "/superadmin",
-      element: <SuperAdminLayout />,
+      element: <ProtectedRoute roles={["superadmin"]} />,
       children: [
-        { index: true, element: <SuperadminDashboard /> },
-        { path: "facilities/:id", element: <SuperAdminFacilityView /> },
-        { path: "facilities", element: <SuperadminFacilities /> },
-        { path: "users", element: <SuperadminUsers /> },
-        { path: "analytics", element: <Analytics /> },
+        {
+          path: "/superadmin",
+          element: <SuperAdminLayout />,
+          children: [
+            { index: true, element: <SuperAdminDashboard /> },
+            { path: "facilities/:id", element: <SuperAdminFacilityView /> },
+            { path: "facilities", element: <SuperadminFacilities /> },
+            { path: "users", element: <SuperadminUsers /> },
+            { path: "analytics", element: <Analytics /> },
+          ],
+        },
       ],
     },
-
-{
-  path:"/about",
-  element:<AboutUs/>
-}
-
-     
   ]);
 
   return (

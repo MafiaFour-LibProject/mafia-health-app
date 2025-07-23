@@ -1,102 +1,66 @@
 import { apiClient } from "./config";
+import axios from "axios";
 
-// // GET all services
-
-// export const getAllServices = async () => {
-//   const res = await apiClient.get("/fake-data/services.json");
-//   return res.data;
-// };
-
-// // GET single service by ID
-
-// export const getSingleService = async (id) => {
-//   const res = await apiClient.get("fake-data/services.json");
-//   return res.data.find((service) => service._id === id);
-// };
-
-// // GET all services for a facility
-
-// export const getServicesByFacility = async (facilityId) => {
-//   const res = await apiClient.get("fake-data/services.json");
-//   return res.data.filter((s) => s.facility === facilityId);
-// };
-
-/* Replace later with: 
-GET /services
-GET /services/:id
-GET /facilities/:id/services
-*/
-
-import { apiClient } from "./config";
-
-let fakeServicesCache = null; // change later
-
-// GET all services
-
-export const getAllServicess = async () => {
-  const res = await apiClient.get("/fake-data/services.json");
-  fakeServicesCache = res.data;
-  return res.data;
+// Create a service for a facility
+export const createService = async (facilityId, serviceData) => {
+  return apiClient.post(`/api/services/${facilityId}/services`, serviceData);
 };
 
-// GET single service by ID
-
-export const getSingleService = async (id) => {
-  const res = await apiClient.get("/fake-data/services.json");
-  return res.data.find((f) => String(f._id) === id);
+// Get all services for a facility
+export const getFacilityServices = async (facilityId) => {
+  return apiClient.get(`/api/services/${facilityId}/services`);
 };
 
-// Create new service
-
-export const createService = async (payload) => {
-  const res = await apiClient.get("/fake-data/services.json");
-  const newService = {
-    ...payload,
-    _id: Date.now().toString(),
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  };
-  fakeServicesCache = [newService, ...res.data];
-  return newService;
+// Get a single service by ID
+export const getSingleService = async (facilityId) => {
+  return apiClient.get(`/api/services/${facilityId}/services`);
 };
 
-// Update service
-
-export const updateService = async (id, payload) => {
-  const res = await apiClient.get("/fake-data/services.json");
-  const index = res.data.findIndex((f) => f._id === id);
-  if (index !== -1) {
-    const updatedService = {
-      ...res.data[index],
-      ...payload,
-      updatedAt: new Date().toISOString(),
-    };
-    res.data[index] = updatedService;
-    fakeServicesCache = [...res.data];
-    return updatedService;
-  }
-  return null;
+// Update a service
+export const updateService = async (serviceId, updatedData) => {
+  return apiClient.put(`/api/services/${serviceId}`, updatedData);
 };
 
-// Delete service
-
-export const deleteService = async (id) => {
-  const res = await apiClient.get("/fake-data/services.json");
-  const updatedList = res.data.filter((f) => f._id !== id);
-  fakeServicesCache = updatedList;
-  return id;
+// Delete a service
+export const deleteService = async (serviceId) => {
+  return apiClient.delete(`/api/services/${serviceId}`);
 };
 
-/*  replace later with:
+// Patch service stock (e.g., for inventory updates)
+export const patchServiceStock = async (serviceId, stockData) => {
+  return apiClient.patch(`/api/services/${serviceId}/stock`, stockData);
+};
 
- export const getAllServices = () => apiClient.get("/services");
+// Search for services by a query string
+export const searchServices = async (query) => {
+  return apiClient.get(`/api/services/search`, {
+    params: { q: query },
+  });
+};
 
- export const getSingleService = (id) => apiClient.get(`/services/${id}`)
+// Upload photos to a facility
+export const uploadFacilityPhotos = async (facilityId, files) => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const token = user?.token;
 
- export const createService = (payload) => apiClient.post("/services", payload);
+  if (!token) throw new Error("Authorization token is missing.");
 
- export const updateService = (id, payload) => apiClient.put(`/services/${id}`, payload);
+  const formData = new FormData();
+  files.forEach((file) => formData.append("files", file));
 
-  export const deleteService = (id) => apiClient.delete(`/services/${id}`);
+  return axios.post(
+    `${import.meta.env.VITE_BASE_URL}/api/facilities/${facilityId}/photos`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
 
- */
+// Get services with low stock for a facility
+export const getLowStockServices = async (facilityId) => {
+  return apiClient.get(`/api/facilities/${facilityId}/services/low-stock`);
+};
