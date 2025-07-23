@@ -100,7 +100,7 @@ const Signup = () => {
               id="contact"
               {...register("contact", { required: "Contact is required" })}
               placeholder="Enter your contact"
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-blue-400"
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-blue-400/50"
             />
             {errors?.contact && (
               <span className="text-red-600">{errors.contact.message}</span>
