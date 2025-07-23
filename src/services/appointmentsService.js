@@ -16,8 +16,7 @@ export const getFacilityAppointments = async () => {
 // facility updates an appointment: pending, confirmed, completed, canceled
 export const updateAppointmentStatus = async (appointmentId, status) => {
   const response = await apiClient.put(
-    `/api/
-    appointments/${appointmentId}/status`,
+    `/api/appointments/${appointmentId}/status`,
     { status }
   );
   return response.data;
@@ -26,7 +25,7 @@ export const updateAppointmentStatus = async (appointmentId, status) => {
 // user updates an appointment
 export const updateAppointment = async (appointmentId, updatedData) => {
   const response = await apiClient.put(
-    `/appointments/${appointmentId}`,
+    `api/appointments/${appointmentId}`,
     updatedData
   );
   return response.data;
