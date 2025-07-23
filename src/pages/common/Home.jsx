@@ -15,6 +15,7 @@ import {
 } from "../../services/facilityService";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
+import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 
 const Home = () => {
   const [nearbyFacilities, setNearbyFacilities] = useState([]);
@@ -87,28 +88,32 @@ const Home = () => {
         className="relative min-h-[70vh] md:min-h-[90vh] w-full bg-cover bg-center flex flex-col"
         style={{ backgroundImage: "url('/images/home-hero-image-4.jpg')" }}
       >
-        <div className="absolute inset-0 bg-black/70 z-0"></div>
+        <div className="absolute inset-0 bg-black/80 z-0"></div>
 
-        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between px-4 py-3 md:px-10 md:py-6 w-full">
-          <span className="text-white text-lg font-bold mb-2 md:mb-0">
-            Logo
-          </span>
+        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between px-4 py-3 md:px-4 md:py-3 w-full">
+          <div>
+            <img
+              className="w-50 h-20 object-cover"
+              src="/images/codeblue-logo-2.png"
+              alt="Code Blue Logo"
+            />
+          </div>
           {user ? (
             <button
               onClick={handleLogout}
-              className="bg-green-600 text-white font-semibold py-1 px-4 rounded-md shadow hover:bg-green-700 transition text-sm md:text-base"
+              className="bg-gray-600 text-white font-semibold py-1 px-4 rounded-md shadow hover:bg-gray-700 transition text-sm md:text-base"
             >
               Logout
             </button>
           ) : (
             <div className="flex gap-1">
               <Link to="/auth/signup">
-                <button className="bg-white text-green-600 font-semibold py-1 px-4 rounded-md shadow hover:bg-green-100 transition text-sm md:text-base">
+                <button className="bg-gray-900 border border-white text-white font-semibold py-1 px-4 rounded-md shadow hover:bg-white hover:text-gray-900 transition text-sm mr-1 md:text-base">
                   Sign up
                 </button>
               </Link>
               <Link to="/auth/login">
-                <button className="bg-green-600 text-white font-semibold py-1 px-4 rounded-md shadow hover:bg-green-700 transition text-sm md:text-base">
+                <button className="bg-white text-gray-900 font-semibold py-1 px-4 rounded-md shadow hover:bg-gray-900 hover:text-white transition text-sm md:text-base">
                   Log in
                 </button>
               </Link>
@@ -122,85 +127,137 @@ const Home = () => {
           </h1>
           <p className="text-center md:text-start text-xl md:text-2xl mb-3 max-w-2xl text-white">
             Quickly find{" "}
-            <span className="text-green-500">hospitals and pharmacies</span> in
-            Accra that provide critical medications, vaccines, and tests.
+            <span className="text-gray-900 font-extrabold">
+              hospitals and pharmacies
+            </span>{" "}
+            in Accra that provide critical medications, vaccines, and tests.
           </p>
         </div>
       </div>
 
-      <div className="flex flex-col items-center justify-center text-center py-10 md:py-15 bg-white mx-4 md:mx-10 mt-10 shadow-2xl">
-        <h3 className="mb-8 text-2xl md:text-4xl font-extrabold text-green-800 drop-shadow-sm">
-          How MAFIA Works
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl px-4 md:px-10">
-          <div className="flex flex-col justify-center items-center gap-2 mb-4 shadow-2xl p-6">
-            <div className="rounded-full flex gap-x-2 bg-orange-200 px-3 py-2 font-semibold items-center justify-center">
-              <Search className="size-5" />
-              <p>Search</p>
-            </div>
-            <p>
-              Quickly search for life-saving medicines, vaccines or emergency
-              tests near you.
-            </p>
-          </div>
+      <div className="relative overflow-hidden bg-gradient-to-br from-darkBlue-900 to-darkCyan-800 py-16 md:py-24 px-4 md:px-10 mx-4 md:mx-10 rounded-2xl shadow-2xl transform transition-all hover:shadow-3xl">
+        <div className="absolute top-0 left-0 w-full h-full opacity-10">
+          <div className="absolute top-20 left-10 w-32 h-32 rounded-full bg-cyan-300 blur-xl"></div>
+          <div className="absolute bottom-10 right-20 w-40 h-40 rounded-full bg-blue-400 blur-xl"></div>
+        </div>
 
-          <div className="flex flex-col justify-center items-center gap-2 mb-4 shadow-2xl p-6">
-            <div className="rounded-full flex gap-x-2 bg-purple-200 px-3 py-2 font-semibold items-center justify-center">
-              <MapPin className="size-5" />
-              <p>Find</p>
-            </div>
-            <p>
-              Locate hospitals and pharmacies in Accra with availability in
-              real-time.
-            </p>
-          </div>
+        <div className="relative z-10 flex flex-col items-center justify-center text-center">
+          <h3 className="mb-12 text-3xl md:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-cyan-600 to-gray-900 font-extrabold">
+            How MAFIA Works
+          </h3>
 
-          <div className="flex flex-col justify-center items-center gap-2 mb-4 shadow-2xl p-6">
-            <div className="rounded-full flex gap-x-2 bg-amber-200 px-3 py-2 font-semibold items-center justify-center">
-              <Calendar className="size-5" />
-              <p>Book</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl px-4">
+            <div className="group relative bg-gray-900 bg-opacity-50 backdrop-blur-md rounded-xl p-8 border border-cyan-800/30 hover:border-cyan-400/50 transition-all duration-300 hover:-translate-y-2">
+              <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-cyan-500/10 to-blue-600/10"></div>
+              <div className="relative z-10 flex flex-col items-center gap-4">
+                <div className="rounded-full flex gap-x-2 bg-gradient-to-r from-cyan-600 to-blue-700 px-4 py-3 font-semibold items-center justify-center shadow-lg">
+                  <Search className="size-5 text-cyan-100" />
+                  <p className="text-gray-100">Search</p>
+                </div>
+                <p className="text-gray-300 mt-2 leading-relaxed">
+                  Quickly search for life-saving medicines, vaccines or
+                  emergency tests near you.
+                </p>
+              </div>
             </div>
-            <p>
-              Reserve appointments, ask questions, or get directions all from
-              one place.
-            </p>
+
+            <div className="group relative bg-gray-900 bg-opacity-50 backdrop-blur-md rounded-xl p-8 border border-cyan-800/30 hover:border-cyan-400/50 transition-all duration-300 hover:-translate-y-2">
+              <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-cyan-500/10 to-blue-600/10"></div>
+              <div className="relative z-10 flex flex-col items-center gap-4">
+                <div className="rounded-full flex gap-x-2 bg-gradient-to-r from-cyan-600 to-blue-700 px-4 py-3 font-semibold items-center justify-center shadow-lg">
+                  <MapPin className="size-5 text-cyan-100" />
+                  <p className="text-gray-100">Find</p>
+                </div>
+                <p className="text-gray-300 mt-2 leading-relaxed">
+                  Locate hospitals and pharmacies in Accra with availability in
+                  real-time.
+                </p>
+              </div>
+            </div>
+
+            <div className="group relative bg-gray-900 bg-opacity-50 backdrop-blur-md rounded-xl p-8 border border-cyan-800/30 hover:border-cyan-400/50 transition-all duration-300 hover:-translate-y-2">
+              <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-cyan-500/10 to-blue-600/10"></div>
+              <div className="relative z-10 flex flex-col items-center gap-4">
+                <div className="rounded-full flex gap-x-2 bg-gradient-to-r from-cyan-600 to-blue-700 px-4 py-3 font-semibold items-center justify-center shadow-lg">
+                  <Calendar className="size-5 text-cyan-100" />
+                  <p className="text-gray-100">Book</p>
+                </div>
+                <p className="text-gray-300 mt-2 leading-relaxed">
+                  Reserve appointments, ask questions, or get directions all
+                  from one place.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="bg-gray-100 px-4 md:px-10 py-8 rounded-xl shadow-lg mt-10 mx-4 md:mx-10">
-        <h2 className="text-xl font-semibold mb-4 text-green-800 text-center">
+      <div className="relative bg-gradient-to-br from-darkBlue-900/80 to-darkCyan-800/80 px-6 md:px-8 py-8 rounded-xl shadow-2xl mt-10 mx-4 md:mx-10 backdrop-blur-sm border border-cyan-800/30 overflow-hidden">
+        <div className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full bg-cyan-400/10 blur-xl"></div>
+
+        <h2 className="text-2xl mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-cyan-600 to-gray-900 font-extrabold">
           Find Facilities Near You
         </h2>
+
         <div className="flex flex-wrap gap-4 justify-center">
           <button
             onClick={handleLocateNearby}
-            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md flex items-center gap-2"
+            className="relative z-10 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white px-5 py-2.5 rounded-lg flex items-center gap-2 shadow-lg hover:shadow-cyan-500/20 transition-all duration-300 transform hover:-translate-y-0.5"
           >
-            <MapPin className="w-4 h-4" />
+            <MapPin className="w-5 h-5 text-cyan-100" />
             Locate Nearby
           </button>
+
           <button
             onClick={handleResetNearby}
-            className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-md flex items-center gap-2"
+            className="relative z-10 bg-gray-800/60 hover:bg-gray-700/80 text-gray-200 px-5 py-2.5 rounded-lg flex items-center gap-2 border border-gray-600/50 hover:border-gray-500/70 transition-all duration-300"
           >
-            <RotateCcw className="w-4 h-4" />
+            <RotateCcw className="w-5 h-5" />
             Reset
           </button>
         </div>
+
         {loadingNearby && (
-          <p className="text-center text-gray-600 mt-3">
-            Finding facilities near you...
-          </p>
+          <div className="mt-4 flex justify-center">
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-cyan-900/30 text-cyan-200">
+              <svg
+                className="animate-spin h-5 w-5 mr-2 text-cyan-300"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              Finding facilities near you...
+            </div>
+          </div>
         )}
+
         {locationError && (
-          <p className="text-center text-red-500 mt-2">{locationError}</p>
+          <div className="mt-4 flex justify-center">
+            <div className="inline-flex items-center px-4 py-2 rounded-lg bg-red-900/40 text-red-200 border border-red-700/50">
+              <ExclamationTriangleIcon className="w-5 h-5 mr-2" />
+              {locationError}
+            </div>
+          </div>
         )}
       </div>
 
       {nearbyFacilities.length > 0 ? (
         <div className="px-4 md:px-10 mt-10">
-          <h2 className="text-2xl font-bold mb-4 text-green-800">
+          <h2 className="text-2xl font-bold mb-4 text-gray-800">
             Facilities Near You
           </h2>
           <FacilityGrid facilities={nearbyFacilities} />
@@ -213,10 +270,10 @@ const Home = () => {
         <div className="fixed bottom-6 right-6 z-50">
           <button
             onClick={() => setShowChatbot(true)}
-            className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-full shadow-lg transition"
+            className="flex items-center gap-2 bg-gray-900 hover:bg-gray-700 text-white px-4 py-2 rounded-full shadow-lg transition"
           >
             <Bot className="w-5 h-5" />
-            <span className="hidden md:inline">Chat with AI</span>
+            <span className="hidden md:inline">Chat with CodeBlue AI</span>
           </button>
         </div>
       )}

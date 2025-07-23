@@ -15,7 +15,6 @@ import { useContext } from "react";
 }
 import { AuthContext } from "../contexts/AuthContext";
 import { p } from "framer-motion/client";
-
 const SidebarUser = ({ isSidebarOpen, toggleSidebar }) => {
   const navigate = useNavigate();
   const { logout } = useContext(AuthContext);
@@ -59,7 +58,6 @@ const SidebarUser = ({ isSidebarOpen, toggleSidebar }) => {
         </button>
       </div>
 
-      {/* Navigation */}
       <ul className="space-y-2 flex-grow overflow-auto">
         {navItems.map(({ label, icon, to }) => (
           <li key={label}>

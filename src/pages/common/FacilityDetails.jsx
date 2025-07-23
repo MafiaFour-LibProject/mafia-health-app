@@ -220,7 +220,8 @@ const FacilityDetails = () => {
         <div className="relative z-10 p-6 md:p-12 text-white w-full">
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center gap-2 mb-4 text-white/90 hover:text-white transition-colors duration-200 text-sm font-medium">
+            className="flex items-center gap-2 mb-4 text-white/90 hover:text-white transition-colors duration-200 text-sm font-medium"
+          >
             <ArrowLeft size={20} /> Back to Facilities
           </button>
           <h1 className="text-4xl md:text-6xl font-extrabold drop-shadow-lg mb-3 leading-tight">
@@ -235,7 +236,8 @@ const FacilityDetails = () => {
                 facility.isActive
                   ? "bg-green-500 text-white"
                   : "bg-red-500 text-white"
-              }`}>
+              }`}
+            >
               {facility.isActive ? "Active" : "Inactive"}
             </span>
             {averageRating && (
@@ -273,7 +275,8 @@ const FacilityDetails = () => {
                 {services.map((s) => (
                   <li
                     key={s._id}
-                    className="border border-gray-200 p-6 rounded-xl shadow-md bg-gradient-to-br from-blue-50 to-white hover:shadow-lg transform hover:-translate-y-1 transition-all duration-200 ease-in-out">
+                    className="border border-gray-200 p-6 rounded-xl shadow-md bg-gradient-to-br from-blue-50 to-white hover:shadow-lg transform hover:-translate-y-1 transition-all duration-200 ease-in-out"
+                  >
                     <h3 className="font-semibold text-xl text-gray-800 mb-2">
                       {s.name}
                     </h3>
@@ -298,7 +301,6 @@ const FacilityDetails = () => {
             </p>
           </section>
 
-          {/* Book Appointment Section */}
           <section className="bg-white rounded-2xl shadow-xl p-8 transform hover:scale-[1.005] transition-transform duration-200 ease-in-out">
             <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center gap-3 border-b-2 border-blue-100 pb-2">
               <CalendarDays size={28} className="text-blue-500" /> Book Your
@@ -309,14 +311,16 @@ const FacilityDetails = () => {
               <div>
                 <label
                   htmlFor="service"
-                  className="block text-sm font-medium text-gray-700 mb-1">
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Service
                 </label>
                 <select
                   id="service"
                   value={selectedService}
                   onChange={(e) => setSelectedService(e.target.value)}
-                  className="w-full border-gray-300 rounded-xl px-4 py-2.5 focus:ring-blue-500 focus:border-blue-500 transition duration-200 text-gray-800 shadow-sm">
+                  className="w-full border-gray-300 rounded-xl px-4 py-2.5 focus:ring-blue-500 focus:border-blue-500 transition duration-200 text-gray-800 shadow-sm"
+                >
                   <option value="">Select a service</option>
                   {services.map((s) => (
                     <option key={s._id} value={s._id}>
@@ -329,7 +333,8 @@ const FacilityDetails = () => {
               <div>
                 <label
                   htmlFor="date"
-                  className="block text-sm font-medium text-gray-700 mb-1">
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Date
                 </label>
                 <input
@@ -344,7 +349,8 @@ const FacilityDetails = () => {
               <div>
                 <label
                   htmlFor="startTime"
-                  className="block text-sm font-medium text-gray-700 mb-1">
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Start Time
                 </label>
                 <input
@@ -359,7 +365,8 @@ const FacilityDetails = () => {
               <div>
                 <label
                   htmlFor="endTime"
-                  className="block text-sm font-medium text-gray-700 mb-1">
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   End Time
                 </label>
                 <input
@@ -375,7 +382,8 @@ const FacilityDetails = () => {
             <div className="mb-8">
               <label
                 htmlFor="reason"
-                className="block text-sm font-medium text-gray-700 mb-1">
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Reason for Appointment
               </label>
               <textarea
@@ -391,7 +399,8 @@ const FacilityDetails = () => {
             <div className="flex justify-end">
               <button
                 onClick={handleBookAppointment}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-full shadow-lg transform hover:-translate-y-1 transition-all duration-300 ease-in-out">
+                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-full shadow-lg transform hover:-translate-y-1 transition-all duration-300 ease-in-out"
+              >
                 Book Appointment
               </button>
             </div>
@@ -410,7 +419,8 @@ const FacilityDetails = () => {
                 Object.entries(facility.hours).map(([day, time]) => (
                   <li
                     key={day}
-                    className="flex justify-between items-center pb-2 border-b border-gray-100 last:border-b-0">
+                    className="flex justify-between items-center pb-2 border-b border-gray-100 last:border-b-0"
+                  >
                     <span className="capitalize font-medium">{day}</span>
                     <span className="font-mono text-gray-800 bg-blue-50 px-3 py-1 rounded-lg text-sm">
                       {time.open} - {time.close}
@@ -431,7 +441,8 @@ const FacilityDetails = () => {
                 <span className="font-semibold">Email:</span>{" "}
                 <a
                   href={`mailto:${facility.contact?.email}`}
-                  className="text-blue-700 hover:underline transition-colors duration-200">
+                  className="text-blue-700 hover:underline transition-colors duration-200"
+                >
                   {facility.contact?.email}
                 </a>
               </p>
@@ -440,7 +451,8 @@ const FacilityDetails = () => {
                 <span className="font-semibold">Phone:</span>{" "}
                 <a
                   href={`tel:${facility.contact?.phone}`}
-                  className="text-blue-700 hover:underline transition-colors duration-200">
+                  className="text-blue-700 hover:underline transition-colors duration-200"
+                >
                   {facility.contact?.phone}
                 </a>
               </p>
@@ -452,7 +464,8 @@ const FacilityDetails = () => {
                     href={facility.contact.website}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-700 hover:underline transition-colors duration-200">
+                    className="text-blue-700 hover:underline transition-colors duration-200"
+                  >
                     {facility.contact.website}
                   </a>
                 </p>
@@ -472,7 +485,8 @@ const FacilityDetails = () => {
                 <select
                   value={sortOrder}
                   onChange={(e) => setSortOrder(e.target.value)}
-                  className="text-sm border border-gray-300 px-3 py-1.5 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200 text-gray-800 shadow-sm">
+                  className="text-sm border border-gray-300 px-3 py-1.5 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200 text-gray-800 shadow-sm"
+                >
                   <option value="newest">Newest</option>
                   <option value="oldest">Oldest</option>
                   <option value="highest">Highest Rating</option>
@@ -495,7 +509,8 @@ const FacilityDetails = () => {
                 reviews.map((review) => (
                   <div
                     key={review._id}
-                    className="bg-gray-50 border border-gray-200 p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200">
+                    className="bg-gray-50 border border-gray-200 p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200"
+                  >
                     <div className="flex justify-between items-start mb-2">
                       <div>
                         <p className="font-semibold text-lg text-gray-800">
@@ -509,7 +524,8 @@ const FacilityDetails = () => {
                         <button
                           onClick={() => handleDeleteReview(review._id)}
                           className="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-50 transition-colors duration-200"
-                          title="Delete your review">
+                          title="Delete your review"
+                        >
                           <Trash2 size={20} />
                         </button>
                       )}
@@ -525,7 +541,8 @@ const FacilityDetails = () => {
               <div className="flex justify-center mt-8">
                 <button
                   onClick={() => setShowReviewModal(true)}
-                  className="bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-3 rounded-full shadow-lg transform hover:-translate-y-1 transition-all duration-300 ease-in-out">
+                  className="bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-3 rounded-full shadow-lg transform hover:-translate-y-1 transition-all duration-300 ease-in-out"
+                >
                   Leave a Review ✨
                 </button>
               </div>
