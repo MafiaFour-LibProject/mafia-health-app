@@ -1,11 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import { MapPin } from "lucide-react";
+import { MapPin, ArrowRight } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 
 const FacilityCard = ({ facility }) => {
   const navigate = useNavigate();
   const defaultImage = "/images/hero-image-3.jpg";
-
   const { user } = useAuth();
 
   const handleClick = () => {
@@ -15,40 +14,51 @@ const FacilityCard = ({ facility }) => {
         return;
       }
     }
-
     navigate(`/facilities/${facility._id}`);
   };
 
   return (
     <div
       onClick={handleClick}
-      className="cursor-pointer facility-card bg-white border border-green-200 hover:border-green-300 hover:-translate-y-1 hover:shadow-xl transition transform duration-300 rounded-xl">
-      <img
-        src={facility.images?.[0]?.url ?? defaultImage}
-        alt={facility.name}
-        className="w-full h-48 object-cover rounded-t-xl"
-      />
-      <div className="px-5 py-5">
-        <div className="flex flex-col md:flex-row items-center justify-between">
-          <h3 className="mt-4 text-base font-bold text-gray-700">
+      className="group cursor-pointer bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-cyan-100 overflow-hidden h-full flex flex-col"
+    >
+      <div className="relative h-48 overflow-hidden">
+        <img
+          src={facility.images?.[0]?.url ?? defaultImage}
+          alt={facility.name}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+      </div>
+
+      <div className="p-5 flex-1 flex flex-col">
+        <div className="flex justify-between items-start mb-3">
+          <h3 className="text-lg font-semibold text-gray-800 group-hover:text-darkBlue-800">
             {facility.name}
           </h3>
-          <span className="bg-orange-200 px-3 py-1 rounded-full text-orange-500 text-xs font-semibold border border-orange-300">
-            {facility.type}
+          <span
+            className={`px-3 py-1 rounded-full text-xs font-medium ${
+              facility.type === "hospital"
+                ? "bg-blue-50 text-blue-700"
+                : "bg-cyan-50 text-cyan-700"
+            }`}
+          >
+            {facility.type.charAt(0).toUpperCase() + facility.type.slice(1)}
           </span>
         </div>
 
-        <div className="flex items-center gap-x-2 mt-2">
-          <MapPin className="size-5 text-green-600" />
-          <p className="text-gray-500 text-sm">
+        <div className="flex items-start gap-2 mb-4">
+          <MapPin className="flex-shrink-0 mt-0.5 size-5 text-darkBlue-600" />
+          <p className="text-gray-600 text-sm">
             {facility.location?.address || "Unknown address"},{" "}
             {facility.location?.city || "Unknown city"}
           </p>
         </div>
 
-        <div className="flex justify-center items-center border border-gray-200 py-2 mt-4 rounded hover:border-green-300 cursor-pointer">
-          <MapPin className="size-4 text-gray-600 mr-2" />
-          <p className="text-sm">View on map</p>
+        <div className="mt-auto">
+          <div className="inline-flex items-center justify-between w-full px-4 py-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-md transition-all group-hover:border-darkCyan-300">
+            <span className="text-sm text-darkBlue-700">View Details</span>
+            <ArrowRight className="size-4 text-darkBlue-600 group-hover:translate-x-1 transition-transform" />
+          </div>
         </div>
       </div>
     </div>

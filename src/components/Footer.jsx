@@ -1,33 +1,29 @@
-import React from "react";
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
 
 const Footer = () => {
   return (
     <footer className="bg-gray-800 text-white py-6">
       <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
-        {/* Brand */}
         <div className="text-center md:text-left">
           <img
-            className="h-30 w-30 bg-gray-800 rounded-full"
-            src="/Logo.png"
-            alt="logo"
+            className="w-50 h-20 object-cover"
+            src="/images/codeblue-logo-2.png"
+            alt="Code Blue Logo"
           />
         </div>
 
-        {/* Navigation Links */}
         <div className="flex space-x-6">
-          <a href="#" className="hover:text-green-400 transition">
+          <a href="#" className="hover:text-gray-400 transition">
             Home
           </a>
-          <a href="#" className="hover:text-green-400 transition">
-            About Us
+          <a href="#" className="hover:text-gray-400 transition">
+            About
           </a>
-          <a href="#" className="hover:text-green-400 transition">
+          <a href="#" className="hover:text-gray-400 transition">
             Contact
           </a>
         </div>
 
-        {/* Social Icons */}
         <div className="flex space-x-4">
           <a
             href="https://facebook.com"
@@ -64,8 +60,7 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Copyright */}
-      <div className="text-center text-sm mt-4 text-white-800">
+      <div className="text-center text-sm mt-4 text-gray-400">
         &copy; {new Date().getFullYear()} MaFia. All rights reserved.
       </div>
     </footer>

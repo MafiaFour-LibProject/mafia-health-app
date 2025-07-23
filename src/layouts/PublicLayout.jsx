@@ -7,7 +7,7 @@ const PublicLayout = () => {
   return (
     <div className="min-h-screen flex flex-col">
       {/* <Navbar /> */}
-      <main className="flex-grow mb-10 ">
+      <main className="flex-grow mb-10">
         <Outlet />
       </main>
       <Footer />
