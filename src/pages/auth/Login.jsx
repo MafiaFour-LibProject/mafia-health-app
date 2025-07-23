@@ -86,7 +86,7 @@ const Login = () => {
               id="email"
               {...register("email", { required: "Email is required" })}
               placeholder="Enter your email"
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-blue-400"
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-blue-400/50 bg-transparent text-gray-700 placeholder-gray-500"
             />
             {errors.email && (
               <p className="text-red-500 text-sm mt-1">
@@ -107,7 +107,7 @@ const Login = () => {
               id="password"
               {...register("password", { required: "Password is required" })}
               placeholder="Enter your password"
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-blue-400"
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-blue-400 bg-transparent text-gray-700 placeholder-gray-500"
             />
             {errors.password && (
               <p className="text-red-500 text-sm mt-1">
@@ -138,12 +138,12 @@ const Login = () => {
           </button>
 
           <div className="flex items-center justify-center mb-6 pt-5">
-            <p className="block text-sm font-semibold text-gray-700 mb-1 mr-1">
+            <p className="block text-sm font-semibold text-gray-700 mb-1 mr-1 ">
               New User?
             </p>
             <a
               onClick={() => navigate("/auth/signup")}
-              className="text-sm text-blue-700 hover:underline font-semibold"
+              className="text-sm text-blue-700 hover:underline font-semibold cursor-pointer"
             >
               Register
             </a>

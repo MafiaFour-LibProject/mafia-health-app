@@ -48,6 +48,10 @@ import EmptyState from "./components/EmptyState";
 import AllFacilities from "./components/AllFacilities";
 import SuperAdminFacilityView from "./pages/superadmin/SuperAdminFacilityView";
 
+//AboutUs
+import AboutUs from "./pages/AboutUs";
+
+
 function App() {
   const router = createBrowserRouter([
     {
@@ -116,6 +120,12 @@ function App() {
         { path: "analytics", element: <Analytics /> },
       ],
     },
+
+{
+  path:"/about",
+  element:<AboutUs/>
+}
+
      
   ]);
 

@@ -70,9 +70,12 @@ const Home = () => {
         <div className="absolute inset-0 bg-black/70 z-0"></div>
         {/* Nav */}
         <div className="relative z-10 flex flex-col md:flex-row items-center justify-between px-4 py-3 md:px-10 md:py-6 w-full">
-          <span className="text-white text-lg font-bold mb-2 md:mb-0">
-            Logo
-          </span>
+          <img
+            className="h-20 w-20 bg-gray-800 rounded-full"
+            src="/Logo.png"
+            alt="logo"
+          />
+
           <div className="flex gap-1">
             <Link to="/auth/signup">
               <button className="bg-white text-gree-600 font-semibold py-1 px-4 rounded-md shadow hover:bg-green-100 transition text-sm md:text-base">
@@ -82,6 +85,11 @@ const Home = () => {
             <Link to="/auth/login">
               <button className="bg-green-600 text-white font-semibold py-1 px-4 rounded-md shadow hover:bg-green-700 transition text-sm md:text-base">
                 Log in
+              </button>
+            </Link>
+            <Link to="/about">
+              <button className="bg-gray-700 text-white font-semibold py-1 px-4 rounded-md shadow hover:bg-gray-600 transition text-sm md:text-base">
+                About Us
               </button>
             </Link>
           </div>
