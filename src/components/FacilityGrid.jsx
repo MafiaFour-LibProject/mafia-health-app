@@ -99,12 +99,11 @@ const FacilityGrid = () => {
             </select>
           </div>
 
-          {/* Reset Button */}
           <div className="flex items-center">
             <button
               type="button"
               onClick={handleResetFilters}
-              className="h-full bg-white hover:bg-gray-50 border border-darkBlue-300 text-darkBlue-700 hover:text-darkBlue-900 font-medium py-3 px-5 rounded-lg shadow-sm transition-all flex items-center gap-2 hover:border-darkBlue-400"
+              className="bg-white hover:bg-gray-700/80 text-gray-900 px-5 py-2.5 rounded-lg flex items-center gap-2 border border-gray-700/50 hover:border-gray-200/70 cursor-pointer hover:text-white transition-all duration-300"
             >
               <RefreshCcw className="size-5" />
               Reset
@@ -113,8 +112,7 @@ const FacilityGrid = () => {
         </form>
       </div>
 
-      {/* Results Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 max-w-7xl mx-15">
         {filteredFacilities.length === 0 ? (
           <div className="col-span-full text-center py-12">
             <div className="inline-flex flex-col items-center justify-center bg-gray-50 rounded-xl p-8 border border-gray-200">

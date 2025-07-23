@@ -266,7 +266,6 @@ const AdminDashboard = () => {
           )}
         </div>
 
-        {/* Upload Photos Modal */}
         {uploadingPhotosFor && (
           <AdminModal onClose={() => setUploadingPhotosFor(null)}>
             <AdminUploadPhotos
@@ -277,7 +276,6 @@ const AdminDashboard = () => {
         )}
       </div>
 
-      {/* Edit Service Modal */}
       {editingService && (
         <AdminModal onClose={() => setEditingService(null)}>
           <AdminAddServiceForm
@@ -293,7 +291,6 @@ const AdminDashboard = () => {
         </AdminModal>
       )}
 
-      {/* Delete Confirmation Modal */}
       {deleteModal.open && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-sm">

@@ -4,25 +4,26 @@ import { Link } from "react-router-dom";
 function Navbar() {
   return (
     <>
-      <div className="bg-gray-600 px-4 py-3 flex justify-between  ">
-        {/*left side*/}
-
-        <div className="flex items-center text-xl">
-          <FaBars className="text-white me-4 cursor-pointer" />
-          <span className="text-white font-semibold">MaFia</span>
-        </div>
-
-        {/*Right side*/}
+      <div className="bg-gray-800 px-4 py-5 flex justify-between  ">
+        <img
+          className="w-40 h-5 object-cover"
+          src="/images/codeblue-logo-2.png"
+          alt="Code Blue Logo"
+        />
 
         <div className=" relative flex  items-center justify-center gap-4">
-          <div className="text-white font-semibold hover:underline focus:outline-none focus:ring-1 focus:ring-blue-400 cursor-pointer ">
-            Home
-          </div>
-          <div className="text-white font-semibold hover:underline focus:outline-none focus:ring-1 focus:ring-blue-400 cursor-pointer ">
-            About Us
-          </div>
+          <Link to="/">
+            <div className="text-white font-semibold hover:underline focus:outline-none focus:ring-1 focus:ring-blue-400 cursor-pointer ">
+              Home
+            </div>
+          </Link>
+          <Link to="/about-us">
+            <div className="text-white font-semibold hover:underline focus:outline-none focus:ring-1 focus:ring-blue-400 cursor-pointer ">
+              About Us
+            </div>
+          </Link>
 
-          <button className="text-white group hover:bg-gray-500 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
+          {/* <button className="text-white group hover:bg-gray-500 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
             <FaUserCircle className="w-8 mt-1 cursor-pointer" />
             <div className="z-10 hidden absolute bg-white rounded-lg shadow w-32 group-focus:block top-full right-0">
               <ul>
@@ -39,7 +40,7 @@ function Navbar() {
                 </li>
               </ul>
             </div>
-          </button>
+          </button> */}
         </div>
       </div>
     </>

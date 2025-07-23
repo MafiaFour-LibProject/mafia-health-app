@@ -16,6 +16,7 @@ import {
 import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+// import { useQueryState } from "nuqs";
 
 const Home = () => {
   const [nearbyFacilities, setNearbyFacilities] = useState([]);
@@ -26,8 +27,9 @@ const Home = () => {
   const [chatLoading, setChatLoading] = useState(false);
   const [chatError, setChatError] = useState(null);
   const [showChatbot, setShowChatbot] = useState(false);
-
   const { user, logout } = useAuth();
+
+  // const [{limit}]
 
   useEffect(() => {
     console.log(user);
@@ -40,6 +42,7 @@ const Home = () => {
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const { latitude, longitude } = position.coords;
+        console.log("Latitude", latitude, "Longitude", longitude);
         try {
           const facilities = await getNearbyFacilities(latitude, longitude);
           setNearbyFacilities(facilities);
@@ -85,10 +88,10 @@ const Home = () => {
   return (
     <div className="relative">
       <div
-        className="relative min-h-[70vh] md:min-h-[90vh] w-full bg-cover bg-center flex flex-col"
+        className="relative min-h-[70vh] md:min-h-[95vh] w-full bg-cover bg-center flex flex-col"
         style={{ backgroundImage: "url('/images/home-hero-image-4.jpg')" }}
       >
-        <div className="absolute inset-0 bg-black/80 z-0"></div>
+        <div className="absolute inset-0 bg-black/70 z-0"></div>
 
         <div className="relative z-10 flex flex-col md:flex-row items-center justify-between px-4 py-3 md:px-4 md:py-3 w-full">
           <div>
@@ -101,19 +104,19 @@ const Home = () => {
           {user ? (
             <button
               onClick={handleLogout}
-              className="bg-gray-600 text-white font-semibold py-1 px-4 rounded-md shadow hover:bg-gray-700 transition text-sm md:text-base"
+              className="bg-green-600 text-white font-semibold py-1 px-4 rounded-md shadow hover:bg-green-700 transition text-sm md:text-base"
             >
               Logout
             </button>
           ) : (
             <div className="flex gap-1">
               <Link to="/auth/signup">
-                <button className="bg-gray-900 border border-white text-white font-semibold py-1 px-4 rounded-md shadow hover:bg-white hover:text-gray-900 transition text-sm mr-1 md:text-base">
+                <button className="bg-green-700 border border-white text-white font-semibold py-1 px-4 rounded-md shadow hover:bg-white hover:text-green-900 transition text-sm mr-1 md:text-base">
                   Sign up
                 </button>
               </Link>
               <Link to="/auth/login">
-                <button className="bg-white text-gray-900 font-semibold py-1 px-4 rounded-md shadow hover:bg-gray-900 hover:text-white transition text-sm md:text-base">
+                <button className="bg-white text-green-900 font-semibold py-1 px-4 rounded-md shadow hover:bg-green-900 hover:text-white transition text-sm md:text-base">
                   Log in
                 </button>
               </Link>
@@ -123,11 +126,11 @@ const Home = () => {
 
         <div className="relative z-10 flex flex-col items-center md:items-start justify-center px-4 md:px-10 py-6 w-full flex-1 mt-3">
           <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold drop-shadow-sm mb-5 text-white max-w-xl">
-            My Access to Fast <br /> and Immediate Aid
+            Your Access to Fast <br /> and Immediate Aid
           </h1>
           <p className="text-center md:text-start text-xl md:text-2xl mb-3 max-w-2xl text-white">
             Quickly find{" "}
-            <span className="text-gray-900 font-extrabold">
+            <span className="text-green-500 font-extrabold">
               hospitals and pharmacies
             </span>{" "}
             in Accra that provide critical medications, vaccines, and tests.
@@ -142,47 +145,47 @@ const Home = () => {
         </div>
 
         <div className="relative z-10 flex flex-col items-center justify-center text-center">
-          <h3 className="mb-12 text-3xl md:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-cyan-600 to-gray-900 font-extrabold">
-            How MAFIA Works
+          <h3 className="mb-12 text-3xl md:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-cyan-600 to-green-900 font-extrabold">
+            How CodeBlue Works
           </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl px-4">
-            <div className="group relative bg-gray-900 bg-opacity-50 backdrop-blur-md rounded-xl p-8 border border-cyan-800/30 hover:border-cyan-400/50 transition-all duration-300 hover:-translate-y-2">
-              <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-cyan-500/10 to-blue-600/10"></div>
+            <div className="group relative bg-white bg-opacity-50 backdrop-blur-md rounded-xl p-8 border border-cyan-800/30 hover:border-cyan-400/50 transition-all duration-300 hover:-translate-y-2">
+              <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-cyan-500/10 to-green-600/10"></div>
               <div className="relative z-10 flex flex-col items-center gap-4">
-                <div className="rounded-full flex gap-x-2 bg-gradient-to-r from-cyan-600 to-blue-700 px-4 py-3 font-semibold items-center justify-center shadow-lg">
+                <div className="rounded-full flex gap-x-2 bg-gradient-to-r from-cyan-600 to-green-700 px-4 py-3 font-semibold items-center justify-center shadow-lg">
                   <Search className="size-5 text-cyan-100" />
                   <p className="text-gray-100">Search</p>
                 </div>
-                <p className="text-gray-300 mt-2 leading-relaxed">
+                <p className="text-gray-900 mt-2 leading-relaxed">
                   Quickly search for life-saving medicines, vaccines or
                   emergency tests near you.
                 </p>
               </div>
             </div>
 
-            <div className="group relative bg-gray-900 bg-opacity-50 backdrop-blur-md rounded-xl p-8 border border-cyan-800/30 hover:border-cyan-400/50 transition-all duration-300 hover:-translate-y-2">
-              <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-cyan-500/10 to-blue-600/10"></div>
+            <div className="group relative bg-green-700 bg-opacity-50 backdrop-blur-md rounded-xl p-8 border border-cyan-800/30 hover:border-cyan-400/50 transition-all duration-300 hover:-translate-y-2">
+              <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-cyan-500/10 to-green-600/10"></div>
               <div className="relative z-10 flex flex-col items-center gap-4">
-                <div className="rounded-full flex gap-x-2 bg-gradient-to-r from-cyan-600 to-blue-700 px-4 py-3 font-semibold items-center justify-center shadow-lg">
+                <div className="rounded-full flex gap-x-2 bg-gradient-to-r from-cyan-600 to-green-700 px-4 py-3 font-semibold items-center justify-center shadow-lg">
                   <MapPin className="size-5 text-cyan-100" />
                   <p className="text-gray-100">Find</p>
                 </div>
-                <p className="text-gray-300 mt-2 leading-relaxed">
+                <p className="text-white mt-2 leading-relaxed">
                   Locate hospitals and pharmacies in Accra with availability in
                   real-time.
                 </p>
               </div>
             </div>
 
-            <div className="group relative bg-gray-900 bg-opacity-50 backdrop-blur-md rounded-xl p-8 border border-cyan-800/30 hover:border-cyan-400/50 transition-all duration-300 hover:-translate-y-2">
-              <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-cyan-500/10 to-blue-600/10"></div>
+            <div className="group relative bg-white bg-opacity-50 backdrop-blur-md rounded-xl p-8 border border-cyan-800/30 hover:border-cyan-400/50 transition-all duration-300 hover:-translate-y-2">
+              <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-cyan-500/10 to-green-600/10"></div>
               <div className="relative z-10 flex flex-col items-center gap-4">
-                <div className="rounded-full flex gap-x-2 bg-gradient-to-r from-cyan-600 to-blue-700 px-4 py-3 font-semibold items-center justify-center shadow-lg">
+                <div className="rounded-full flex gap-x-2 bg-gradient-to-r from-cyan-600 to-green-700 px-4 py-3 font-semibold items-center justify-center shadow-lg">
                   <Calendar className="size-5 text-cyan-100" />
                   <p className="text-gray-100">Book</p>
                 </div>
-                <p className="text-gray-300 mt-2 leading-relaxed">
+                <p className="text-gray-900 mt-2 leading-relaxed">
                   Reserve appointments, ask questions, or get directions all
                   from one place.
                 </p>
@@ -202,7 +205,7 @@ const Home = () => {
         <div className="flex flex-wrap gap-4 justify-center">
           <button
             onClick={handleLocateNearby}
-            className="relative z-10 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white px-5 py-2.5 rounded-lg flex items-center gap-2 shadow-lg hover:shadow-cyan-500/20 transition-all duration-300 transform hover:-translate-y-0.5"
+            className="relative z-10 bg-green-700 cursor-pointer hover:bg-green-900 text-white px-5 py-2.5 rounded-lg flex items-center gap-2 shadow-lg hover:shadow-cyan-500/20 transition-all duration-300 transform hover:-translate-y-0.5"
           >
             <MapPin className="w-5 h-5 text-cyan-100" />
             Locate Nearby
@@ -210,7 +213,7 @@ const Home = () => {
 
           <button
             onClick={handleResetNearby}
-            className="relative z-10 bg-gray-800/60 hover:bg-gray-700/80 text-gray-200 px-5 py-2.5 rounded-lg flex items-center gap-2 border border-gray-600/50 hover:border-gray-500/70 transition-all duration-300"
+            className="relative z-10 bg-white hover:bg-gray-700/80 text-gray-900 px-5 py-2.5 rounded-lg flex items-center gap-2 border border-gray-700/50 hover:border-gray-200/70 cursor-pointer hover:text-white transition-all duration-300"
           >
             <RotateCcw className="w-5 h-5" />
             Reset
@@ -257,7 +260,7 @@ const Home = () => {
 
       {nearbyFacilities.length > 0 ? (
         <div className="px-4 md:px-10 mt-10">
-          <h2 className="text-2xl font-bold mb-4 text-gray-800">
+          <h2 className="text-2xl font-bold mb-4 text-green-800">
             Facilities Near You
           </h2>
           <FacilityGrid facilities={nearbyFacilities} />
@@ -270,7 +273,7 @@ const Home = () => {
         <div className="fixed bottom-6 right-6 z-50">
           <button
             onClick={() => setShowChatbot(true)}
-            className="flex items-center gap-2 bg-gray-900 hover:bg-gray-700 text-white px-4 py-2 rounded-full shadow-lg transition"
+            className="flex items-center gap-2 bg-blue-700 hover:bg-gray-700 text-white px-4 py-2 rounded-full shadow-lg transition"
           >
             <Bot className="w-5 h-5" />
             <span className="hidden md:inline">Chat with CodeBlue AI</span>
@@ -280,14 +283,14 @@ const Home = () => {
 
       {showChatbot && (
         <div className="fixed bottom-6 right-6 z-50 w-80 max-w-full bg-white rounded-lg shadow-lg flex flex-col border border-gray-300">
-          <div className="flex justify-between items-center bg-green-600 text-white px-4 py-2 rounded-t-lg">
+          <div className="flex justify-between items-center bg-green-800 text-white px-4 py-2 rounded-t-lg">
             <h2 className="font-semibold">AI Assistant</h2>
             <button onClick={() => setShowChatbot(false)}>
               <X className="w-5 h-5" />
             </button>
           </div>
 
-          <div className="p-3 h-60 overflow-y-auto text-sm text-gray-800 border-b border-gray-200">
+          <div className="p-3 h-60 overflow-y-auto text-sm text-green-800 border-b border-gray-200">
             {chatLoading ? (
               <p className="text-gray-400">Loading...</p>
             ) : chatError ? (
@@ -310,11 +313,11 @@ const Home = () => {
               value={chatInput}
               onChange={(e) => setChatInput(e.target.value)}
               placeholder="Don't rely solely on AI responses..."
-              className="flex-1 border border-gray-300 px-3 py-1 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+              className="flex-1 border border-gray-300 px-3 py-1 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
             />
             <button
               type="submit"
-              className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md text-sm"
+              className="bg-green-800 hover:bg-green-900 text-white px-3 py-1 rounded-md text-sm"
             >
               <SendHorizonal className="w-4 h-4" />
             </button>

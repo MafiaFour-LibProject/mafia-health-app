@@ -21,6 +21,7 @@ const AdminSettingsPage = ({ facility }) => {
   });
   const [saving, setSaving] = useState(false);
   const [showPasswordFields, setShowPasswordFields] = useState(false);
+  const [activeTab, setActiveTab] = useState("facility");
 
   const handleFacilityUpdate = async () => {
     try {
@@ -59,114 +60,221 @@ const AdminSettingsPage = ({ facility }) => {
   };
 
   const inputClass =
-    "w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500";
+    "w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition";
 
   return (
-    <div className="p-6 max-w-2xl mx-auto bg-white rounded-2xl shadow space-y-8">
-      <h1 className="text-2xl font-bold text-gray-800">Facility Settings</h1>
+    <div className="p-6 max-w-4xl my-6 mx-auto bg-white rounded-xl shadow-lg">
+      <h1 className="text-3xl font-bold text-gray-800 mb-8">Admin Settings</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <input
-          type="text"
-          placeholder="Facility Name"
-          value={facilityData.name}
-          onChange={(e) =>
-            setFacilityData({ ...facilityData, name: e.target.value })
-          }
-          className={inputClass}
-        />
-        <input
-          type="text"
-          placeholder="Address"
-          value={facilityData.address}
-          onChange={(e) =>
-            setFacilityData({ ...facilityData, address: e.target.value })
-          }
-          className={inputClass}
-        />
-        <input
-          type="text"
-          placeholder="City"
-          value={facilityData.city}
-          onChange={(e) =>
-            setFacilityData({ ...facilityData, city: e.target.value })
-          }
-          className={inputClass}
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={facilityData.email}
-          onChange={(e) =>
-            setFacilityData({ ...facilityData, email: e.target.value })
-          }
-          className={inputClass}
-        />
-        <input
-          type="text"
-          placeholder="Phone"
-          value={facilityData.phone}
-          onChange={(e) =>
-            setFacilityData({ ...facilityData, phone: e.target.value })
-          }
-          className={inputClass}
-        />
+      <div className="flex border-b border-gray-200 mb-6">
+        <button
+          className={`px-4 py-2 font-medium ${
+            activeTab === "facility"
+              ? "text-blue-600 border-b-2 border-blue-600"
+              : "text-gray-500 hover:text-gray-700"
+          }`}
+          onClick={() => setActiveTab("facility")}
+        >
+          Facility Information
+        </button>
+        <button
+          className={`px-4 py-2 font-medium ${
+            activeTab === "security"
+              ? "text-blue-600 border-b-2 border-blue-600"
+              : "text-gray-500 hover:text-gray-700"
+          }`}
+          onClick={() => setActiveTab("security")}
+        >
+          Security
+        </button>
       </div>
 
-      <button
-        className={`w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition ${
-          saving ? "opacity-50 cursor-not-allowed" : ""
-        }`}
-        onClick={handleFacilityUpdate}
-        disabled={saving}
-      >
-        {saving ? "Saving..." : "Update Facility"}
-      </button>
+      {activeTab === "facility" && (
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Facility Name
+              </label>
+              <input
+                type="text"
+                value={facilityData.name}
+                onChange={(e) =>
+                  setFacilityData({ ...facilityData, name: e.target.value })
+                }
+                className={inputClass}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Email
+              </label>
+              <input
+                type="email"
+                value={facilityData.email}
+                onChange={(e) =>
+                  setFacilityData({ ...facilityData, email: e.target.value })
+                }
+                className={inputClass}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Address
+              </label>
+              <input
+                type="text"
+                value={facilityData.address}
+                onChange={(e) =>
+                  setFacilityData({ ...facilityData, address: e.target.value })
+                }
+                className={inputClass}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                City
+              </label>
+              <input
+                type="text"
+                value={facilityData.city}
+                onChange={(e) =>
+                  setFacilityData({ ...facilityData, city: e.target.value })
+                }
+                className={inputClass}
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Phone Number
+              </label>
+              <input
+                type="text"
+                value={facilityData.phone}
+                onChange={(e) =>
+                  setFacilityData({ ...facilityData, phone: e.target.value })
+                }
+                className={inputClass}
+              />
+            </div>
+          </div>
 
-      <hr className="my-6" />
+          <button
+            className={`w-full md:w-auto px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition ${
+              saving ? "opacity-70 cursor-not-allowed" : ""
+            }`}
+            onClick={handleFacilityUpdate}
+            disabled={saving}
+          >
+            {saving ? (
+              <span className="flex items-center justify-center">
+                <svg
+                  className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                Saving...
+              </span>
+            ) : (
+              "Save Facility Information"
+            )}
+          </button>
+        </div>
+      )}
 
-      <div>
-        <button
-          onClick={() => setShowPasswordFields((prev) => !prev)}
-          className="text-sm text-blue-600 hover:underline"
-        >
-          {showPasswordFields
-            ? "Hide Password Fields"
-            : "Change Admin Password"}
-        </button>
+      {activeTab === "security" && (
+        <div className="space-y-6">
+          <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
+            <h3 className="font-medium text-blue-800 mb-2">Change Password</h3>
+            <p className="text-sm text-gray-600 mb-4">
+              For security reasons, you'll be logged out after changing your
+              password.
+            </p>
 
-        {showPasswordFields && (
-          <div className="mt-4 space-y-4">
-            <input
-              type="password"
-              placeholder="Old Password"
-              value={passwords.oldPassword}
-              onChange={(e) =>
-                setPasswords({ ...passwords, oldPassword: e.target.value })
-              }
-              className={inputClass}
-            />
-            <input
-              type="password"
-              placeholder="New Password"
-              value={passwords.newPassword}
-              onChange={(e) =>
-                setPasswords({ ...passwords, newPassword: e.target.value })
-              }
-              className={inputClass}
-            />
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Current Password
+                </label>
+                <input
+                  type="password"
+                  placeholder="Enter current password"
+                  value={passwords.oldPassword}
+                  onChange={(e) =>
+                    setPasswords({ ...passwords, oldPassword: e.target.value })
+                  }
+                  className={inputClass}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  New Password
+                </label>
+                <input
+                  type="password"
+                  placeholder="Enter new password"
+                  value={passwords.newPassword}
+                  onChange={(e) =>
+                    setPasswords({ ...passwords, newPassword: e.target.value })
+                  }
+                  className={inputClass}
+                />
+              </div>
+            </div>
+
             <button
-              className={`w-full bg-red-600 text-white py-2 rounded-md hover:bg-red-700 transition ${
-                saving ? "opacity-50 cursor-not-allowed" : ""
+              className={`mt-4 w-full md:w-auto px-6 py-3 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition ${
+                saving ? "opacity-70 cursor-not-allowed" : ""
               }`}
               onClick={handlePasswordChange}
               disabled={saving}
             >
-              {saving ? "Updating..." : "Change Password & Logout"}
+              {saving ? (
+                <span className="flex items-center justify-center">
+                  <svg
+                    className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Updating...
+                </span>
+              ) : (
+                "Change Password"
+              )}
             </button>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

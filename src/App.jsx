@@ -2,6 +2,7 @@ import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { NuqsAdapter } from "nuqs/adapters/react-router/v7";
 
 // Layouts
 import PublicLayout from "./layouts/PublicLayout";
@@ -49,6 +50,7 @@ import AllFacilities from "./components/AllFacilities";
 import SuperAdminFacilityView from "./pages/superadmin/SuperAdminFacilityView";
 import AdminSettingsPage from "./pages/admin/AdminSettingsPage";
 import ProtectedRoute from "./ProtectedRoute";
+import AboutUs from "./pages/AboutUs";
 
 function App() {
   const router = createBrowserRouter([
@@ -60,6 +62,7 @@ function App() {
         { index: true, element: <Home /> },
         { path: "facilities/:facilityId", element: <FacilityDetails /> },
         { path: "all-facilities", element: <AllFacilities /> },
+        { path: "/about-us", element: <AboutUs /> },
         { path: "*", element: <EmptyState message="Page not found" /> },
       ],
     },
@@ -105,7 +108,7 @@ function App() {
           children: [
             { index: true, element: <AdminDashboard /> },
             { path: "appointments", element: <AdminAppointments /> },
-            { path: "reviews", element: <AdminReviews /> },
+            { path: "reviews/:facilityId", element: <AdminReviews /> },
             { path: "profile", element: <AdminProfile /> },
             { path: "settings", element: <AdminSettingsPage /> },
           ],
@@ -135,7 +138,9 @@ function App() {
   return (
     <>
       <RouterProvider router={router} />
-      <ToastContainer position="top-right" autoClose={3000} />
+      <NuqsAdapter>
+        <ToastContainer position="top-right" autoClose={3000} />
+      </NuqsAdapter>
     </>
   );
 }

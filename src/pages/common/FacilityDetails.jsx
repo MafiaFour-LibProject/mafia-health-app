@@ -407,9 +407,7 @@ const FacilityDetails = () => {
           </section>
         </div>
 
-        {/* Sidebar Content Area */}
         <div className="space-y-10">
-          {/* Operating Hours Section */}
           <section className="bg-white rounded-2xl shadow-xl p-8 transform hover:scale-[1.005] transition-transform duration-200 ease-in-out">
             <h2 className="text-2xl font-bold text-gray-900 mb-5 flex items-center gap-2 border-b-2 border-blue-100 pb-2">
               <Clock size={24} className="text-blue-500" /> Operating Hours

@@ -20,7 +20,7 @@ const AdminLayout = () => {
       >
         <Outlet />
       </main>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };

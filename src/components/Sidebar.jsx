@@ -13,7 +13,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
 const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -24,9 +24,13 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
   const navItems = [
     { label: "Home", icon: Home, path: "/" },
     { label: "Dashboard", icon: LayoutDashboard, path: "/admin" },
-    { label: "Services", icon: PlusSquare, path: "/admin/services" },
+    // { label: "Services", icon: PlusSquare, path: "/admin/services" },
     { label: "Appointments", icon: CalendarDays, path: "/admin/appointments" },
-    { label: "Reviews", icon: Star, path: "/admin/reviews" },
+    {
+      label: "Reviews",
+      icon: Star,
+      path: `/admin/reviews/${user.facilityId}`,
+    },
     { label: "Settings", icon: Settings, path: "/admin/settings" },
   ];
 
@@ -40,18 +44,17 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
         {isSidebarOpen ? (
           <div className="flex items-center gap-2">
             <img
-              src="/images/codeblue-logo.png"
+              src="/images/codeblue-logo-2.png"
               alt="CodeBlue Logo"
-              className="w-8 h-8"
+              className="w-30 h-20 object-cover"
             />
-            <h1 className="text-xl font-bold">CodeBlue</h1>
           </div>
         ) : (
           <span />
         )}
         <button
           onClick={toggleSidebar}
-          className="p-1 rounded-full bg-green-500 hover:bg-green-600"
+          className="p-1 rounded-full bg-gray-800 hover:bg-gray-600"
         >
           {isSidebarOpen ? (
             <ChevronLeft className="h-5 w-5" />
