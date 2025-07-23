@@ -38,32 +38,14 @@ export const deleteFacility = async (id) =>
   apiClient.delete(`/api/facilities/${id}`);
 
 // get nearby
-export const getNearbyFacilities = async (
-  latitude,
-  longitude,
-  radius = 5,
-  type
-) => {
-  const params = {
-    lat: Number(latitude),
-    lng: Number(longitude),
-    radius,
-  };
-
-  if (type) {
-    params.type = type;
-  }
-
-  const response = await apiClient.get("/api/facilities/nearby", { params });
-
-  const maybeArray =
-    response.data?.facilities || response.data?.data || response.data;
-
-  if (!Array.isArray(maybeArray)) {
-    throw new Error("Expected an array of nearby facilities");
-  }
-
-  return maybeArray;
+export const getNearbyFacilities = async (latitude, longitude) => {
+  const res = await apiClient.get(`/api/facilities/nearby`, {
+    params: {
+      latitude,
+      longitude,
+    },
+  });
+  return res.data.data;
 };
 
 // chatbot
