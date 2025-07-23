@@ -21,6 +21,9 @@ const FacilityFormModal = ({ isOpen, onClose, onSaved }) => {
         city: "",
         email: "",
         phone: "",
+        website: "",
+        latitude: "",
+        longitude: "",
       });
       document.body.style.overflow = "hidden";
     }
@@ -30,16 +33,30 @@ const FacilityFormModal = ({ isOpen, onClose, onSaved }) => {
   }, [isOpen, reset]);
 
   const onSubmit = async (data) => {
+    const latitude = parseFloat(data.latitude);
+    const longitude = parseFloat(data.longitude);
+
+    if (isNaN(latitude) || isNaN(longitude)) {
+      toast.error("Please enter valid latitude and longitude.");
+      return;
+    }
+
     const payload = {
       name: data.name,
       type: data.type,
       location: {
         address: data.address,
         city: data.city,
+        geometry: {
+          coordinates: [longitude, latitude],
+        },
+        latitude,
+        longitude,
       },
       contact: {
         email: data.email,
         phone: data.phone,
+        website: data.website,
       },
     };
 
@@ -50,7 +67,11 @@ const FacilityFormModal = ({ isOpen, onClose, onSaved }) => {
       onSaved?.();
     } catch (error) {
       console.error("Error creating facility:", error);
-      toast.error("Failed to create facility");
+      const errMsg =
+        error?.response?.data?.message ||
+        error?.response?.data?.error ||
+        "Failed to create facility";
+      toast.error(errMsg);
     }
   };
 
@@ -64,15 +85,13 @@ const FacilityFormModal = ({ isOpen, onClose, onSaved }) => {
     <div
       id="facility-modal-overlay"
       className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4"
-      onClick={handleOverlayClick}
-    >
+      onClick={handleOverlayClick}>
       <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md relative border">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-semibold">Add New Facility</h2>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-red-500"
-          >
+            className="text-gray-500 hover:text-red-500">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -81,13 +100,13 @@ const FacilityFormModal = ({ isOpen, onClose, onSaved }) => {
           <input
             type="text"
             placeholder="Facility Name"
-            {...register("name", { required: true })}
+            {...register("name", { required: "Facility name is required" })}
             className="w-full px-3 py-2 border rounded-md"
           />
           <input
             type="text"
             placeholder="Type (e.g., hospital, clinic)"
-            {...register("type", { required: true })}
+            {...register("type", { required: "Facility type is required" })}
             className="w-full px-3 py-2 border rounded-md"
           />
 
@@ -95,13 +114,13 @@ const FacilityFormModal = ({ isOpen, onClose, onSaved }) => {
             <input
               type="text"
               placeholder="Address"
-              {...register("address", { required: true })}
+              {...register("address", { required: "Address is required" })}
               className="w-full px-3 py-2 border rounded-md"
             />
             <input
               type="text"
               placeholder="City"
-              {...register("city", { required: true })}
+              {...register("city", { required: "City is required" })}
               className="w-full px-3 py-2 border rounded-md"
             />
           </div>
@@ -110,13 +129,41 @@ const FacilityFormModal = ({ isOpen, onClose, onSaved }) => {
             <input
               type="email"
               placeholder="Email"
-              {...register("email", { required: true })}
+              {...register("email", { required: "Email is required" })}
               className="w-full px-3 py-2 border rounded-md"
             />
             <input
               type="text"
               placeholder="Phone"
-              {...register("phone", { required: true })}
+              {...register("phone", { required: "Phone number is required" })}
+              className="w-full px-3 py-2 border rounded-md"
+            />
+          </div>
+
+          <input
+            type="text"
+            placeholder="Website"
+            {...register("website")}
+            className="w-full px-3 py-2 border rounded-md"
+          />
+
+          <div className="grid grid-cols-2 gap-2">
+            <input
+              type="number"
+              step="any"
+              placeholder="Latitude"
+              {...register("latitude", {
+                required: "Latitude is required",
+              })}
+              className="w-full px-3 py-2 border rounded-md"
+            />
+            <input
+              type="number"
+              step="any"
+              placeholder="Longitude"
+              {...register("longitude", {
+                required: "Longitude is required",
+              })}
               className="w-full px-3 py-2 border rounded-md"
             />
           </div>
@@ -126,8 +173,7 @@ const FacilityFormModal = ({ isOpen, onClose, onSaved }) => {
             disabled={isSubmitting}
             className={`w-full py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition ${
               isSubmitting ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-          >
+            }`}>
             {isSubmitting ? "Saving..." : "Add Facility"}
           </button>
         </form>

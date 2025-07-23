@@ -31,7 +31,7 @@ const FacilityAdminFormModal = ({ isOpen, onClose, onSaved }) => {
       reset({
         fullName: "",
         email: "",
-        password: "",
+        // password: "",
         contact: "",
         facility: "",
       });
@@ -46,14 +46,33 @@ const FacilityAdminFormModal = ({ isOpen, onClose, onSaved }) => {
   }, [isOpen]);
 
   const onSubmit = async (data) => {
+    console.log("Submitting data:", data);
+
+    if (!data.facility) {
+      toast.error("Please select a facility before submitting.");
+      return;
+    }
+
     try {
       await createFacilityAdmin(data);
       toast.success("Facility admin created successfully");
       onClose();
       onSaved?.();
     } catch (error) {
-      console.error("Error creating facility admin:", error);
-      toast.error("Failed to create facility admin");
+      console.error(
+        "Error creating facility admin:",
+        error.response?.data || error.message
+      );
+
+      if (error.response?.status === 403) {
+        toast.error("You are not authorized to perform this action.");
+      } else if (
+        error.response?.data?.message?.toLowerCase().includes("already exists")
+      ) {
+        toast.error("A user with this email already exists.");
+      } else {
+        toast.error("Failed to create facility admin");
+      }
     }
   };
 
@@ -93,12 +112,12 @@ const FacilityAdminFormModal = ({ isOpen, onClose, onSaved }) => {
             {...register("email", { required: true })}
             className="w-full px-3 py-2 border rounded-md"
           />
-          <input
+          {/* <input
             type="password"
             placeholder="Password"
             {...register("password", { required: true })}
             className="w-full px-3 py-2 border rounded-md"
-          />
+          /> */}
           <input
             type="text"
             placeholder="Contact"
@@ -110,7 +129,10 @@ const FacilityAdminFormModal = ({ isOpen, onClose, onSaved }) => {
             {...register("facility", { required: true })}
             className="w-full px-3 py-2 border rounded-md"
           >
-            <option value="">Select Facility</option>
+            <option value="" disabled>
+              Select Facility
+            </option>
+
             {facilities.map((facility) => (
               <option key={facility._id} value={facility._id}>
                 {facility.name}

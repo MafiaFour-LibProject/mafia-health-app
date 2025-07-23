@@ -1,12 +1,18 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { ApiLogin } from "../../services/authService";
+import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
+
+import { ApiLogin } from "../../services/authService";
+import { useAuth } from "../../hooks/useAuth";
 
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { login } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const redirectTo = new URLSearchParams(location.search).get("redirect");
 
   const {
     register,
@@ -24,32 +30,34 @@ const Login = () => {
       };
 
       const res = await ApiLogin(payload);
-      console.log("Login response:", res);
+      const token = res.data.token;
+      const user = res.data.user;
+      login(token);
 
-      const token = res?.data?.token;
-      const user = res?.data?.user;
-
-      if (!token || !user) {
-        toast.error("Login succeeded but no token or user returned.");
+      if (!token) {
+        toast.error("Unauthorized, please login");
         return;
       }
 
-      localStorage.setItem("token", token);
-      console.log("Token saved:", localStorage.getItem("token"));
-      localStorage.setItem("name", user.name);
-      localStorage.setItem("email", user.email);
-
       toast.success("Login successful!");
 
-      if (user.role === "user") {
-        navigate("/user");
-      } else if (user.role === "facility_admin") {
-        navigate("/admin");
-      } else if (user.role === "superadmin") {
-        navigate("/superadmin");
+      if (redirectTo) {
+        navigate(redirectTo);
       } else {
-        toast.warn("Unknown role. Redirecting to home.");
-        navigate("/");
+        switch (user.role) {
+          case "user":
+            navigate("/user");
+            break;
+          case "facility_admin":
+            navigate("/admin");
+            break;
+          case "superadmin":
+            navigate("/superadmin");
+            break;
+          default:
+            toast.warn("Unknown role. Redirecting to home.");
+            navigate("/");
+        }
       }
     } catch (error) {
       console.error("Login error:", error);
@@ -61,13 +69,10 @@ const Login = () => {
     }
   };
 
-  const isError = Object.keys(errors).length > 0;
-
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-cover bg-center"
-      style={{ backgroundImage: "url('/Drug1.jpg')" }}
-    >
+      style={{ backgroundImage: "url('/Drug1.jpg')" }}>
       <div className="bg-white/50 p-8 rounded-lg shadow-lg w-full max-w-md mx-auto">
         <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
           Login Here
@@ -77,8 +82,7 @@ const Login = () => {
           <div className="mb-4">
             <label
               htmlFor="email"
-              className="block text-sm font-semibold text-gray-700 mb-1"
-            >
+              className="block text-sm font-semibold text-gray-700 mb-1">
               Email Address
             </label>
             <input
@@ -98,8 +102,7 @@ const Login = () => {
           <div className="mb-6">
             <label
               htmlFor="password"
-              className="block text-sm font-semibold text-gray-700 mb-1"
-            >
+              className="block text-sm font-semibold text-gray-700 mb-1">
               Password
             </label>
             <input
@@ -119,32 +122,27 @@ const Login = () => {
           <div className="flex justify-between items-center mb-6 cursor-pointer">
             <a
               onClick={() => navigate("/auth/forgot-password")}
-              className="text-sm text-blue-700 hover:underline"
-            >
+              className="text-sm text-blue-700 hover:underline">
               Forgot Password?
             </a>
           </div>
 
           <button
             type="submit"
-            disabled={isSubmitting || isError}
+            disabled={isSubmitting}
             className={`w-full py-2 mt-5 font-bold rounded-md transition transform ${
-              isSubmitting || isError
+              isSubmitting
                 ? "bg-gray-300 cursor-not-allowed"
-                : "bg-green-600 text-white hover:bg-green-500 hover:scale-105 "
-            }`}
-          >
+                : "bg-green-600 text-white hover:bg-green-500 hover:scale-105"
+            }`}>
             {isSubmitting ? "Submitting..." : "Log In"}
           </button>
 
           <div className="flex items-center justify-center mb-6 pt-5">
-            <p className="block text-sm font-semibold text-gray-700 mb-1 mr-1">
-              New User?
-            </p>
+            <p className="text-sm text-gray-700 mr-1">New User?</p>
             <a
               onClick={() => navigate("/auth/signup")}
-              className="text-sm text-blue-700 hover:underline font-semibold"
-            >
+              className="text-sm text-blue-700 hover:underline font-semibold cursor-pointer">
               Register
             </a>
           </div>
