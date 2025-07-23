@@ -39,12 +39,9 @@ export const deleteFacility = async (id) =>
 
 // get nearby
 export const getNearbyFacilities = async (latitude, longitude) => {
-  const res = await apiClient.get(`/api/facilities/nearby`, {
-    params: {
-      latitude,
-      longitude,
-    },
-  });
+  const res = await apiClient.get(
+    `/api/facilities/nearby?lat=${latitude}&lng=${longitude}`
+  );
   return res.data.data;
 };
 

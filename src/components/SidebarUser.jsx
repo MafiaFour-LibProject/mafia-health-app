@@ -7,6 +7,7 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
+  LayoutDashboard,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
@@ -26,27 +27,34 @@ const SidebarUser = ({ isSidebarOpen, toggleSidebar }) => {
 
   const navItems = [
     { label: "Home", icon: <Home />, to: "/" },
-    { label: "Services", icon: <PlusSquare />, to: "/user/services" },
+    { label: "Dashboard", icon: <LayoutDashboard />, to: "/user" },
     {
       label: "Appointments",
       icon: <CalendarCheck />,
       to: "/user/appointments",
     },
-    { label: "Reviews", icon: <Star />, to: "/user/reviews" },
-    { label: "Settings", icon: <Settings />, to: "/user/settings" },
+    // { label: "Settings", icon: <Settings />, to: "/user/settings" },
   ];
 
   return (
     <div
-      className={`bg-gray-800 text-white fixed h-screen px-2 py-4 flex flex-col transition-all duration-300 shadow-md z-50 ${
+      className={`bg-gray-800 text-white fixed h-screen px-2 flex flex-col transition-all duration-300 shadow-md z-50 ${
         isSidebarOpen ? "w-64" : "w-20"
       }`}
     >
       <div className="flex items-center justify-between px-2 mb-6">
-        {isSidebarOpen ? <p>Dashboard</p> : <div className="h-12 w-14 " />}
+        {isSidebarOpen ? (
+          <img
+            src="/images/codeblue-logo-2.png"
+            alt="CodeBlue Logo"
+            className="w-30 h-20 object-cover"
+          />
+        ) : (
+          <div className="h-12 w-14 " />
+        )}
         <button
           onClick={toggleSidebar}
-          className="p-1 rounded-full bg-green-500 hover:bg-green-600"
+          className="p-1 rounded-full cursor-pointer bg-gray-900 hover:bg-gray-600"
         >
           {isSidebarOpen ? (
             <ChevronLeft className="h-5 w-5" />
