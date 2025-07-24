@@ -125,13 +125,13 @@ const SuperAdminDashboard = () => {
             <Home className="w-5 h-5" />
             {sidebarOpen && <span>Home</span>}
           </Link>
-          <Link
+          {/* <Link
             to="/superadmin/users"
             className="flex items-center gap-2 cursor-pointer hoever:bg-green-800 px-2 py-1 rounded"
           >
             <Users className="w-5 h-5" />
             {sidebarOpen && <span>Users</span>}
-          </Link>
+          </Link> */}
           <Link
             to="/superadmin/analytics"
             className="flex items-center gap-2 hover:bg-green-800 px-2 py-1 rounded"
@@ -139,13 +139,15 @@ const SuperAdminDashboard = () => {
             <BarChart3 className="w-5 h-5" />
             {sidebarOpen && <span>Analytics</span>}
           </Link>
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 w-full cursor-pointer hover:bg-green-800 px-2 py-1 rounded"
-          >
-            <LogOut className="w-5 h-5" />
-            {sidebarOpen && <span>Logout</span>}
-          </button>
+          <div>
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 w-full cursor-pointer hover:bg-green-800 px-2 py-1 rounded"
+            >
+              <LogOut className="w-5 h-5" />
+              {sidebarOpen && <span>Logout</span>}
+            </button>
+          </div>
         </nav>
       </div>
 
