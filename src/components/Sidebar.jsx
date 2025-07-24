@@ -54,7 +54,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
         )}
         <button
           onClick={toggleSidebar}
-          className="p-1 rounded-full bg-gray-800 hover:bg-gray-600"
+          className="p-1 rounded-full bg-green-800 hover:bg-unt-deep"
         >
           {isSidebarOpen ? (
             <ChevronLeft className="h-5 w-5" />
@@ -79,7 +79,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
 
       <button
         onClick={handleLogout}
-        className="flex items-center gap-3 mt-auto px-3 py-2 rounded hover:bg-red-600 transition-colors"
+        className="flex items-center gap-3 mt-auto px-3 py-2 rounded hover:bg-red-600 hover:text-white transition-colors"
       >
         <LogOut className="w-5 h-5" />
         {isSidebarOpen && <span>Logout</span>}

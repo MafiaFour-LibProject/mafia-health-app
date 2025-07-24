@@ -3,22 +3,58 @@ import { RefreshCcw, Search, Filter } from "lucide-react";
 import { getAllFacilities } from "../services/facilityService";
 import Loader from "./Loader";
 import FacilityCard from "./FacilityCard";
+import { searchServices } from "../services/serviceService";
+import { parseAsFloat, parseAsString, useQueryStates } from "nuqs";
+import { useDebounce } from "@uidotdev/usehooks";
 
 const type = ["hospital", "pharmacy"];
 
 const FacilityGrid = () => {
   const [allFacilities, setAllFacilities] = useState([]);
   const [filteredFacilities, setFilteredFacilities] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
   const [selectedType, setSelectedType] = useState("");
   const [loading, setLoading] = useState(true);
+  const [noFacilityError, setNoFacilityError] = useState(false);
   const [error, setError] = useState(null);
+  const [queries, setQueries] = useQueryStates({
+    query: parseAsString.withDefault(""),
+    lat: parseAsFloat.withDefault(0),
+    lng: parseAsFloat.withDefault(0),
+  });
+
+  const debouncedSearchTerm = useDebounce(queries.query, 500);
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        console.log("Latitude", latitude, "Longitude", longitude);
+        try {
+          setQueries({
+            lat: latitude,
+            lng: longitude,
+          });
+        } catch (error) {
+          console.error("Error getting location:", error);
+        }
+      },
+      (error) => {
+        setLocationError("Location access denied.");
+        setLoadingNearby(false);
+      }
+    );
+  }, []);
 
   const fetchFacilities = async () => {
     setLoading(true);
     try {
-      const data = await getAllFacilities();
+      const response = await searchServices(queries);
+      const data = response.data.services;
+      if (!data) {
+        setNoFacilityError(true);
+      }
       const activeFacilities = data.filter((f) => f.isActive);
+      console.log(activeFacilities);
       setAllFacilities(activeFacilities);
       setFilteredFacilities(activeFacilities);
     } catch (err) {
@@ -30,34 +66,32 @@ const FacilityGrid = () => {
 
   useEffect(() => {
     fetchFacilities();
-  }, []);
+  }, [debouncedSearchTerm]);
 
-  useEffect(() => {
-    applyFilters();
-  }, [searchTerm, selectedType, allFacilities]);
-
-  const applyFilters = () => {
-    let result = allFacilities;
-
-    if (searchTerm) {
-      const q = searchTerm.toLowerCase();
-      result = result.filter(
-        (f) =>
-          f.name.toLowerCase().includes(q) ||
-          f.location?.city?.toLowerCase().includes(q) ||
-          f.location?.address?.toLowerCase().includes(q)
-      );
-    }
-
-    if (selectedType) {
-      result = result.filter((f) => f.type === selectedType);
-    }
-
-    setFilteredFacilities(result);
+  const handleChange = (e) => {
+    setQueries({
+      query: e.target.value,
+    });
   };
 
+  // useEffect(() => {
+  //   applyFilters();
+  // }, [queries.query, selectedType, allFacilities]);
+
+  // const applyFilters = () => {
+  //   let result = allFacilities;
+
+  //   if (selectedType) {
+  //     result = result.filter((f) => f.facility.type === selectedType);
+  //   }
+
+  //   setFilteredFacilities(result);
+  // };
+
   const handleResetFilters = () => {
-    setSearchTerm("");
+    setQueries({
+      query: "",
+    });
     setSelectedType("");
   };
 
@@ -70,25 +104,25 @@ const FacilityGrid = () => {
         <form className="flex flex-col md:flex-row gap-4 w-full">
           <div className="flex-1 relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-darkBlue-600" />
+              <Search className="h-5 w-5 text-sac-state-secondary" />
             </div>
             <input
               type="text"
-              placeholder="Search facilities"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-darkBlue-500 focus:border-transparent transition-all"
+              placeholder="Search services..."
+              value={queries.query}
+              onChange={(e) => handleChange(e)}
+              className="w-full pl-10 pr-4 py-3 bg-white border border-unt-border rounded-lg text-sac-state-secondary placeholder-sac-state-secondary focus:outline-none focus:ring-2 focus:ring-darkBlue-500 focus:border-transparent transition-all"
             />
           </div>
 
           <div className="flex-1 relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Filter className="h-5 w-5 text-darkBlue-600" />
+              <Filter className="h-5 w-5 text-sac-state-secondary" />
             </div>
             <select
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-darkBlue-500 focus:border-transparent appearance-none"
+              className="w-full pl-10 pr-4 py-3 bg-white border border-gray-300 rounded-lg text-sac-state-secondary focus:outline-none focus:ring-2 focus:ring-darkBlue-500 focus:border-transparent appearance-none"
             >
               <option value="">All Facility Types</option>
               {type.map((t) => (
@@ -124,7 +158,7 @@ const FacilityGrid = () => {
           </div>
         ) : (
           filteredFacilities.map((facility) => (
-            <FacilityCard key={facility._id} facility={facility} />
+            <FacilityCard key={facility._id} facility={facility.facility} />
           ))
         )}
       </div>

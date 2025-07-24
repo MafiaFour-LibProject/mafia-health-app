@@ -55,9 +55,9 @@ const FacilityCard = ({ facility }) => {
         </div>
 
         <div className="mt-auto">
-          <div className="inline-flex items-center justify-between w-full px-4 py-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-md transition-all group-hover:border-darkCyan-300">
+          <div className="inline-flex items-center justify-between w-full px-4 py-2 bg-unt-deep hover:bg-sac-state-secondary text-white border border-gray-200 rounded-md transition-all group-hover:border-darkCyan-300">
             <span className="text-sm text-darkBlue-700">View Details</span>
-            <ArrowRight className="size-4 text-darkBlue-600 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="size-4 text-white group-hover:translate-x-1 transition-transform" />
           </div>
         </div>
       </div>

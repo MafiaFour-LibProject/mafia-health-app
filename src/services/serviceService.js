@@ -1,5 +1,5 @@
 import { apiClient } from "./config";
-import axios from "axios";
+// import axios from "axios";
 
 // Create a service for a facility
 export const createService = async (facilityId, serviceData) => {
@@ -32,10 +32,10 @@ export const patchServiceStock = async (serviceId, stockData) => {
 };
 
 // Search for services by a query string
-export const searchServices = async (query) => {
-  return apiClient.get(`/api/services/search`, {
-    params: { q: query },
-  });
+export const searchServices = async (q) => {
+  return apiClient.get(
+    `/api/services/search?query=${q.query}&lat=${q.lat}&lng=${q.lng}`
+  );
 };
 
 // Upload photos to a facility
@@ -48,17 +48,18 @@ export const uploadFacilityPhotos = async (facilityId, files) => {
   const formData = new FormData();
   files.forEach((file) => formData.append("files", file));
 
-  return axios.post(
-    `${import.meta.env.VITE_BASE_URL}/api/facilities/${facilityId}/photos`,
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  return apiClient.post(`/api/facilities/${facilityId}/photos`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 };
+
+// export const uploadFacilityPhotos = async (facilityId, files) => {
+//   const formData = new FormData();
+//   files.forEach((file) => formData.append("files", file));
+//   return apiClient.post(`/api/facilities/${facilityId}/photos`), formData;
+// };
 
 // Get services with low stock for a facility
 export const getLowStockServices = async (facilityId) => {
