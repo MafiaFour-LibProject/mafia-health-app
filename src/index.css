@@ -1,3 +1,27 @@
 @import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Questrial&family=Quicksand:wght@300..700&family=Signika:wght@300..700&display=swap");
 
 @import "tailwindcss";
+
+@theme {
+  --color-unt-deep: #00853e;
+  --color-unt-light: #66c68c;
+  --color-unt-border: #a3d5b0;
+  --color-sac-state-primary: #00853e;
+  --color-sac-state-secondary: #043927;
+}
+
+.text-sac-cyan-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--color-sac-state-secondary) 70%,
+    #0e7c7b 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+.my-text-shadow {
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
+}

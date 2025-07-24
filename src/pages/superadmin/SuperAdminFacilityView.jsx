@@ -1,7 +1,15 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getSingleFacility } from "../../services/facilityService";
-import { ArrowLeftIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowLeftIcon,
+  MapPinIcon,
+  EnvelopeIcon,
+  PhoneIcon,
+  ClockIcon,
+  StarIcon,
+} from "@heroicons/react/24/outline";
+import { StarIcon as SolidStarIcon } from "@heroicons/react/24/solid";
 
 const SuperAdminFacilityView = () => {
   const { id } = useParams();
@@ -26,16 +34,25 @@ const SuperAdminFacilityView = () => {
   if (loading)
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#00853e]"></div>
       </div>
     );
 
   if (!facility)
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 max-w-md">
-          <p className="font-bold">Facility not found</p>
-          <p>The requested facility could not be loaded.</p>
+        <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-6 max-w-md rounded-lg shadow-sm">
+          <h3 className="font-bold text-lg mb-1">Facility Not Found</h3>
+          <p className="text-gray-600">
+            The requested facility could not be loaded. Please try again.
+          </p>
+          <button
+            onClick={() => navigate(-1)}
+            className="mt-4 text-[#00853e] hover:text-[#006f34] font-medium flex items-center gap-1"
+          >
+            <ArrowLeftIcon className="w-4 h-4" />
+            Back to Dashboard
+          </button>
         </div>
       </div>
     );
@@ -57,7 +74,7 @@ const SuperAdminFacilityView = () => {
     <div className="p-6 max-w-7xl mx-auto">
       <button
         onClick={() => navigate(-1)}
-        className="flex items-center gap-2 mb-8 text-blue-600 hover:text-blue-800 transition-colors"
+        className="flex items-center gap-2 mb-8 text-[#00853e] hover:text-[#006f34] transition-colors"
       >
         <ArrowLeftIcon className="w-5 h-5" />
         <span className="font-medium">Back to Dashboard</span>
@@ -65,20 +82,43 @@ const SuperAdminFacilityView = () => {
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         {/* Header Section */}
-        <div className="bg-gradient-to-r from-blue-50 to-cyan-50 p-6 border-b border-gray-200">
+        <div className="bg-gradient-to-r from-[#00853e]/5 to-[#a3d5b0]/10 p-6 border-b border-gray-200">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">{name}</h1>
-              <p className="text-blue-600 font-medium">{type}</p>
+              <h1 className="text-3xl font-bold text-[#043927]">{name}</h1>
+              <div className="flex items-center gap-3 mt-2">
+                <span className="bg-[#a3d5b0] text-[#043927] text-sm font-medium px-3 py-1 rounded-full">
+                  {type}
+                </span>
+                <span
+                  className={`text-sm font-medium px-3 py-1 rounded-full ${
+                    isActive
+                      ? "bg-green-100 text-green-800"
+                      : "bg-red-100 text-red-800"
+                  }`}
+                >
+                  {isActive ? "Active" : "Inactive"}
+                </span>
+              </div>
             </div>
-            <div
-              className={`px-4 py-2 rounded-full text-sm font-semibold ${
-                isActive
-                  ? "bg-green-100 text-green-800"
-                  : "bg-red-100 text-red-800"
-              }`}
-            >
-              {isActive ? "Active" : "Inactive"}
+
+            <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-lg shadow-xs border border-gray-200">
+              <div className="flex items-center">
+                {[...Array(5)].map((_, i) =>
+                  i < Math.floor(rating?.average || 0) ? (
+                    <SolidStarIcon
+                      key={i}
+                      className="w-5 h-5 text-yellow-400"
+                    />
+                  ) : (
+                    <StarIcon key={i} className="w-5 h-5 text-gray-300" />
+                  )
+                )}
+              </div>
+              <span className="text-gray-700 font-medium">
+                {rating?.average?.toFixed(1) || "N/A"}{" "}
+                <span className="text-gray-400">({rating?.count || 0})</span>
+              </span>
             </div>
           </div>
         </div>
@@ -86,78 +126,64 @@ const SuperAdminFacilityView = () => {
         <div className="grid md:grid-cols-2 gap-8 p-6">
           {/* Left Column */}
           <div className="space-y-6">
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <h2 className="text-lg font-semibold text-gray-800 mb-3">
-                Description
+            <div className="bg-[#f8faf9] p-5 rounded-xl border border-[#a3d5b0]/30">
+              <h2 className="text-lg font-semibold text-[#043927] mb-3 flex items-center gap-2">
+                <span className="w-1 h-6 bg-[#00853e] rounded-full"></span>
+                Facility Description
               </h2>
-              <p className="text-gray-700">{description}</p>
+              <p className="text-gray-700">
+                {description || "No description provided"}
+              </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h2 className="text-lg font-semibold text-gray-800 mb-2">
+              <div className="bg-[#f8faf9] p-5 rounded-xl border border-[#a3d5b0]/30">
+                <h2 className="text-lg font-semibold text-[#043927] mb-3 flex items-center gap-2">
+                  <MapPinIcon className="w-5 h-5 text-[#00853e]" />
                   Location
                 </h2>
-                <p className="text-gray-700">
-                  {location?.address}, {location?.city}
-                </p>
-                <p className="text-sm text-gray-500 mt-1">
-                  Coordinates: {location?.coordinates?.latitude},{" "}
-                  {location?.coordinates?.longitude}
-                </p>
+                <div className="space-y-2">
+                  <p className="text-gray-700">{location?.address}</p>
+                  <p className="text-gray-700">{location?.city}</p>
+                  <p className="text-xs text-gray-500 mt-2">
+                    Coordinates: {location?.coordinates?.latitude},{" "}
+                    {location?.coordinates?.longitude}
+                  </p>
+                </div>
               </div>
 
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h2 className="text-lg font-semibold text-gray-800 mb-2">
+              <div className="bg-[#f8faf9] p-5 rounded-xl border border-[#a3d5b0]/30">
+                <h2 className="text-lg font-semibold text-[#043927] mb-3 flex items-center gap-2">
+                  <EnvelopeIcon className="w-5 h-5 text-[#00853e]" />
                   Contact
                 </h2>
-                <p className="text-gray-700">Email: {contact?.email}</p>
-                <p className="text-gray-700">Phone: {contact?.phone}</p>
-              </div>
-            </div>
-
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <h2 className="text-lg font-semibold text-gray-800 mb-2">
-                Rating
-              </h2>
-              <div className="flex items-center">
-                <div className="flex items-center">
-                  {[...Array(5)].map((_, i) => (
-                    <svg
-                      key={i}
-                      className={`w-5 h-5 ${
-                        i < Math.floor(rating?.average || 0)
-                          ? "text-yellow-400"
-                          : "text-gray-300"
-                      }`}
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
+                <div className="space-y-2">
+                  <p className="text-gray-700 flex items-center gap-2">
+                    <PhoneIcon className="w-4 h-4" />
+                    {contact?.phone || "Not provided"}
+                  </p>
+                  <p className="text-gray-700 flex items-center gap-2">
+                    <EnvelopeIcon className="w-4 h-4" />
+                    {contact?.email || "Not provided"}
+                  </p>
                 </div>
-                <span className="ml-2 text-gray-700">
-                  {rating?.average?.toFixed(1) || "N/A"} ({rating?.count || 0}{" "}
-                  reviews)
-                </span>
               </div>
             </div>
           </div>
 
-          {/* Right Column */}
           <div className="space-y-6">
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <h2 className="text-lg font-semibold text-gray-800 mb-3">
+            <div className="bg-[#f8faf9] p-5 rounded-xl border border-[#a3d5b0]/30">
+              <h2 className="text-lg font-semibold text-[#043927] mb-3 flex items-center gap-2">
+                <ClockIcon className="w-5 h-5 text-[#00853e]" />
                 Operating Hours
               </h2>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {Object.entries(hours || {}).map(([day, time]) => (
                   <div key={day} className="flex justify-between items-center">
                     <span className="font-medium text-gray-700">
                       {day.charAt(0).toUpperCase() + day.slice(1)}
                     </span>
-                    <span className="text-gray-600">
+                    <span className="text-gray-600 bg-white px-2 py-1 rounded text-sm">
                       {time.open} - {time.close}
                     </span>
                   </div>
@@ -166,22 +192,23 @@ const SuperAdminFacilityView = () => {
             </div>
 
             {services?.length > 0 && (
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h2 className="text-lg font-semibold text-gray-800 mb-3">
-                  Services
+              <div className="bg-[#f8faf9] p-5 rounded-xl border border-[#a3d5b0]/30">
+                <h2 className="text-lg font-semibold text-[#043927] mb-3 flex items-center gap-2">
+                  <span className="w-1 h-6 bg-[#00853e] rounded-full"></span>
+                  Services Offered
                 </h2>
-                <div className="space-y-3">
+                <div className="divide-y divide-[#a3d5b0]/30">
                   {services.map((s, index) => (
                     <div
                       key={index}
-                      className="flex justify-between items-center"
+                      className="flex justify-between items-center py-3 first:pt-0 last:pb-0"
                     >
                       <span className="text-gray-700">
                         {typeof s.name === "string"
                           ? s.name
                           : JSON.stringify(s.name)}
                       </span>
-                      <span className="font-medium text-blue-600">
+                      <span className="font-medium text-[#00853e]">
                         {typeof s.price === "object"
                           ? `${s.price.amount ?? ""} ${s.price.currency ?? ""}`
                           : s.price}
@@ -195,8 +222,10 @@ const SuperAdminFacilityView = () => {
         </div>
 
         {images?.length > 0 && (
-          <div className="border-t border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">Images</h2>
+          <div className="border-t border-gray-200 p-6 bg-[#f8faf9]">
+            <h2 className="text-lg font-semibold text-[#043927] mb-4">
+              Facility Images
+            </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
               {images.map((img, i) => (
                 <div
@@ -208,8 +237,8 @@ const SuperAdminFacilityView = () => {
                     alt={img.alt || "Facility"}
                     className="w-full h-48 object-cover transition-transform group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
-                    <span className="text-white text-sm truncate">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                    <span className="text-white text-sm">
                       {img.alt || "Facility image"}
                     </span>
                   </div>

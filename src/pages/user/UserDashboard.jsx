@@ -25,7 +25,7 @@ const UserDashboard = () => {
           <div className="flex flex-wrap gap-3">
             <button
               onClick={() => navigate("/user/appointments")}
-              className="flex items-center gap-2 bg-gradient-to-r from-darkBlue-600 to-darkCyan-600 hover:from-darkBlue-700 hover:to-darkCyan-700 text-gray-900 px-5 py-2.5 rounded-lg shadow-lg transition-all hover:shadow-xl hover:-translate-y-0.5"
+              className="flex items-center gap-2 bg-unt-deep text-white cursor-pointer hover:bg-sac-state-secondary px-5 py-2.5 rounded-lg shadow-lg transition-all hover:shadow-xl hover:-translate-y-0.5"
             >
               <CalendarDays size={18} />
               View Appointments
@@ -84,7 +84,7 @@ const UserDashboard = () => {
               </h2>
               <button
                 onClick={() => setShowGrid((prev) => !prev)}
-                className="flex items-center gap-2 bg-gradient-to-r from-darkBlue-600 to-darkCyan-600 hover:from-darkBlue-700 hover:to-darkCyan-700 text-gray-900 px-4 py-2.5 rounded-lg shadow-md transition-all hover:shadow-lg"
+                className="flex items-center gap-2  bg-unt-deep text-white cursor-pointer hover:bg-sac-state-secondary px-4 py-2.5 rounded-lg shadow-md transition-all hover:shadow-lg"
               >
                 {showGrid ? (
                   <span>Hide Facilities</span>

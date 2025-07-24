@@ -38,7 +38,7 @@ const SidebarUser = ({ isSidebarOpen, toggleSidebar }) => {
 
   return (
     <div
-      className={`bg-gray-800 text-white fixed h-screen px-2 flex flex-col transition-all duration-300 shadow-md z-50 ${
+      className={`bg-unt-deep text-white fixed h-screen px-2 flex flex-col transition-all duration-300 shadow-md z-50 ${
         isSidebarOpen ? "w-64" : "w-20"
       }`}
     >
@@ -54,7 +54,7 @@ const SidebarUser = ({ isSidebarOpen, toggleSidebar }) => {
         )}
         <button
           onClick={toggleSidebar}
-          className="p-1 rounded-full cursor-pointer bg-gray-900 hover:bg-gray-600"
+          className="p-1 rounded-full cursor-pointer bg-green-800 hover:bg-sac-state-secondary hover:text-white"
         >
           {isSidebarOpen ? (
             <ChevronLeft className="h-5 w-5" />
@@ -71,7 +71,7 @@ const SidebarUser = ({ isSidebarOpen, toggleSidebar }) => {
           <li key={label}>
             <Link
               to={to}
-              className="flex items-center gap-3 py-2 px-3 rounded hover:bg-blue-600 transition"
+              className="flex items-center gap-3 py-2 px-3 rounded hover:bg-sac-state-secondary transition"
             >
               <span className="text-xl">{icon}</span>
               {isSidebarOpen && (

@@ -399,7 +399,7 @@ const FacilityDetails = () => {
             <div className="flex justify-end">
               <button
                 onClick={handleBookAppointment}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-full shadow-lg transform hover:-translate-y-1 transition-all duration-300 ease-in-out"
+                className="bg-unt-deep hover:bg-sac-state-secondary text-white font-semibold px-8 py-3 rounded-full shadow-lg transform hover:-translate-y-1 transition-all duration-300 ease-in-out"
               >
                 Book Appointment
               </button>
@@ -539,7 +539,7 @@ const FacilityDetails = () => {
               <div className="flex justify-center mt-8">
                 <button
                   onClick={() => setShowReviewModal(true)}
-                  className="bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-3 rounded-full shadow-lg transform hover:-translate-y-1 transition-all duration-300 ease-in-out"
+                  className="bg-unt-deep hover:bg-sac-state-secondary text-white font-semibold px-8 py-3 rounded-full shadow-lg transform hover:-translate-y-1 transition-all duration-300 ease-in-out"
                 >
                   Leave a Review ✨
                 </button>
