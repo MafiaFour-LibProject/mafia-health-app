@@ -21,7 +21,7 @@ const Footer = () => {
               Home
             </a>
             <a
-              href="/about-team"
+              href="/about-us"
               className="text-gray-300 hover:text-white transition-colors duration-200"
             >
               About
