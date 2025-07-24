@@ -65,7 +65,7 @@ const FacilityGrid = () => {
   if (error) return <p className="text-red-400 text-center">{error}</p>;
 
   return (
-    <div className="py-12 px-4 md:px-10 bg-white min-h-[60vh]">
+    <div className="py-12 px-2 md:px-10 bg-white min-h-[60vh]">
       <div className="bg-gray-50 rounded-xl shadow-md w-full max-w-6xl mx-auto mb-10 p-6 border border-gray-200">
         <form className="flex flex-col md:flex-row gap-4 w-full">
           <div className="flex-1 relative">
@@ -112,7 +112,7 @@ const FacilityGrid = () => {
         </form>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 max-w-7xl mx-15">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-10 max-w-7xl mx-10">
         {filteredFacilities.length === 0 ? (
           <div className="col-span-full text-center py-12">
             <div className="inline-flex flex-col items-center justify-center bg-gray-50 rounded-xl p-8 border border-gray-200">
