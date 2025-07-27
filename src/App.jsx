@@ -29,7 +29,7 @@ import VerifyEmailToken from "./pages/auth/VerifyEmailToken";
 import SuperAdminDashboard from "./pages/superadmin/SuperadminDashboard";
 import SuperadminFacilities from "./pages/superadmin/SuperadminFacilities";
 import SuperadminUsers from "./pages/superadmin/SuperadminUsers";
-import Analytics from "./pages/superadmin/Analytics";
+import SuperAdminAnalytics from "./pages/superadmin/SuperAdminAnalytics";
 import SuperAdminFacilityView from "./pages/superadmin/SuperAdminFacilityView";
 
 // Admin Pages
@@ -144,7 +144,7 @@ function App() {
                 { path: "facilities/:id", element: <SuperAdminFacilityView /> },
                 { path: "facilities", element: <SuperadminFacilities /> },
                 { path: "users", element: <SuperadminUsers /> },
-                { path: "analytics", element: <Analytics /> },
+                { path: "analytics", element: <SuperAdminAnalytics /> },
               ],
             },
           ],

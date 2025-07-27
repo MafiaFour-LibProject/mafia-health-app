@@ -2,6 +2,15 @@ import { useEffect, useState } from "react";
 import { getFacilityAnalytics } from "../../services/analyticsService";
 import { toast } from "react-toastify";
 import Loader from "../../components/Loader";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  CartesianGrid,
+} from "recharts";
 
 const AdminAnalytics = () => {
   const [analytics, setAnalytics] = useState(null);
@@ -64,17 +73,19 @@ const AdminAnalytics = () => {
         <h2 className="text-xl font-semibold mb-4 text-blue-800">
           Appointments By Month
         </h2>
-        <ul className="space-y-2">
-          {analytics.appointmentsByMonth?.map((month) => (
-            <li
-              key={month._id}
-              className="flex justify-between text-gray-700 border-b py-1"
-            >
-              <span>{month.month}</span>
-              <span className="font-semibold">{month.count}</span>
-            </li>
-          ))}
-        </ul>
+        {analytics.appointmentsByMonth?.length > 0 ? (
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={analytics.appointmentsByMonth}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="month" />
+              <YAxis allowDecimals={false} />
+              <Tooltip />
+              <Bar dataKey="count" fill="#4F46E5" />
+            </BarChart>
+          </ResponsiveContainer>
+        ) : (
+          <p className="text-gray-500">No data available.</p>
+        )}
       </div>
     </div>
   );

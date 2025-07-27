@@ -17,7 +17,6 @@ import {
 } from "lucide-react";
 import { toast } from "react-toastify";
 import { useAuth } from "../../hooks/useAuth";
-import { PhotoIcon } from "@heroicons/react/24/outline";
 
 const statIcons = [
   <Building className="text-blue-600" size={28} key="building" />,

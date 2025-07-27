@@ -36,7 +36,7 @@ const UserDashboard = () => {
   }, [token]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50 p-6 md:p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50 p-6 md:p-4 my-5">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
           <div>
