@@ -105,7 +105,7 @@ const SuperAdminDashboard = () => {
     <div className="flex min-h-screen bg-gray-50">
       <div
         className={`bg-[#00853e] text-white transition-all duration-300 ${
-          sidebarOpen ? "w-64" : "w-20"
+          sidebarOpen ? "w-50" : "w-20"
         }`}
       >
         <div className="p-4 flex items-center justify-between border-b border-[#66c68c]">
@@ -116,7 +116,7 @@ const SuperAdminDashboard = () => {
           )}
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="text-white hover:text-gray-200 p-1 rounded-full hover:bg-[#043927]"
+            className="text-white hover:text-gray-200 p-1 cursor-pointer rounded-full hover:bg-[#66c68c]/30 "
           >
             {sidebarOpen ? "◀" : "▶"}
           </button>
@@ -125,7 +125,7 @@ const SuperAdminDashboard = () => {
         <nav className="p-4 space-y-2">
           <button
             onClick={handleAddFacility}
-            className={`flex items-center w-full gap-3 px-3 py-2 rounded-lg bg-[#043927] hover:bg-[#043927]/90 transition-colors ${
+            className={`flex items-center w-full gap-3 px-3 cursor-pointer py-2 rounded-lg hover:bg-[#66c68c]/30  transition-colors ${
               !sidebarOpen && "justify-center"
             }`}
           >

@@ -9,7 +9,6 @@ import {
 const SuperAdminSidebar = () => {
   return (
     <div className="w-72 bg-white fixed h-screen flex flex-col border-r border-[#a3d5b0] shadow-lg">
-      {/* Header with accent */}
       <div className="px-6 py-5 border-b border-[#a3d5b0] bg-gradient-to-r from-[#00853e]/10 to-white">
         <h1 className="text-2xl font-bold">
           <span className="text-[#00853e]">Super</span>
@@ -18,7 +17,6 @@ const SuperAdminSidebar = () => {
         <p className="text-sm text-gray-500 mt-1">Management Console</p>
       </div>
 
-      {/* Navigation Items */}
       <nav className="flex-1 px-3 py-6 overflow-y-auto">
         <ul className="space-y-2">
           {[

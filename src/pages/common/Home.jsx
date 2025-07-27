@@ -7,6 +7,7 @@ import {
   X,
   SendHorizonal,
   RotateCcw,
+  Menu,
 } from "lucide-react";
 import FacilityGrid from "../../components/FacilityGrid";
 import {
@@ -19,7 +20,6 @@ import {
   ExclamationTriangleIcon,
   QuestionMarkCircleIcon,
 } from "@heroicons/react/24/outline";
-// import { useQueryState } from "nuqs";
 
 const Home = () => {
   const [nearbyFacilities, setNearbyFacilities] = useState([]);
@@ -30,9 +30,8 @@ const Home = () => {
   const [chatLoading, setChatLoading] = useState(false);
   const [chatError, setChatError] = useState(null);
   const [showChatbot, setShowChatbot] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const { user, logout } = useAuth();
-
-  // const [{limit}]
 
   useEffect(() => {
     console.log(user);
@@ -97,34 +96,46 @@ const Home = () => {
         <div className="absolute inset-0 bg-black/70 z-0"></div>
 
         <div className="relative z-10 flex flex-col md:flex-row items-center justify-between px-4 py-3 md:px-4 md:py-3 w-full">
-          <div>
+          <div className="flex items-center justify-between w-full md:w-auto">
             <img
               className="w-50 h-20 object-cover"
               src="/images/codeblue-logo-2.png"
               alt="Code Blue Logo"
             />
-          </div>
-          {user ? (
             <button
-              onClick={handleLogout}
-              className="bg-transparent border border-white text-white font-semibold py-1 px-4 rounded-md shadow hover:bg-green-700 transition text-sm md:text-base"
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="md:hidden text-white"
             >
-              Logout
+              <Menu className="w-6 h-6" />
             </button>
-          ) : (
-            <div className="flex gap-1">
-              <Link to="/auth/signup">
-                <button className="bg-unt-deep text-white font-semibold py-1 px-4 rounded-md shadow hover:bg-sac-state-secondary hover:text-white cursor-pointer transition text-sm mr-1 md:text-base">
-                  Sign up
-                </button>
-              </Link>
-              <Link to="/auth/login">
-                <button className="bg-transparent text-white border border-white font-semibold py-1 px-4 rounded-md shadow hover:bg-white cursor-pointer hover:text-black transition text-sm md:text-base">
-                  Log in
-                </button>
-              </Link>
-            </div>
-          )}
+          </div>
+          <div
+            className={`mt-2 md:mt-0 w-full md:w-auto flex-col md:flex-row md:flex items-center justify-end gap-2 transition-all duration-300 ease-in-out overflow-hidden md:overflow-visible ${
+              menuOpen ? "flex" : "hidden md:flex"
+            }`}
+          >
+            {user ? (
+              <button
+                onClick={handleLogout}
+                className="bg-transparent border border-white text-white font-semibold py-1 px-4 rounded-md shadow hover:bg-green-700 transition text-sm md:text-base"
+              >
+                Logout
+              </button>
+            ) : (
+              <div className="flex flex-col md:flex-row gap-2 md:gap-1 w-full md:w-auto">
+                <Link to="/auth/signup">
+                  <button className="bg-unt-deep text-white font-semibold py-1 px-4 rounded-md shadow hover:bg-sac-state-secondary hover:text-white cursor-pointer transition text-sm md:text-base w-full md:w-auto">
+                    Sign up
+                  </button>
+                </Link>
+                <Link to="/auth/login">
+                  <button className="bg-transparent text-white border border-white font-semibold py-1 px-4 rounded-md shadow hover:bg-white cursor-pointer hover:text-black transition text-sm md:text-base w-full md:w-auto">
+                    Log in
+                  </button>
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="relative z-10 flex flex-col items-center md:items-start justify-center px-4 md:px-10 py-6 w-full flex-1 mt-3">
@@ -204,27 +215,11 @@ const Home = () => {
       <div className="relative bg-gradient-to-br from-darkBlue-900/80 to-darkCyan-800/80 px-6 md:px-8 py-8 rounded-xl shadow-2xl mt-10 mx-4 md:mx-10 backdrop-blur-sm border border-unt-border overflow-hidden">
         <div className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full bg-cyan-400/10 blur-xl"></div>
 
-        <h2 className="text-2xl mb-6 text-center bg-clip-text text-sac-state-secondary font-extrabold">
-          Find Facilities Near You
+        <h2 className="text-xl md:text-2xl mb-6 text-center bg-clip-text text-sac-state-secondary font-extrabold">
+          Looking for meds, vaccines, or tests? Find nearby facilities that have
+          them <br />
+          No more hopping all over town.
         </h2>
-
-        <div className="flex flex-wrap gap-4 justify-center">
-          <button
-            onClick={handleLocateNearby}
-            className="relative z-10 bg-unt-deep hover:bg-sac-state-secondary cursor-pointer text-white hover:text-white px-5 py-2.5 rounded-lg flex items-center gap-2 shadow-lg hover:shadow-cyan-500/20 transition-all duration-300 transform hover:-translate-y-0.5"
-          >
-            <MapPin className="w-5 h-5 text-white hover:bg-white hover:text-unt-deep" />
-            Locate Nearby
-          </button>
-
-          <button
-            onClick={handleResetNearby}
-            className="relative z-10 bg-white hover:bg-unt-deep text-sac-state-secondary hover:text-white font-bold px-5 py-2.5 rounded-lg flex items-center gap-2 border border-unt-border hover:border-unt-border cursor-pointer transition-all duration-300"
-          >
-            <RotateCcw className="w-5 h-5 text-sac-state-secondary" />
-            Reset
-          </button>
-        </div>
 
         {loadingNearby && (
           <div className="mt-4 flex justify-center">
@@ -304,7 +299,7 @@ const Home = () => {
             ) : chatResponse ? (
               <p>{chatResponse}</p>
             ) : (
-              <p className="text-gray-400">
+              <p className="text-sac-state-secondary">
                 Ask me anything about healthcare access!
               </p>
             )}

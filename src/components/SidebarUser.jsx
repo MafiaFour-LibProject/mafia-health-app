@@ -15,7 +15,6 @@ import { useContext } from "react";
   AuthContext;
 }
 import { AuthContext } from "../contexts/AuthContext";
-import { p } from "framer-motion/client";
 const SidebarUser = ({ isSidebarOpen, toggleSidebar }) => {
   const navigate = useNavigate();
   const { logout } = useContext(AuthContext);
@@ -33,13 +32,13 @@ const SidebarUser = ({ isSidebarOpen, toggleSidebar }) => {
       icon: <CalendarCheck />,
       to: "/user/appointments",
     },
-    // { label: "Settings", icon: <Settings />, to: "/user/settings" },
+    { label: "Settings", icon: <Settings />, to: "/user/user-settings" },
   ];
 
   return (
     <div
       className={`bg-unt-deep text-white fixed h-screen px-2 flex flex-col transition-all duration-300 shadow-md z-50 ${
-        isSidebarOpen ? "w-64" : "w-20"
+        isSidebarOpen ? "w-45" : "w-20"
       }`}
     >
       <div className="flex items-center justify-between px-2 mb-6">
@@ -47,7 +46,7 @@ const SidebarUser = ({ isSidebarOpen, toggleSidebar }) => {
           <img
             src="/images/codeblue-logo-2.png"
             alt="CodeBlue Logo"
-            className="w-30 h-20 object-cover"
+            className="w-25 h-20 object-cover"
           />
         ) : (
           <div className="h-12 w-14 " />
@@ -85,7 +84,7 @@ const SidebarUser = ({ isSidebarOpen, toggleSidebar }) => {
       <div className="mt-auto">
         <button
           onClick={handleLogout}
-          className="cursor-pointer flex items-center gap-3 py-2 px-3 rounded hover:bg-red-600 w-full transition"
+          className="cursor-pointer flex items-center gap-3 py-2 px-3 rounded hover:bg-sac-state-secondary w-full transition"
         >
           <LogOut className="text-xl" />
           {isSidebarOpen && <span className="text-sm font-medium">Logout</span>}

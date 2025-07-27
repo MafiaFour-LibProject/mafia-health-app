@@ -13,8 +13,11 @@ import {
   MessageCircle,
   Pencil,
   Trash2,
+  User,
 } from "lucide-react";
 import { toast } from "react-toastify";
+import { useAuth } from "../../hooks/useAuth";
+import { PhotoIcon } from "@heroicons/react/24/outline";
 
 const statIcons = [
   <Building className="text-blue-600" size={28} key="building" />,
@@ -25,6 +28,7 @@ const statIcons = [
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   // State to track which facility's photos are being uploaded
   const [uploadingPhotosFor, setUploadingPhotosFor] = useState(null);
@@ -82,17 +86,19 @@ const AdminDashboard = () => {
   if (loading) return <Loader />;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-10 px-4">
-      <h1 className="text-3xl md:text-4xl font-extrabold text-green-800 mb-8 text-center">
-        Admin Dashboard
-      </h1>
-      <div className="flex justify-end max-w-6xl mx-auto mb-6">
-        <button
-          className="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700"
-          onClick={() => navigate("/admin/settings")}
-        >
-          Settings
-        </button>
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-10 px-8">
+      <div>
+        <h1 className="text-xl md:text-4xl text-center mb-5 text-sac-state-secondary font-extrabold">
+          Admin Dashboard
+        </h1>
+        <h2 className="text-2xl font-bold text-darkBlue-800 mb-3 flex items-center gap-3 text-unt-deep">
+          <User size={32} className="text-darkCyan-600" />
+          Welcome back
+          {user?.name ? `, ${user.name.split(" ")[0]}!` : " Back!"}
+        </h2>
+        <p className="text-darkBlue-600/80 mb-2 mt-2">
+          Manage your facility details and services.
+        </p>
       </div>
 
       {stats && (
@@ -134,7 +140,9 @@ const AdminDashboard = () => {
       )}
 
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-2xl font-bold text-blue-900 mb-6">Facilities</h2>
+        <h2 className="text-2xl font-bold text-blue-900 mb-6">
+          Your Facilities
+        </h2>
         <div className="space-y-8">
           {facilities.length === 0 ? (
             <div className="text-gray-500 text-center">
@@ -180,16 +188,18 @@ const AdminDashboard = () => {
 
                 <div className="flex-1">
                   <div className="flex justify-between items-center mb-2">
-                    <h4 className="font-semibold text-green-700">Services</h4>
+                    <h4 className="font-semibold text-green-700 text-lg">
+                      Services
+                    </h4>
                     <div className="flex gap-2">
                       <button
-                        className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-xs"
+                        className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-xs"
                         onClick={() => setShowAddService(facility._id)}
                       >
                         + Add Service
                       </button>
                       <button
-                        className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-xs"
+                        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-xs"
                         onClick={() => setUploadingPhotosFor(facility._id)}
                       >
                         Upload Photos
@@ -211,7 +221,7 @@ const AdminDashboard = () => {
                     </AdminModal>
                   )}
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-6">
                     {facility.services && facility.services.length > 0 ? (
                       facility.services.map((service) => (
                         <div

@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import { MdAnalytics } from "react-icons/md";
 
 const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
   const { logout, user } = useAuth();
@@ -26,18 +27,19 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
     { label: "Dashboard", icon: LayoutDashboard, path: "/admin" },
     // { label: "Services", icon: PlusSquare, path: "/admin/services" },
     { label: "Appointments", icon: CalendarDays, path: "/admin/appointments" },
-    {
-      label: "Reviews",
-      icon: Star,
-      path: `/admin/reviews/${user.facilityId}`,
-    },
+    { label: "Analytics", icon: MdAnalytics, path: "/admin/analytics" },
+    // {
+    //   label: "Reviews",
+    //   icon: Star,
+    //   path: `/admin/reviews/${user.facilityId}`,
+    // },
     { label: "Settings", icon: Settings, path: "/admin/settings" },
   ];
 
   return (
     <div
-      className={`bg-gray-800 text-white fixed h-screen px-3 py-4 flex flex-col transition-all duration-300 ${
-        isSidebarOpen ? "w-64" : "w-20"
+      className={`bg-unt-deep text-white fixed h-screen px-3 py-4 flex flex-col transition-all duration-300 ${
+        isSidebarOpen ? "w-50" : "w-20"
       }`}
     >
       <div className="flex items-center justify-between mb-6">
@@ -54,12 +56,12 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
         )}
         <button
           onClick={toggleSidebar}
-          className="p-1 rounded-full bg-green-800 hover:bg-unt-deep"
+          className="p-1 rounded-full bg-unt-deep hover:bg-sac-state-secondary"
         >
           {isSidebarOpen ? (
-            <ChevronLeft className="h-5 w-5" />
+            <ChevronLeft className="h-5 w-5 cursor-pointer" />
           ) : (
-            <ChevronRight className="h-5 w-5" />
+            <ChevronRight className="h-5 w-5 cursor-pointer" />
           )}
         </button>
       </div>
@@ -69,7 +71,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
           <Link
             key={label}
             to={path}
-            className="flex items-center gap-3 px-3 py-2 rounded hover:bg-blue-600 transition-colors"
+            className="flex items-center gap-3 px-3 py-2 rounded hover:bg-sac-state-secondary transition-colors"
           >
             <Icon className="w-5 h-5" />
             {isSidebarOpen && <span>{label}</span>}
@@ -79,7 +81,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
 
       <button
         onClick={handleLogout}
-        className="flex items-center gap-3 mt-auto px-3 py-2 rounded hover:bg-red-600 hover:text-white transition-colors"
+        className="flex items-center gap-3 mt-auto px-3 py-2 cursor-pointer rounded hover:bg-sac-state-secondary hover:text-white transition-colors"
       >
         <LogOut className="w-5 h-5" />
         {isSidebarOpen && <span>Logout</span>}
