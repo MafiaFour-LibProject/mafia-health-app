@@ -32,7 +32,7 @@ const Login = () => {
       const res = await ApiLogin(payload);
       const token = res.data.token;
       const user = res.data.user;
-      login(token);
+      login(token, user);
 
       if (!token) {
         toast.error("Unauthorized, please login");
@@ -71,16 +71,13 @@ const Login = () => {
 
   return (
     <div className="relative min-h-screen flex items-center justify-center">
-      {/* Dark overlay div */}
-      <div className="absolute inset-0 bg-black/50 z-0"></div>
+      <div className="absolute inset-0 bg-black/100 z-0"></div>
 
-      {/* Background image with dark overlay */}
       <div
         className="absolute inset-0 bg-cover bg-center z-0"
-        style={{ backgroundImage: "url('/Drug1.jpg')" }}
+        style={{ backgroundImage: "url('/images/gradient.jpg')" }}
       ></div>
 
-      {/* Content container */}
       <div className="bg-white/80 p-8 rounded-lg shadow-lg w-full max-w-md mx-auto z-10 backdrop-blur-sm">
         <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
           Login Here

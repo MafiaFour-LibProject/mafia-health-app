@@ -47,8 +47,8 @@ const FacilityCard = ({ facility }) => {
         </div>
 
         <div className="flex items-start gap-2 mb-4">
-          <MapPin className="flex-shrink-0 mt-0.5 size-5 text-darkBlue-600" />
-          <p className="text-gray-600 text-sm">
+          <MapPin className="flex-shrink-0 mt-0.5 size-5 text-sac-state-secondary " />
+          <p className="text-sac-state-secondary  text-sm">
             {facility.location?.address || "Unknown address"},{" "}
             {facility.location?.city || "Unknown city"}
           </p>

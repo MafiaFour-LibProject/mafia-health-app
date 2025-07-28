@@ -428,45 +428,65 @@ const FacilityDetails = () => {
             </ul>
           </section>
 
-          {/* Contact Section */}
-          <section className="bg-white rounded-2xl shadow-xl p-8 transform hover:scale-[1.005] transition-transform duration-200 ease-in-out">
-            <h2 className="text-2xl font-bold text-gray-900 mb-5 flex items-center gap-2 border-b-2 border-blue-100 pb-2">
-              <Phone size={24} className="text-blue-500" /> Contact Details
+          <section className="bg-white rounded-xl md:rounded-2xl shadow-md md:shadow-xl p-6 md:p-8 transform hover:scale-[1.005] transition-transform duration-200 ease-in-out">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 md:mb-5 flex items-center gap-2 border-b-2 border-blue-100 pb-2">
+              <Phone size={20} className="md:w-6 md:h-6 text-blue-500" />
+              <span>Contact Details</span>
             </h2>
-            <div className="space-y-3 text-base text-gray-700">
-              <p className="flex items-center gap-3">
-                <Mail size={20} className="text-blue-500" />
-                <span className="font-semibold">Email:</span>{" "}
+
+            <div className="space-y-3 md:space-y-3 text-sm md:text-base text-gray-700">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <Mail
+                    size={18}
+                    className="md:w-5 md:h-5 text-blue-500 flex-shrink-0"
+                  />
+                  <span className="font-medium sm:font-semibold">Email:</span>
+                </div>
                 <a
                   href={`mailto:${facility.contact?.email}`}
-                  className="text-blue-700 hover:underline transition-colors duration-200"
+                  className="text-blue-700 hover:underline transition-colors duration-200 break-all"
                 >
                   {facility.contact?.email}
                 </a>
-              </p>
-              <p className="flex items-center gap-3">
-                <Phone size={20} className="text-blue-500" />
-                <span className="font-semibold">Phone:</span>{" "}
+              </div>
+
+              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <Phone
+                    size={18}
+                    className="md:w-5 md:h-5 text-blue-500 flex-shrink-0"
+                  />
+                  <span className="font-medium sm:font-semibold">Phone:</span>
+                </div>
                 <a
                   href={`tel:${facility.contact?.phone}`}
                   className="text-blue-700 hover:underline transition-colors duration-200"
                 >
                   {facility.contact?.phone}
                 </a>
-              </p>
+              </div>
+
               {facility.contact?.website && (
-                <p className="flex items-center gap-3">
-                  <Globe size={20} className="text-blue-500" />
-                  <span className="font-semibold">Website:</span>{" "}
+                <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <Globe
+                      size={18}
+                      className="md:w-5 md:h-5 text-blue-500 flex-shrink-0"
+                    />
+                    <span className="font-medium sm:font-semibold">
+                      Website:
+                    </span>
+                  </div>
                   <a
                     href={facility.contact.website}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-700 hover:underline transition-colors duration-200"
+                    className="text-blue-700 hover:underline transition-colors duration-200 break-all"
                   >
                     {facility.contact.website}
                   </a>
-                </p>
+                </div>
               )}
             </div>
           </section>

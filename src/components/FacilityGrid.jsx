@@ -14,7 +14,6 @@ const FacilityGrid = () => {
   const [filteredFacilities, setFilteredFacilities] = useState([]);
   const [selectedType, setSelectedType] = useState("");
   const [loading, setLoading] = useState(true);
-  const [noFacilityError, setNoFacilityError] = useState(false);
   const [error, setError] = useState(null);
   const [queries, setQueries] = useQueryStates({
     query: parseAsString.withDefault(""),
@@ -24,49 +23,67 @@ const FacilityGrid = () => {
 
   const debouncedSearchTerm = useDebounce(queries.query, 500);
 
+  // Get geolocation on first load
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const { latitude, longitude } = position.coords;
-        console.log("Latitude", latitude, "Longitude", longitude);
-        try {
-          setQueries({
-            lat: latitude,
-            lng: longitude,
-          });
-        } catch (error) {
-          console.error("Error getting location:", error);
-        }
+        setQueries({
+          lat: latitude,
+          lng: longitude,
+        });
       },
       (error) => {
-        setLocationError("Location access denied.");
-        setLoadingNearby(false);
+        console.error("Location access denied or failed.", error);
+        setLoading(false);
       }
     );
   }, []);
 
+  // Fetch facilities on search or type change
+  useEffect(() => {
+    fetchFacilities();
+  }, [debouncedSearchTerm, selectedType]);
+
   const fetchFacilities = async () => {
     setLoading(true);
     try {
-      const response = await searchServices(queries);
-      const data = response.data.services;
-      if (!data) {
-        setNoFacilityError(true);
+      let facilities = [];
+
+      if (debouncedSearchTerm.trim()) {
+        const response = await searchServices(queries);
+        const serviceMatches = response.data.services || [];
+
+        // Deduplicate by facility._id
+        const matchedFacilities = serviceMatches
+          .filter((s) => s.isActive && s.facility)
+          .map((s) => s.facility);
+
+        const uniqueFacilities = Array.from(
+          new Map(matchedFacilities.map((f) => [f._id, f])).values()
+        );
+
+        facilities = uniqueFacilities;
+      } else {
+        const response = await getAllFacilities();
+        const data = response || [];
+        facilities = data.filter((f) => f.isActive);
       }
-      const activeFacilities = data.filter((f) => f.isActive);
-      console.log(activeFacilities);
-      setAllFacilities(activeFacilities);
-      setFilteredFacilities(activeFacilities);
+
+      const finalList = selectedType
+        ? facilities.filter((f) => f.type === selectedType)
+        : facilities;
+
+      setAllFacilities(facilities);
+      setFilteredFacilities(finalList);
+      setError(null);
     } catch (err) {
+      console.error("Error fetching facilities:", err);
       setError("Failed to load facilities. Please try again later.");
     } finally {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchFacilities();
-  }, [debouncedSearchTerm]);
 
   const handleChange = (e) => {
     setQueries({
@@ -74,24 +91,8 @@ const FacilityGrid = () => {
     });
   };
 
-  // useEffect(() => {
-  //   applyFilters();
-  // }, [queries.query, selectedType, allFacilities]);
-
-  // const applyFilters = () => {
-  //   let result = allFacilities;
-
-  //   if (selectedType) {
-  //     result = result.filter((f) => f.facility.type === selectedType);
-  //   }
-
-  //   setFilteredFacilities(result);
-  // };
-
   const handleResetFilters = () => {
-    setQueries({
-      query: "",
-    });
+    setQueries({ query: "" });
     setSelectedType("");
   };
 
@@ -108,9 +109,9 @@ const FacilityGrid = () => {
             </div>
             <input
               type="text"
-              placeholder="Search services..."
+              placeholder="Search services...e.g. 'rabies vaccine'"
               value={queries.query}
-              onChange={(e) => handleChange(e)}
+              onChange={handleChange}
               className="w-full pl-10 pr-4 py-3 bg-white border border-unt-border rounded-lg text-sac-state-secondary placeholder-sac-state-secondary focus:outline-none focus:ring-2 focus:ring-darkBlue-500 focus:border-transparent transition-all"
             />
           </div>
@@ -137,7 +138,7 @@ const FacilityGrid = () => {
             <button
               type="button"
               onClick={handleResetFilters}
-              className="bg-white hover:bg-gray-700/80 text-gray-900 px-5 py-2.5 rounded-lg flex items-center gap-2 border border-gray-700/50 hover:border-gray-200/70 cursor-pointer hover:text-white transition-all duration-300"
+              className="bg-white hover:bg-sac-state-secondary text-sac-state-secondary px-5 py-2.5 rounded-lg flex items-center gap-2 border border-gray-700/50 hover:border-gray-200/70 cursor-pointer hover:text-white transition-all duration-300"
             >
               <RefreshCcw className="size-5" />
               Reset
@@ -158,7 +159,7 @@ const FacilityGrid = () => {
           </div>
         ) : (
           filteredFacilities.map((facility) => (
-            <FacilityCard key={facility._id} facility={facility.facility} />
+            <FacilityCard key={facility._id} facility={facility} />
           ))
         )}
       </div>

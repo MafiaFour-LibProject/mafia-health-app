@@ -1,39 +1,37 @@
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
-import { MdEmail, MdPhone } from "react-icons/md";
+import { MdEmail, MdPhone, MdLocationOn } from "react-icons/md";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#043927] text-white">
-      <div className="container mx-auto px-6 py-12">
-        {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
-          {/* Logo and Description */}
-          <div className="space-y-4">
+    <footer className="bg-unt-deep text-white">
+      <div className="container mx-auto px-4 sm:px-6 py-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8 items-center">
+          <div className="flex flex-col items-center sm:items-start">
             <img
-              className="h-16 w-auto object-contain"
+              className="h-30 w-auto"
               src="/images/codeblue-logo-2.png"
               alt="Code Blue Logo"
             />
-            <p className="text-gray-300 text-sm leading-relaxed">
+            <p className="text-gray-300 text-sm text-center sm:text-left mb-6">
               Your trusted access to fast and immediate medical aid when it
               matters most.
             </p>
             <div className="flex space-x-4">
               {[
                 {
-                  icon: <FaFacebook className="w-5 h-5" />,
+                  icon: <FaFacebook className="w-4 h-4 sm:w-5 sm:h-5" />,
                   color: "hover:text-blue-400",
                 },
                 {
-                  icon: <FaTwitter className="w-5 h-5" />,
+                  icon: <FaTwitter className="w-4 h-4 sm:w-5 sm:h-5" />,
                   color: "hover:text-sky-400",
                 },
                 {
-                  icon: <FaInstagram className="w-5 h-5" />,
+                  icon: <FaInstagram className="w-4 h-4 sm:w-5 sm:h-5" />,
                   color: "hover:text-pink-400",
                 },
                 {
-                  icon: <FaLinkedin className="w-5 h-5" />,
+                  icon: <FaLinkedin className="w-4 h-4 sm:w-5 sm:h-5" />,
                   color: "hover:text-blue-300",
                 },
               ].map((social, index) => (
@@ -51,22 +49,20 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4 text-white">
+          <div className="text-center sm:text-left">
+            <h3 className="text-base sm:text-lg font-semibold mb-3 text-white">
               Quick Links
             </h3>
-            <ul className="space-y-3">
+            <ul className="space-y-2">
               {[
                 { label: "Home", href: "/" },
                 { label: "About Us", href: "/about-us" },
-                { label: "Services", href: "/services" },
-                { label: "Contact", href: "/contact" },
+                { label: "Blogs", href: "/blogs" },
               ].map((link, index) => (
                 <li key={index}>
                   <a
                     href={link.href}
-                    className="text-gray-300 hover:text-white transition-colors duration-200 text-sm"
+                    className="text-gray-300 hover:text-white transition-colors duration-200 text-xs sm:text-sm"
                   >
                     {link.label}
                   </a>
@@ -75,76 +71,63 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Contact Info */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4 text-white">
+          <div className="text-center sm:text-left">
+            <h3 className="text-base sm:text-lg font-semibold mb-3 text-white">
               Contact Us
             </h3>
-            <ul className="space-y-3">
-              <li className="flex items-start gap-3">
-                <MdEmail className="w-5 h-5 mt-0.5 text-[#66c68c]" />
-                <span className="text-gray-300 text-sm">
-                  contact@codeblue.com
-                </span>
+            <ul className="space-y-2">
+              <li className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 justify-center sm:justify-start">
+                <div className="flex items-center justify-center sm:justify-start gap-2">
+                  <MdEmail className="text-[#66c68c] w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="text-gray-300 text-xs sm:text-sm break-all">
+                    contact@codeblue.com
+                  </span>
+                </div>
               </li>
-              <li className="flex items-start gap-3">
-                <MdPhone className="w-5 h-5 mt-0.5 text-[#66c68c]" />
-                <span className="text-gray-300 text-sm">+1 (234) 567-8900</span>
+              <li className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 justify-center sm:justify-start">
+                <div className="flex items-center justify-center sm:justify-start gap-2">
+                  <MdPhone className="text-[#66c68c] w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="text-gray-300 text-xs sm:text-sm">
+                    +233 2411 856 35
+                  </span>
+                </div>
               </li>
-              <li className="flex items-start gap-3">
-                <svg
-                  className="w-5 h-5 mt-0.5 text-[#66c68c]"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                </svg>
-                <span className="text-gray-300 text-sm">
-                  123 Medical Drive, Health City
-                </span>
+              <li className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 justify-center sm:justify-start">
+                <div className="flex items-center justify-center sm:justify-start gap-2">
+                  <MdLocationOn className="text-[#66c68c] w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="text-gray-300 text-xs sm:text-sm">
+                    19 Nii Adjei Onano St, Accra
+                  </span>
+                </div>
               </li>
             </ul>
           </div>
 
-          {/* Newsletter */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4 text-white">
+          <div className="text-center sm:text-left">
+            <h3 className="text-base sm:text-lg font-semibold mb-3 text-white">
               Stay Updated
             </h3>
-            <p className="text-gray-300 text-sm mb-4">
+            <p className="text-gray-300 text-xs sm:text-sm mb-3">
               Subscribe to our newsletter for the latest updates.
             </p>
-            <div className="flex">
+            <div className="flex flex-col sm:flex-row">
               <input
                 type="email"
                 placeholder="Your email"
-                className="px-4 py-2 w-full rounded-l-lg focus:outline-none text-gray-800 text-sm"
+                className="px-3 py-2 w-full rounded sm:rounded-l-lg sm:rounded-r-none focus:outline-none text-white placeholder:text-white text-xs sm:text-sm"
               />
-              <button className="bg-[#00853e] hover:bg-[#006f34] text-white px-4 py-2 rounded-r-lg text-sm font-medium transition-colors">
+              <button className="bg-sac-state-secondary hover:bg-[#006f34] text-white px-3 py-2 rounded sm:rounded-r-lg sm:rounded-l-none text-xs sm:text-sm font-medium transition-colors mt-2 sm:mt-0">
                 Subscribe
               </button>
             </div>
           </div>
         </div>
 
-        {/* Copyright */}
-        <div className="pt-6 border-t border-[#00853e]/30 text-center text-sm text-gray-300">
+        <div className="pt-6 border-t border-[#00853e]/30 text-center text-xs sm:text-sm text-gray-300">
           <p>
             &copy; {new Date().getFullYear()} CodeBlue. All rights reserved.
           </p>
-          <div className="mt-2 flex justify-center space-x-4 text-xs">
+          <div className="mt-2 flex flex-wrap justify-center gap-x-4 gap-y-1">
             <a href="#" className="hover:text-white transition-colors">
               Privacy Policy
             </a>

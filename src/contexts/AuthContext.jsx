@@ -1,45 +1,56 @@
 import { jwtDecode } from "jwt-decode";
 import { createContext, useEffect, useState } from "react";
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
+    const storedToken = localStorage.getItem("token");
+    const storedUser = localStorage.getItem("user");
+
+    if (storedToken && storedUser) {
       try {
-        const decoded = jwtDecode(token);
+        const parsedUser = JSON.parse(storedUser);
+        const decoded = jwtDecode(storedToken);
         const currentTime = Date.now() / 1000;
+
         if (decoded.exp > currentTime) {
-          setUser(decoded);
+          setUser(parsedUser);
+          setToken(storedToken);
         } else {
           localStorage.removeItem("token");
+          localStorage.removeItem("user");
         }
       } catch (err) {
-        console.error("Invalid token:", err);
+        console.error("Auth loading error:", err);
         localStorage.removeItem("token");
+        localStorage.removeItem("user");
       }
     }
+
     setLoading(false);
   }, []);
 
-  const login = (token) => {
+  const login = (token, userData) => {
     localStorage.setItem("token", token);
-    const decoded = jwtDecode(token);
-    setUser(decoded);
+    localStorage.setItem("user", JSON.stringify(userData));
+    setUser(userData);
+    setToken(token);
   };
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
     setUser(null);
+    setToken(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, token, login, logout, loading }}>
       {!loading && children}
     </AuthContext.Provider>
   );

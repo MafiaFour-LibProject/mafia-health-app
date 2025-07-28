@@ -149,7 +149,7 @@ const AboutUs = () => {
         </div>
 
         {/* CTA Section */}
-        <div className="bg-[#043927] py-16 px-6">
+        {/* <div className="bg-[#043927] py-16 px-6">
           <div className="max-w-4xl mx-auto text-center text-white">
             <h2 className="text-3xl font-bold mb-6">
               Join Us in Making a Difference
@@ -167,7 +167,7 @@ const AboutUs = () => {
               </button>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );

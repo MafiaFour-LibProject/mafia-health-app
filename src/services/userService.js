@@ -1,18 +1,28 @@
 import { apiClient } from "./config";
 
-export const getUserProfile = async () => {
-  const response = await apiClient.get("/users/profile");
+export const getUserProfile = async (token) => {
+  const response = await apiClient.get("/api/users/profile", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return response.data;
 };
 
-export const updateUserProfile = async (profileData) => {
-  const response = await apiClient.put("/users/profile", profileData);
-  return response.data;
+export const updateUserProfile = async (token, data) => {
+  return await apiClient.put("/api/users/profile", data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 };
 
-export const deleteUserAccount = async () => {
-  const response = await apiClient.delete("/users/account");
-  return response.data;
+export const deleteUserAccount = async (token) => {
+  return await apiClient.delete("/api/users/account", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 };
 
 export const getAdminDashboard = async () =>
