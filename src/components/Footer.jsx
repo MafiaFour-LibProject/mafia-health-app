@@ -3,17 +3,16 @@ import { MdEmail, MdPhone, MdLocationOn } from "react-icons/md";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#043927] text-white">
+    <footer className="bg-unt-deep text-white">
       <div className="container mx-auto px-4 sm:px-6 py-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
-          {/* Logo and Social */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8 items-center">
           <div className="flex flex-col items-center sm:items-start">
             <img
-              className="h-20 w-auto mb-4"
+              className="h-30 w-auto"
               src="/images/codeblue-logo-2.png"
               alt="Code Blue Logo"
             />
-            <p className="text-gray-300 text-sm text-center sm:text-left mb-4">
+            <p className="text-gray-300 text-sm text-center sm:text-left mb-6">
               Your trusted access to fast and immediate medical aid when it
               matters most.
             </p>
@@ -50,7 +49,6 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Quick Links */}
           <div className="text-center sm:text-left">
             <h3 className="text-base sm:text-lg font-semibold mb-3 text-white">
               Quick Links
@@ -59,6 +57,7 @@ const Footer = () => {
               {[
                 { label: "Home", href: "/" },
                 { label: "About Us", href: "/about-us" },
+                { label: "Blogs", href: "/blogs" },
               ].map((link, index) => (
                 <li key={index}>
                   <a
@@ -72,7 +71,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Contact Info */}
           <div className="text-center sm:text-left">
             <h3 className="text-base sm:text-lg font-semibold mb-3 text-white">
               Contact Us
@@ -105,7 +103,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Newsletter */}
           <div className="text-center sm:text-left">
             <h3 className="text-base sm:text-lg font-semibold mb-3 text-white">
               Stay Updated
@@ -117,16 +114,15 @@ const Footer = () => {
               <input
                 type="email"
                 placeholder="Your email"
-                className="px-3 py-2 w-full rounded sm:rounded-l-lg sm:rounded-r-none focus:outline-none text-gray-800 text-xs sm:text-sm"
+                className="px-3 py-2 w-full rounded sm:rounded-l-lg sm:rounded-r-none focus:outline-none text-white placeholder:text-white text-xs sm:text-sm"
               />
-              <button className="bg-[#00853e] hover:bg-[#006f34] text-white px-3 py-2 rounded sm:rounded-r-lg sm:rounded-l-none text-xs sm:text-sm font-medium transition-colors mt-2 sm:mt-0">
+              <button className="bg-sac-state-secondary hover:bg-[#006f34] text-white px-3 py-2 rounded sm:rounded-r-lg sm:rounded-l-none text-xs sm:text-sm font-medium transition-colors mt-2 sm:mt-0">
                 Subscribe
               </button>
             </div>
           </div>
         </div>
 
-        {/* Copyright */}
         <div className="pt-6 border-t border-[#00853e]/30 text-center text-xs sm:text-sm text-gray-300">
           <p>
             &copy; {new Date().getFullYear()} CodeBlue. All rights reserved.

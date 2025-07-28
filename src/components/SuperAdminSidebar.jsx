@@ -1,11 +1,18 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { LogOut, Home, BarChart3, LayoutDashboard } from "lucide-react";
+import {
+  LogOut,
+  Home,
+  BarChart3,
+  LayoutDashboard,
+  FileText,
+} from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 
 const navLinks = [
   { label: "Home", to: "/", icon: Home },
   { label: "Dashboard", to: "/superadmin", icon: LayoutDashboard },
   { label: "Analytics", to: "/superadmin/analytics", icon: BarChart3 },
+  { label: "Blogs", to: "/superadmin/blogs", icon: FileText },
 ];
 
 const SuperAdminSidebar = ({ sidebarOpen, setSidebarOpen }) => {

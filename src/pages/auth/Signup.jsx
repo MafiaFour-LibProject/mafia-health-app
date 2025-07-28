@@ -42,7 +42,7 @@ const Signup = () => {
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-cover bg-center"
-      style={{ backgroundImage: "url('/Drug1.jpg')" }}
+      style={{ backgroundImage: "url('/images/gradient.jpg')" }}
     >
       <div className="bg-white/50 p-8 rounded-lg shadow-lg w-full max-w-md mx-auto">
         <h2 className="text-2xl font-bold mb-6 text-center">Sign Up Here</h2>

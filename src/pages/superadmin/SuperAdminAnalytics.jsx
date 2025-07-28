@@ -88,7 +88,6 @@ const SuperAdminAnalytics = () => {
       </div>
 
       <div className="grid md:grid-cols-2 gap-8 mb-10">
-        {/* Facilities By Type - Pie */}
         <div className="bg-white p-6 rounded-lg shadow border">
           <h3 className="text-lg font-semibold text-[#043927] mb-4">
             Facilities by Type
@@ -117,7 +116,6 @@ const SuperAdminAnalytics = () => {
           </ResponsiveContainer>
         </div>
 
-        {/* Appointments By Status - Bar */}
         <div className="bg-white p-6 rounded-lg shadow border">
           <h3 className="text-lg font-semibold text-[#043927] mb-4">
             Appointments by Status
@@ -133,8 +131,6 @@ const SuperAdminAnalytics = () => {
           </ResponsiveContainer>
         </div>
       </div>
-
-      {/* Monthly Registrations */}
       <div className="bg-white p-6 rounded-lg shadow border">
         <h3 className="text-lg font-semibold text-[#043927] mb-4">
           Monthly Registrations

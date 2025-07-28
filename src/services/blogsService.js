@@ -1,20 +1,30 @@
 import { apiClient } from "./config";
 
-// Get all blog posts
+// Create blog
+export const createBlog = async (blogData) => {
+  const response = await apiClient.post("/api/blogs", blogData);
+  return response.data;
+};
 
-export const getAllBlogs = async () => {
-  const res = await apiClient.get("/fake-data/blogs.json");
+// Get all blog posts
+export const getBlogs = async (params = {}) => {
+  const response = await apiClient.get("/api/blogs", { params });
+  return response.data;
+};
+
+// Get blog by id
+export const getBlogById = async (id) => {
+  const response = await apiClient.get(`/api/blogs/${id}`);
+  return response.data;
+};
+
+// Update blog
+export const updateBlog = async (id, data) => {
+  const res = await apiClient.put(`/api/blogs/${id}`, data);
   return res.data;
 };
 
-// Get single blog post
-
-export const getSingleBlog = async (id) => {
-  const res = await apiClient.get("/fake-data/blogs.json");
-  return res.data.find((blog) => blog._id === id);
+// Delete blog
+export const deleteBlog = async (id) => {
+  const res = await apiClient.delete(`/api/blogs/${id}`);
 };
-
-/* Replace later with:
-GET /blogs
-GET /blogs/:id
-*/

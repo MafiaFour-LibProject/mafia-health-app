@@ -16,6 +16,8 @@ import SuperAdminLayout from "./layouts/SuperAdminLayout";
 import Home from "./pages/common/Home";
 import FacilityDetails from "./pages/common/FacilityDetails";
 import AboutUs from "./pages/AboutUs";
+import BlogList from "./components/BlogList";
+import BlogDetail from "./pages/common/BlogDetail";
 
 // Authentication Pages
 import Login from "./pages/auth/Login";
@@ -31,6 +33,9 @@ import SuperadminFacilities from "./pages/superadmin/SuperadminFacilities";
 import SuperadminUsers from "./pages/superadmin/SuperadminUsers";
 import SuperAdminAnalytics from "./pages/superadmin/SuperAdminAnalytics";
 import SuperAdminFacilityView from "./pages/superadmin/SuperAdminFacilityView";
+import BlogManager from "./pages/superadmin/BlogManager";
+import AddBlog from "./pages/superadmin/AddBlog";
+import EditBlog from "./pages/superadmin/EditBlog";
 
 // Admin Pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -73,7 +78,9 @@ function App() {
             { index: true, element: <Home /> },
             { path: "facilities/:facilityId", element: <FacilityDetails /> },
             { path: "all-facilities", element: <AllFacilities /> },
-            { path: "/about-us", element: <AboutUs /> },
+            { path: "about-us", element: <AboutUs /> },
+            { path: "blogs", element: <BlogList /> },
+            { path: "blogs/:id", element: <BlogDetail /> },
             { path: "*", element: <EmptyState message="Page not found" /> },
           ],
         },
@@ -145,6 +152,9 @@ function App() {
                 { path: "facilities", element: <SuperadminFacilities /> },
                 { path: "users", element: <SuperadminUsers /> },
                 { path: "analytics", element: <SuperAdminAnalytics /> },
+                { path: "blogs", element: <BlogManager /> },
+                { path: "blogs/create", element: <AddBlog /> },
+                { path: "blogs/edit/:id", element: <EditBlog /> },
               ],
             },
           ],

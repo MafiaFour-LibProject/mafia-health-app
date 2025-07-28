@@ -71,11 +71,11 @@ const Login = () => {
 
   return (
     <div className="relative min-h-screen flex items-center justify-center">
-      <div className="absolute inset-0 bg-black/50 z-0"></div>
+      <div className="absolute inset-0 bg-black/100 z-0"></div>
 
       <div
         className="absolute inset-0 bg-cover bg-center z-0"
-        style={{ backgroundImage: "url('/Drug1.jpg')" }}
+        style={{ backgroundImage: "url('/images/gradient.jpg')" }}
       ></div>
 
       <div className="bg-white/80 p-8 rounded-lg shadow-lg w-full max-w-md mx-auto z-10 backdrop-blur-sm">

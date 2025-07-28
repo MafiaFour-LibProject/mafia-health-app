@@ -1,16 +1,18 @@
 // Reusable reset password component for all role types with inputs (Enter new password, Confirm new password, Reset Password button)
 
-import React from 'react';
+import React from "react";
 
 const ResetPassword = () => {
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-cover bg-center"
-      style={{ backgroundImage: "url('/Drug1.jpg')" }}
+      style={{ backgroundImage: "url('/images/gradient.jpg')" }}
     >
       {/* Form container with transparent background */}
       <div className="bg-white/50 p-8 rounded-lg shadow-lg w-full max-w-md mx-auto">
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Reset Password</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
+          Reset Password
+        </h2>
 
         <form>
           <div className="mb-4">
