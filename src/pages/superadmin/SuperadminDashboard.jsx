@@ -9,15 +9,7 @@ import FacilityFormModal from "./FacilityFormModal";
 import FacilityAdminFormModal from "./FacilityAdminFormModal";
 import ConfirmationModal from "../../components/ConfirmationModal";
 import Loader from "../../components/Loader";
-import {
-  LayoutDashboard,
-  Users,
-  BarChart3,
-  LogOut,
-  Home,
-  Plus,
-} from "lucide-react";
-import { Link } from "react-router-dom";
+import { Users, Plus, Search, Trash2, Eye, Home } from "lucide-react";
 
 const SuperAdminDashboard = () => {
   const [facilities, setFacilities] = useState([]);
@@ -28,19 +20,15 @@ const SuperAdminDashboard = () => {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [facilityToDelete, setFacilityToDelete] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [sidebarOpen, setSidebarOpen] = useState(true);
   const navigate = useNavigate();
 
   const fetchFacilities = async () => {
     try {
       setLoading(true);
       const data = await getAllFacilities();
-      if (!Array.isArray(data)) throw new Error("Invalid facilities data");
-
       const activeFacilities = data.filter(
         (facility) => facility.isActive !== false
       );
-
       setFacilities(activeFacilities);
     } catch (err) {
       console.error("Error fetching facilities:", err);
@@ -59,10 +47,6 @@ const SuperAdminDashboard = () => {
     setAdminModalOpen(true);
   };
 
-  const handleLogout = () => {
-    navigate("/auth/login");
-  };
-
   const handleView = (facilityId) => {
     navigate(`/superadmin/facilities/${facilityId}`);
   };
@@ -75,7 +59,7 @@ const SuperAdminDashboard = () => {
   const handleDelete = async () => {
     if (!facilityToDelete) return;
     try {
-      const res = await deleteFacility(facilityToDelete._id);
+      await deleteFacility(facilityToDelete._id);
       toast.success("Facility deleted");
       setFacilities((prev) =>
         prev.filter((f) => f._id !== facilityToDelete._id)
@@ -98,194 +82,163 @@ const SuperAdminDashboard = () => {
   }, []);
 
   return (
-    <div className="flex min-h-screen">
-      <div
-        className={`bg-green-900 text-white p-4 transition-all duration-300 ${
-          sidebarOpen ? "w-60" : "w-16"
-        }`}
-      >
-        <button
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="mb-6 text-white hover:text-gray-300 cursor-pointer"
-        >
-          ☰
-        </button>
-        <nav className="space-y-4">
-          <button
-            onClick={handleAddFacility}
-            className="flex items-center cursor-pointer gap-2 w-full hover:bg-green-800 px-2 py-1 rounded"
-          >
-            <Plus className="w-5 h-5" />
-            {sidebarOpen && <span>Add Facility</span>}
-          </button>
-          <Link
-            to="/"
-            className="flex items-center gap-2 hover:bg-green-800 px-2 py-1 rounded"
-          >
-            <Home className="w-5 h-5" />
-            {sidebarOpen && <span>Home</span>}
-          </Link>
-          <Link
-            to="/superadmin/users"
-            className="flex items-center gap-2 cursor-pointer hoever:bg-green-800 px-2 py-1 rounded"
-          >
-            <Users className="w-5 h-5" />
-            {sidebarOpen && <span>Users</span>}
-          </Link>
-          <Link
-            to="/superadmin/analytics"
-            className="flex items-center gap-2 hover:bg-green-800 px-2 py-1 rounded"
-          >
-            <BarChart3 className="w-5 h-5" />
-            {sidebarOpen && <span>Analytics</span>}
-          </Link>
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 w-full cursor-pointer hover:bg-green-800 px-2 py-1 rounded"
-          >
-            <LogOut className="w-5 h-5" />
-            {sidebarOpen && <span>Logout</span>}
-          </button>
-        </nav>
+    <div className="p-8">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-[#043927] mb-2">
+          SuperAdmin Dashboard
+        </h1>
+        <p className="text-gray-600">
+          Manage all healthcare facilities and admins in the system.
+        </p>
       </div>
 
-      <div className="flex-1 p-6 bg-gray-50">
-        <h1 className="text-4xl font-extrabold text-green-900 mb-1">
-          Welcome to your Dashboard
-        </h1>
-        <p className="text-lg font-medium text-gray-600 mb-6">
-          My Access to Fast Immediate Aid
-        </p>
-
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-          <div>
-            <h2 className="text-2xl font-bold text-green-800 mb-1">
-              Facilities
-            </h2>
-            <p className="text-gray-500">Manage all registered facilities</p>
-          </div>
-
-          <div className="flex gap-3">
-            <button
-              onClick={handleAddFacility}
-              className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2 cursor-pointer rounded-lg shadow transition"
-            >
-              <Plus className="w-5 h-5" />
-              Add Facility
-            </button>
-            <button
-              onClick={handleAddAdmin}
-              className="inline-flex items-center gap-2 cursor-pointer bg-green-600 hover:bg-green-700 text-white font-semibold px-5 py-2 rounded-lg shadow transition"
-            >
-              <Plus className="w-5 h-5" />
-              Add Facility Admin
-            </button>
-          </div>
-        </div>
-
-        <div className="mb-6 max-w-md">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+        <div className="relative flex-1 max-w-md">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
           <input
             type="text"
             placeholder="Search facilities..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#a3d5b0] focus:border-transparent"
           />
         </div>
 
-        {loading ? (
+        <div className="flex gap-3">
+          <button
+            onClick={handleAddFacility}
+            className="flex items-center gap-2 bg-[#00853e] cursor-pointer hover:bg-[#006f34] text-white font-medium px-4 py-2 rounded-lg shadow transition-colors"
+          >
+            <Plus className="w-5 h-5" />
+            Add Facility
+          </button>
+          <button
+            onClick={handleAddAdmin}
+            className="flex items-center gap-2 cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg shadow transition-colors"
+          >
+            <Users className="w-5 h-5" />
+            Add Admin
+          </button>
+        </div>
+      </div>
+
+      {loading ? (
+        <div className="flex justify-center items-center h-64">
           <Loader />
-        ) : facilities.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20">
-            <p className="text-lg text-gray-500">No facilities found.</p>
+        </div>
+      ) : filteredFacilities.length === 0 ? (
+        <div className="bg-white rounded-xl shadow-sm p-8 text-center">
+          <div className="max-w-md mx-auto">
+            <div className="text-gray-400 mb-4">
+              <Home className="w-12 h-12 mx-auto" />
+            </div>
+            <h3 className="text-lg font-medium text-gray-700 mb-2">
+              No facilities found
+            </h3>
+            <p className="text-gray-500 mb-4">
+              Get started by adding your first healthcare facility
+            </p>
+            <button
+              onClick={handleAddFacility}
+              className="inline-flex items-center gap-2 bg-[#00853e] hover:bg-[#006f34] text-white font-medium px-4 py-2 rounded-lg"
+            >
+              <Plus className="w-5 h-5" />
+              Add Facility
+            </button>
           </div>
-        ) : (
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredFacilities.map((facility) => (
-              <div
-                key={facility._id}
-                className="bg-white border border-gray-200 rounded-2xl shadow-lg hover:shadow-xl transition p-6 flex flex-col"
-              >
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="bg-blue-100 text-blue-700 rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg uppercase">
+        </div>
+      ) : (
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {filteredFacilities.map((facility) => (
+            <div
+              key={facility._id}
+              className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 overflow-hidden"
+            >
+              <div className="p-6">
+                <div className="flex items-start gap-4 mb-4">
+                  <div className="bg-[#a3d5b0] text-[#043927] rounded-lg w-12 h-12 flex items-center justify-center font-bold text-xl uppercase flex-shrink-0">
                     {facility.name?.[0] || "?"}
                   </div>
                   <div>
-                    <h2 className="text-xl font-bold text-green-800">
+                    <h2 className="text-lg font-bold text-[#043927]">
                       {facility.name}
                     </h2>
-                    <span
-                      className={`inline-block text-xs font-medium rounded px-2 py-0.5 ${
-                        facility.isActive
-                          ? "bg-green-100 text-green-700"
-                          : "bg-red-100 text-red-700"
-                      }`}
-                    >
-                      {facility.isActive ? "Active" : "Inactive"}
+                    <div className="flex items-center gap-2 mt-1">
+                      <span
+                        className={`inline-block text-xs font-medium rounded-full px-2 py-1 ${
+                          facility.isActive
+                            ? "bg-green-100 text-green-800"
+                            : "bg-red-100 text-red-800"
+                        }`}
+                      >
+                        {facility.isActive ? "Active" : "Inactive"}
+                      </span>
+                      <span className="text-xs text-gray-500">
+                        {facility.type}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                  {facility.description || "No description provided"}
+                </p>
+
+                <div className="space-y-2 text-sm text-gray-700 mb-5">
+                  <div className="flex items-center gap-2">
+                    <span className="text-gray-500">📍</span>
+                    <span>
+                      {facility.location?.city}, {facility.location?.address}
                     </span>
                   </div>
                 </div>
-                <p className="text-gray-600 text-sm mb-2 line-clamp-2">
-                  {facility.description}
-                </p>
-                <div className="flex flex-col gap-1 text-sm text-gray-700 mb-4">
-                  <div>
-                    <strong>Type:</strong> {facility.type}
-                  </div>
-                  <div>
-                    <strong>City:</strong> {facility.location?.city}
-                  </div>
-                  <div>
-                    <strong>Address:</strong> {facility.location?.address}
-                  </div>
-                </div>
-                <div className="mt-auto flex gap-2">
+
+                <div className="flex gap-2 border-t border-gray-100 pt-4">
                   <button
                     onClick={() => handleView(facility._id)}
-                    className="flex-1 inline-flex items-center cursor-pointer justify-center gap-1 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 font-medium px-3 py-1.5 rounded-lg transition"
+                    className="flex-1 cursor-pointer flex items-center justify-center gap-1 bg-[#f0f7f2] text-[#00853e] hover:bg-[#e0efe5] font-medium px-3 py-2 rounded-lg transition-colors text-sm"
                   >
+                    <Eye className="w-4 h-4" />
                     View
                   </button>
-
                   <button
                     onClick={() => confirmDelete(facility)}
-                    className="flex-1 cursor-pointer inline-flex items-center justify-center gap-1 bg-red-50 text-red-700 hover:bg-red-100 font-medium px-3 py-1.5 rounded-lg transition"
+                    className="flex-1 flex items-center  cursor-pointer justify-center gap-1 bg-red-50 text-red-600 hover:bg-red-100 font-medium px-3 py-2 rounded-lg transition-colors text-sm"
                   >
-                    Remove Facility
+                    <Trash2 className="w-4 h-4" />
+                    Delete
                   </button>
                 </div>
               </div>
-            ))}
-          </div>
-        )}
+            </div>
+          ))}
+        </div>
+      )}
 
-        <FacilityFormModal
-          isOpen={modalOpen}
-          onClose={() => setModalOpen(false)}
-          facility={selectedFacility}
-          onSaved={() => {
-            setModalOpen(false);
-            fetchFacilities();
-          }}
-        />
-
-        <FacilityAdminFormModal
-          isOpen={adminModalOpen}
-          onClose={() => setAdminModalOpen(false)}
-          onSaved={() => {
-            setAdminModalOpen(false);
-            fetchFacilities();
-          }}
-        />
-
-        <ConfirmationModal
-          isOpen={confirmOpen}
-          onCancel={() => setConfirmOpen(false)}
-          onConfirm={handleDelete}
-          title="Delete Facility"
-          message={`Are you sure you want to delete '${facilityToDelete?.name}'?`}
-        />
-      </div>
+      <FacilityFormModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        facility={selectedFacility}
+        onSaved={() => {
+          setModalOpen(false);
+          fetchFacilities();
+        }}
+      />
+      <FacilityAdminFormModal
+        isOpen={adminModalOpen}
+        onClose={() => setAdminModalOpen(false)}
+        onSaved={() => {
+          setAdminModalOpen(false);
+          fetchFacilities();
+        }}
+      />
+      <ConfirmationModal
+        isOpen={confirmOpen}
+        onCancel={() => setConfirmOpen(false)}
+        onConfirm={handleDelete}
+        title="Delete Facility"
+        message={`Are you sure you want to delete '${facilityToDelete?.name}'?`}
+      />
     </div>
   );
 };

@@ -32,7 +32,7 @@ const Login = () => {
       const res = await ApiLogin(payload);
       const token = res.data.token;
       const user = res.data.user;
-      login(token);
+      login(token, user);
 
       if (!token) {
         toast.error("Unauthorized, please login");
@@ -70,10 +70,15 @@ const Login = () => {
   };
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center bg-cover bg-center"
-      style={{ backgroundImage: "url('/Drug1.jpg')" }}>
-      <div className="bg-white/50 p-8 rounded-lg shadow-lg w-full max-w-md mx-auto">
+    <div className="relative min-h-screen flex items-center justify-center">
+      <div className="absolute inset-0 bg-black/100 z-0"></div>
+
+      <div
+        className="absolute inset-0 bg-cover bg-center z-0"
+        style={{ backgroundImage: "url('/images/gradient.jpg')" }}
+      ></div>
+
+      <div className="bg-white/80 p-8 rounded-lg shadow-lg w-full max-w-md mx-auto z-10 backdrop-blur-sm">
         <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
           Login Here
         </h2>
@@ -82,7 +87,8 @@ const Login = () => {
           <div className="mb-4">
             <label
               htmlFor="email"
-              className="block text-sm font-semibold text-gray-700 mb-1">
+              className="block text-sm font-semibold text-gray-700 mb-1"
+            >
               Email Address
             </label>
             <input
@@ -102,7 +108,8 @@ const Login = () => {
           <div className="mb-6">
             <label
               htmlFor="password"
-              className="block text-sm font-semibold text-gray-700 mb-1">
+              className="block text-sm font-semibold text-gray-700 mb-1"
+            >
               Password
             </label>
             <input
@@ -122,7 +129,8 @@ const Login = () => {
           <div className="flex justify-between items-center mb-6 cursor-pointer">
             <a
               onClick={() => navigate("/auth/forgot-password")}
-              className="text-sm text-blue-700 hover:underline">
+              className="text-sm text-blue-700 hover:underline"
+            >
               Forgot Password?
             </a>
           </div>
@@ -134,7 +142,8 @@ const Login = () => {
               isSubmitting
                 ? "bg-gray-300 cursor-not-allowed"
                 : "bg-green-600 text-white hover:bg-green-500 hover:scale-105"
-            }`}>
+            }`}
+          >
             {isSubmitting ? "Submitting..." : "Log In"}
           </button>
 
@@ -142,7 +151,8 @@ const Login = () => {
             <p className="text-sm text-gray-700 mr-1">New User?</p>
             <a
               onClick={() => navigate("/auth/signup")}
-              className="text-sm text-blue-700 hover:underline font-semibold cursor-pointer">
+              className="text-sm text-blue-700 hover:underline font-semibold cursor-pointer"
+            >
               Register
             </a>
           </div>

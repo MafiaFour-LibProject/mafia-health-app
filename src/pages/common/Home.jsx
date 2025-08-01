@@ -7,6 +7,7 @@ import {
   X,
   SendHorizonal,
   RotateCcw,
+  Menu,
 } from "lucide-react";
 import FacilityGrid from "../../components/FacilityGrid";
 import {
@@ -15,8 +16,10 @@ import {
 } from "../../services/facilityService";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
-import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
-// import { useQueryState } from "nuqs";
+import {
+  ExclamationTriangleIcon,
+  QuestionMarkCircleIcon,
+} from "@heroicons/react/24/outline";
 
 const Home = () => {
   const [nearbyFacilities, setNearbyFacilities] = useState([]);
@@ -27,9 +30,8 @@ const Home = () => {
   const [chatLoading, setChatLoading] = useState(false);
   const [chatError, setChatError] = useState(null);
   const [showChatbot, setShowChatbot] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const { user, logout } = useAuth();
-
-  // const [{limit}]
 
   useEffect(() => {
     console.log(user);
@@ -94,34 +96,46 @@ const Home = () => {
         <div className="absolute inset-0 bg-black/70 z-0"></div>
 
         <div className="relative z-10 flex flex-col md:flex-row items-center justify-between px-4 py-3 md:px-4 md:py-3 w-full">
-          <div>
+          <div className="flex items-center justify-between w-full md:w-auto">
             <img
               className="w-50 h-20 object-cover"
               src="/images/codeblue-logo-2.png"
               alt="Code Blue Logo"
             />
-          </div>
-          {user ? (
             <button
-              onClick={handleLogout}
-              className="bg-green-600 text-white font-semibold py-1 px-4 rounded-md shadow hover:bg-green-700 transition text-sm md:text-base"
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="md:hidden text-white"
             >
-              Logout
+              <Menu className="w-6 h-6" />
             </button>
-          ) : (
-            <div className="flex gap-1">
-              <Link to="/auth/signup">
-                <button className="bg-green-700 border border-white text-white font-semibold py-1 px-4 rounded-md shadow hover:bg-white hover:text-green-900 transition text-sm mr-1 md:text-base">
-                  Sign up
-                </button>
-              </Link>
-              <Link to="/auth/login">
-                <button className="bg-white text-green-900 font-semibold py-1 px-4 rounded-md shadow hover:bg-green-900 hover:text-white transition text-sm md:text-base">
-                  Log in
-                </button>
-              </Link>
-            </div>
-          )}
+          </div>
+          <div
+            className={`mt-2 md:mt-0 w-full md:w-auto flex-col md:flex-row md:flex items-center justify-end gap-2 transition-all duration-300 ease-in-out overflow-hidden md:overflow-visible ${
+              menuOpen ? "flex" : "hidden md:flex"
+            }`}
+          >
+            {user ? (
+              <button
+                onClick={handleLogout}
+                className="bg-transparent border border-white text-white font-semibold py-1 px-4 rounded-md shadow hover:bg-green-700 transition text-sm md:text-base"
+              >
+                Logout
+              </button>
+            ) : (
+              <div className="flex flex-col md:flex-row gap-2 md:gap-1 w-full md:w-auto">
+                <Link to="/auth/signup">
+                  <button className="bg-unt-deep text-white font-semibold py-1 px-4 rounded-md shadow hover:bg-sac-state-secondary hover:text-white cursor-pointer transition text-sm md:text-base w-full md:w-auto">
+                    Sign up
+                  </button>
+                </Link>
+                <Link to="/auth/login">
+                  <button className="bg-transparent text-white border border-white font-semibold py-1 px-4 rounded-md shadow hover:bg-white cursor-pointer hover:text-black transition text-sm md:text-base w-full md:w-auto">
+                    Log in
+                  </button>
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="relative z-10 flex flex-col items-center md:items-start justify-center px-4 md:px-10 py-6 w-full flex-1 mt-3">
@@ -145,47 +159,50 @@ const Home = () => {
         </div>
 
         <div className="relative z-10 flex flex-col items-center justify-center text-center">
-          <h3 className="mb-12 text-3xl md:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-cyan-600 to-green-900 font-extrabold">
-            How CodeBlue Works
-          </h3>
+          <div className="flex flex-col gap-y-4 items-center justify-center">
+            <QuestionMarkCircleIcon className="size-12 text-sac-state-secondary" />
+            <h3 className="mb-12 text-3xl md:text-5xl bg-clip-text text-sac-state-secondary font-extrabold">
+              How CodeBlue Works
+            </h3>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl px-4">
-            <div className="group relative bg-white bg-opacity-50 backdrop-blur-md rounded-xl p-8 border border-cyan-800/30 hover:border-cyan-400/50 transition-all duration-300 hover:-translate-y-2">
+            <div className="group relative bg-white bg-opacity-50 backdrop-blur-md rounded-xl p-8 border border-unt-border hover:border-cyan-400/50 transition-all duration-300 hover:-translate-y-2">
               <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-cyan-500/10 to-green-600/10"></div>
               <div className="relative z-10 flex flex-col items-center gap-4">
-                <div className="rounded-full flex gap-x-2 bg-gradient-to-r from-cyan-600 to-green-700 px-4 py-3 font-semibold items-center justify-center shadow-lg">
+                <div className="rounded-full flex gap-x-2 bg-unt-deep px-4 py-3 font-semibold items-center justify-center shadow-lg">
                   <Search className="size-5 text-cyan-100" />
                   <p className="text-gray-100">Search</p>
                 </div>
-                <p className="text-gray-900 mt-2 leading-relaxed">
+                <p className="text-sac-state-secondary mt-2 leading-relaxed">
                   Quickly search for life-saving medicines, vaccines or
                   emergency tests near you.
                 </p>
               </div>
             </div>
 
-            <div className="group relative bg-green-700 bg-opacity-50 backdrop-blur-md rounded-xl p-8 border border-cyan-800/30 hover:border-cyan-400/50 transition-all duration-300 hover:-translate-y-2">
+            <div className="group relative bg-white bg-opacity-50 backdrop-blur-md rounded-xl p-8 border border-unt-border hover:border-cyan-400/50 transition-all duration-300 hover:-translate-y-2">
               <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-cyan-500/10 to-green-600/10"></div>
               <div className="relative z-10 flex flex-col items-center gap-4">
-                <div className="rounded-full flex gap-x-2 bg-gradient-to-r from-cyan-600 to-green-700 px-4 py-3 font-semibold items-center justify-center shadow-lg">
+                <div className="rounded-full flex gap-x-2 bg-unt-deep px-6 py-3 font-semibold items-center justify-center shadow-lg">
                   <MapPin className="size-5 text-cyan-100" />
                   <p className="text-gray-100">Find</p>
                 </div>
-                <p className="text-white mt-2 leading-relaxed">
+                <p className="text-sac-state-secondary  mt-2 leading-relaxed">
                   Locate hospitals and pharmacies in Accra with availability in
                   real-time.
                 </p>
               </div>
             </div>
 
-            <div className="group relative bg-white bg-opacity-50 backdrop-blur-md rounded-xl p-8 border border-cyan-800/30 hover:border-cyan-400/50 transition-all duration-300 hover:-translate-y-2">
+            <div className="group relative bg-white bg-opacity-50 backdrop-blur-md rounded-xl p-8 border border-unt-border hover:border-cyan-400/50 transition-all duration-300 hover:-translate-y-2">
               <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-cyan-500/10 to-green-600/10"></div>
               <div className="relative z-10 flex flex-col items-center gap-4">
-                <div className="rounded-full flex gap-x-2 bg-gradient-to-r from-cyan-600 to-green-700 px-4 py-3 font-semibold items-center justify-center shadow-lg">
+                <div className="rounded-full flex gap-x-2 bg-unt-deep px-6 py-3 font-semibold items-center justify-center shadow-lg">
                   <Calendar className="size-5 text-cyan-100" />
                   <p className="text-gray-100">Book</p>
                 </div>
-                <p className="text-gray-900 mt-2 leading-relaxed">
+                <p className="text-sac-state-secondary mt-2 leading-relaxed">
                   Reserve appointments, ask questions, or get directions all
                   from one place.
                 </p>
@@ -195,30 +212,14 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="relative bg-gradient-to-br from-darkBlue-900/80 to-darkCyan-800/80 px-6 md:px-8 py-8 rounded-xl shadow-2xl mt-10 mx-4 md:mx-10 backdrop-blur-sm border border-cyan-800/30 overflow-hidden">
+      <div className="relative bg-gradient-to-br from-darkBlue-900/80 to-darkCyan-800/80 px-6 md:px-8 py-8 rounded-xl shadow-2xl mt-10 mx-4 md:mx-10 backdrop-blur-sm border border-unt-border overflow-hidden">
         <div className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full bg-cyan-400/10 blur-xl"></div>
 
-        <h2 className="text-2xl mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-cyan-600 to-gray-900 font-extrabold">
-          Find Facilities Near You
+        <h2 className="text-xl md:text-2xl mb-6 text-center bg-clip-text text-sac-state-secondary font-extrabold">
+          Looking for meds, vaccines, or tests? Find nearby facilities that have
+          them <br />
+          No more hopping all over town.
         </h2>
-
-        <div className="flex flex-wrap gap-4 justify-center">
-          <button
-            onClick={handleLocateNearby}
-            className="relative z-10 bg-green-700 cursor-pointer hover:bg-green-900 text-white px-5 py-2.5 rounded-lg flex items-center gap-2 shadow-lg hover:shadow-cyan-500/20 transition-all duration-300 transform hover:-translate-y-0.5"
-          >
-            <MapPin className="w-5 h-5 text-cyan-100" />
-            Locate Nearby
-          </button>
-
-          <button
-            onClick={handleResetNearby}
-            className="relative z-10 bg-white hover:bg-gray-700/80 text-gray-900 px-5 py-2.5 rounded-lg flex items-center gap-2 border border-gray-700/50 hover:border-gray-200/70 cursor-pointer hover:text-white transition-all duration-300"
-          >
-            <RotateCcw className="w-5 h-5" />
-            Reset
-          </button>
-        </div>
 
         {loadingNearby && (
           <div className="mt-4 flex justify-center">
@@ -273,10 +274,10 @@ const Home = () => {
         <div className="fixed bottom-6 right-6 z-50">
           <button
             onClick={() => setShowChatbot(true)}
-            className="flex items-center gap-2 bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded-full shadow-lg transition"
+            className="flex items-center gap-2 bg-unt-deep hover:bg-sac-state-secondary cursor-pointer text-white px-6 py-2 rounded-full shadow-lg transition"
           >
             <Bot className="w-5 h-5" />
-            <span className="hidden md:inline">Chat with CodeBlue AI</span>
+            <span className="hidden md:inline">CodeBlue AI</span>
           </button>
         </div>
       )}
@@ -298,7 +299,7 @@ const Home = () => {
             ) : chatResponse ? (
               <p>{chatResponse}</p>
             ) : (
-              <p className="text-gray-400">
+              <p className="text-sac-state-secondary">
                 Ask me anything about healthcare access!
               </p>
             )}

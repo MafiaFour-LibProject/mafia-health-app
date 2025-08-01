@@ -97,9 +97,13 @@ const AdminAppointments = () => {
 
   return (
     <div className="max-w-4xl mx-auto py-10 px-4">
-      <h1 className="text-3xl font-bold mb-6">Appointments Management</h1>
+      <h1 className="text-3xl font-bold mb-3 text-sac-state-secondary">
+        Appointments Management
+      </h1>
+      <h2 className="text-unt-deep mb-6">
+        Easily view and handle all appointments here.
+      </h2>
 
-      {/* Filter Dropdown */}
       <div className="mb-6">
         <label className="block mb-1 font-medium">Filter by status:</label>
         <select
@@ -124,7 +128,7 @@ const AdminAppointments = () => {
               key={appt._id}
               className="bg-white shadow-md p-6 rounded-lg border border-gray-200"
             >
-              <h2 className="text-xl font-semibold text-blue-700 mb-2">
+              <h2 className="text-xl font-semibold text-sac-state-secondary mb-2">
                 {appt.service?.name || "Service"}
               </h2>
               <p>
@@ -170,7 +174,7 @@ const AdminAppointments = () => {
                         newStatus: statusOption,
                       })
                     }
-                    className={`flex items-center gap-2 text-white py-1 px-4 rounded hover:opacity-90 transition-all ${
+                    className={`flex items-center gap-2 text-white py-1 px-4 cursor-pointer rounded hover:opacity-90 transition-all ${
                       statusOption === "confirmed"
                         ? "bg-green-600"
                         : statusOption === "completed"
@@ -193,7 +197,6 @@ const AdminAppointments = () => {
         </ul>
       )}
 
-      {/* Confirmation Modal */}
       {confirmModal.show && (
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
           <div
