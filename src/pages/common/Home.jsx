@@ -273,7 +273,7 @@ const Home = () => {
         <div className="fixed bottom-6 right-6 z-50">
           <button
             onClick={() => setShowChatbot(true)}
-            className="flex items-center gap-2 bg-blue-700 hover:bg-gray-700 text-white px-4 py-2 rounded-full shadow-lg transition"
+            className="flex items-center gap-2 bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded-full shadow-lg transition"
           >
             <Bot className="w-5 h-5" />
             <span className="hidden md:inline">Chat with CodeBlue AI</span>
@@ -294,7 +294,7 @@ const Home = () => {
             {chatLoading ? (
               <p className="text-gray-400">Loading...</p>
             ) : chatError ? (
-              <p className="text-red-500">{chatError}</p>
+              <p className="text-gray-500">{chatError}</p>
             ) : chatResponse ? (
               <p>{chatResponse}</p>
             ) : (
