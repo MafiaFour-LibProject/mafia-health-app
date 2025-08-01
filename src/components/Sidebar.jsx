@@ -56,7 +56,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
           ) : (
             <ChevronRight className="h-5 w-5" />
           )}
-        </button>
+        </button>  
       </div>
 
       <nav className="flex flex-col gap-2 flex-grow">

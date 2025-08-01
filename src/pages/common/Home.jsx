@@ -295,7 +295,7 @@ const Home = () => {
             {chatLoading ? (
               <p className="text-gray-400">Loading...</p>
             ) : chatError ? (
-              <p className="text-red-500">{chatError}</p>
+              <p className="text-gray-500">{chatError}</p>
             ) : chatResponse ? (
               <p>{chatResponse}</p>
             ) : (
